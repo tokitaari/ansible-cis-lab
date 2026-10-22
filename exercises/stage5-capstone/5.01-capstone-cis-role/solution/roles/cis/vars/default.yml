@@ -1,0 +1,14 @@
+---
+# Conservative fallback for unknown platforms
+cis_sshd_service: sshd
+cis_cron_service: crond
+cis_cron_allow_supported: true
+cis_shadow_group: root
+cis_shadow_mode: "0600"
+cis_audit_package: audit
+# How PAM is managed on this platform: pam-auth-update | authselect | manual | none
+cis_pam_tool: none
+cis_pwquality_supported: false
+cis_pwquality_package: ''
+cis_pam_password_stack: ''
+cis_platform_features: []

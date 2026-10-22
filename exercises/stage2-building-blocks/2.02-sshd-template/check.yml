@@ -1,0 +1,41 @@
+---
+- name: Check 2.02 - SSH server hardening
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Read the effective sshd configuration
+      ansible.builtin.include_tasks: "{{ playbook_dir }}/../../_common/sshd_effective.yml"
+
+    - name: Read the drop-in
+      ansible.builtin.slurp:
+        src: /etc/ssh/sshd_config.d/00-cis-hardening.conf
+      register: dropin
+
+    - name: Effective values match the CIS baseline
+      vars:
+        weak_re: '(cbc|arcfour|3des|hmac-md5|hmac-sha1|-sha1|group1-|group14-sha1)'
+      ansible.builtin.assert:
+        that:
+          - (dropin.content | b64decode) is search('(?i)ansible')
+          - sshd_cfg.loglevel in ['VERBOSE', 'INFO']
+          - sshd_cfg.permitrootlogin == 'no'
+          - sshd_cfg.permitemptypasswords == 'no'
+          - sshd_cfg.permituserenvironment == 'no'
+          - sshd_cfg.hostbasedauthentication == 'no'
+          - sshd_cfg.ignorerhosts == 'yes'
+          - sshd_cfg.disableforwarding == 'yes'
+          - sshd_cfg.x11forwarding == 'no'
+          - sshd_cfg.maxauthtries | int <= 4
+          - sshd_cfg.maxsessions | int <= 10
+          - sshd_cfg.maxstartups == '10:30:60'
+          - sshd_cfg.logingracetime | int in range(1, 61)
+          - sshd_cfg.clientaliveinterval | int in range(1, 16)
+          - sshd_cfg.clientalivecountmax | int in range(1, 4)
+          - sshd_cfg.banner == '/etc/issue.net'
+          - (sshd_cfg.allowgroups | default('')) | length > 0
+          - sshd_cfg.ciphers is not search(weak_re)
+          - sshd_cfg.macs is not search(weak_re)
+          - sshd_cfg.kexalgorithms is not search(weak_re)
+        fail_msg: "Effective sshd config differs from the baseline. Run 'sudo sshd -T' on the host and compare with the table in the README."
+        quiet: true

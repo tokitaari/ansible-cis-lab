@@ -1,0 +1,22 @@
+---
+id: '1.01'
+slug: remove-telnet
+stage: 1
+stage_name: Stage 1 - Beginner
+stage_name_de: Stufe 1 - Einsteiger
+title:
+  en: Remove insecure client packages
+  de: Unsichere Client-Pakete entfernen
+difficulty: 1
+minutes: 20
+cis:
+  section: 2.2 Client services
+  level: L1
+hosts: targets
+concepts:
+- package
+- 'state: absent'
+- package_facts
+- --check --diff
+idempotency: true
+solve: ansible-playbook playbook.yml

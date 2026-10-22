@@ -1,0 +1,21 @@
+---
+- name: Gather facts from all targets
+  hosts: targets
+  gather_facts: true
+  tasks: []
+
+- name: Write the platform report on the control node
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Ensure the work directory exists
+      ansible.builtin.file:
+        path: /lab/work/0.03
+        state: directory
+        mode: "0755"
+
+    - name: Render facts.csv
+      ansible.builtin.template:
+        src: facts.csv.j2
+        dest: /lab/work/0.03/facts.csv
+        mode: "0644"

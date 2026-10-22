@@ -1,0 +1,37 @@
+---
+- name: CIS - disable unneeded kernel modules
+  hosts: targets
+  become: true
+  vars:
+    cis_level: 1
+    cis_disabled_modules_l1: [cramfs, freevxfs, hfs, hfsplus, jffs2, usb-storage]
+    cis_disabled_modules_l2: [squashfs, udf, dccp, tipc, rds, sctp]
+    cis_disabled_modules: >-
+      {{ cis_disabled_modules_l1
+         + (cis_disabled_modules_l2 if cis_level | int >= 2 else []) }}
+  tasks:
+    - name: Ensure /etc/modprobe.d exists (not present on every minimal system)
+      ansible.builtin.file:
+        path: /etc/modprobe.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Disable kernel module
+      ansible.builtin.copy:
+        dest: "/etc/modprobe.d/cis-{{ item }}.conf"
+        content: |
+          install {{ item }} /bin/false
+          blacklist {{ item }}
+        owner: root
+        group: root
+        mode: "0644"
+      loop: "{{ cis_disabled_modules }}"
+
+    - name: Unload modules (real hosts only - never inside the lab containers)
+      community.general.modprobe:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ cis_disabled_modules }}"
+      when: not (lab_in_container | default(false))

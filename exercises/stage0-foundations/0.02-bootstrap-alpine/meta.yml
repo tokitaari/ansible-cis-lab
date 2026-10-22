@@ -1,0 +1,22 @@
+---
+id: '0.02'
+slug: bootstrap-alpine
+stage: 0
+stage_name: Stage 0 - Foundations
+stage_name_de: Stufe 0 - Grundlagen
+title:
+  en: Bootstrap Python on Alpine with raw
+  de: Python auf Alpine per raw nachrüsten
+difficulty: 1
+minutes: 20
+cis:
+  section: '-'
+  level: '-'
+hosts: alpine_family
+concepts:
+- raw
+- 'gather_facts: false'
+- changed_when
+- become
+idempotency: true
+solve: ansible-playbook playbook.yml

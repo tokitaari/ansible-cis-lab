@@ -1,0 +1,20 @@
+---
+# Control registry. 'requires' lists platform features (cis_platform_features in
+# vars/<platform>.yml); a control whose requirement is missing is 'not-applicable'.
+cis_controls:
+  - {id: "1.1.1", level: 1, file: modules_l1.yml, title: Unneeded filesystem kernel modules are disabled}
+  - {id: "1.1.1-L2", level: 2, file: modules_l2.yml, title: Level 2 kernel modules are disabled}
+  - {id: "1.5", level: 1, file: sysctl_kernel.yml, title: Process hardening kernel parameters are persisted}
+  - {id: "1.6", level: 1, file: banners.yml, title: Login banners contain no OS information}
+  - {id: "2.1", level: 1, file: services.yml, title: Unneeded server services are stopped and disabled}
+  - {id: "2.2", level: 1, file: client_packages.yml, title: Insecure client packages are not installed}
+  - {id: "2.4", level: 1, file: cron.yml, title: Job scheduler files are restricted}
+  - {id: "3.3", level: 1, file: sysctl_network.yml, title: Network kernel parameters are set}
+  - {id: "5.1", level: 1, file: sshd.yml, title: SSH server is hardened}
+  - {id: "5.2", level: 1, file: sudo.yml, title: sudo uses a PTY and a log file}
+  - {id: "5.3.3", level: 1, file: pwquality.yml, title: Password quality is enforced, requires: [pwquality]}
+  - {id: "5.4.1", level: 1, file: password_aging.yml, title: Password aging and inactivity lock are configured}
+  - {id: "5.4.2", level: 1, file: accounts.yml, title: Only root has UID 0 and no account has an empty password}
+  - {id: "5.4.3", level: 1, file: environment.yml, title: Default umask and shell timeout are set}
+  - {id: "6.3", level: 2, file: auditd.yml, title: auditd rules and retention are configured}
+  - {id: "7.1", level: 1, file: file_permissions.yml, title: Account files have correct permissions}

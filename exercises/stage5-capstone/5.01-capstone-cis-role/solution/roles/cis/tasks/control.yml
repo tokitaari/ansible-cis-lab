@@ -1,0 +1,44 @@
+---
+# Runs one control from the registry and records the outcome.
+# Contract for control files: register every task that can change state as
+# cis_r_<n> and finish with set_fact cis_control_results: [cis_r_1, ...].
+- name: "Decide whether the control applies | {{ cis_control.id }}"
+  ansible.builtin.set_fact:
+    cis_control_state: >-
+      {{ 'excepted' if cis_control.id in cis_exception_ids
+         else 'out-of-profile' if cis_control.level | int > cis_level | int
+         else 'not-applicable' if (cis_control.requires | default([])) | difference(cis_platform_features) | length > 0
+         else 'active' }}
+    cis_control_results: []
+
+- name: "Execute control | {{ cis_control.id }}"
+  ansible.builtin.include_tasks:
+    file: "controls/{{ cis_control.file }}"
+    apply:
+      check_mode: "{{ cis_mode == 'audit' }}"
+  when: cis_control_state == 'active'
+
+- name: "Record the result | {{ cis_control.id }}"
+  vars:
+    cis_noncompliant: >-
+      {%- set ns = namespace(found=false) -%}
+      {%- for r in cis_control_results -%}
+        {%- for x in [r] + (r.results | default([])) -%}
+          {%- if x.changed | default(false) or (x.msg | default('') | string) is search('would have run') -%}
+            {%- set ns.found = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+      {{ ns.found }}
+    cis_status: >-
+      {{ cis_control_state if cis_control_state != 'active'
+         else ('fail' if cis_mode == 'audit' else 'fixed') if cis_noncompliant | bool
+         else 'pass' }}
+    cis_reason: >-
+      {{ (cis_exceptions | selectattr('id', 'equalto', cis_control.id) | map(attribute='reason') | first)
+         if cis_control_state == 'excepted' else '' }}
+  ansible.builtin.set_fact:
+    cis_findings: >-
+      {{ cis_findings + [{'id': cis_control.id, 'level': cis_control.level,
+                          'title': cis_control.title, 'status': cis_status | trim,
+                          'reason': cis_reason | trim}] }}

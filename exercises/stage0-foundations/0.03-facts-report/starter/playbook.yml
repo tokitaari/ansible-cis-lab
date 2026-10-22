@@ -1,0 +1,10 @@
+---
+# Exercise 0.03: Facts: one report across eight distributions
+# Replace the TODOs. Run with: ansible-playbook playbook.yml
+- name: TODO - describe what this play does
+  hosts: targets
+  become: true
+  tasks:
+    - name: TODO - describe the first task
+      ansible.builtin.debug:
+        msg: replace me

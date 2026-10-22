@@ -1,0 +1,118 @@
+---
+# Ansible CIS hardening lab
+# One control node + eight target systems on an isolated bridge network.
+# Targets run a real init system (systemd / OpenRC) and therefore need
+# `privileged: true`. Read docs/CONTAINER_LIMITS.md before changing that.
+name: ansible-cis-lab
+
+x-target: &target
+  privileged: true
+  cgroup: private
+  tmpfs:
+    - /run
+    - /run/lock
+  volumes:
+    - lab-keys:/lab-keys:ro
+  networks:
+    - lab
+  depends_on:
+    control:
+      condition: service_healthy
+  stop_grace_period: 15s
+
+services:
+  control:
+    build:
+      context: ./control
+    image: ansible-cis-lab/control:latest
+    hostname: control
+    init: true
+    environment:
+      ANSIBLE_CONFIG: /lab/ansible/ansible.cfg
+      LAB_ROOT: /lab
+      LAB_UID: ${LAB_UID:-1000}
+      LAB_GID: ${LAB_GID:-1000}
+      LAB_LANG: ${LAB_LANG:-}
+    volumes:
+      - ./:/lab
+      - lab-keys:/lab-keys
+    networks:
+      - lab
+    healthcheck:
+      test: ["CMD", "test", "-s", "/lab-keys/id_ed25519.pub"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  debian:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: debian/Dockerfile
+    image: ansible-cis-lab/debian:latest
+    hostname: debian
+
+  ubuntu:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: ubuntu/Dockerfile
+    image: ansible-cis-lab/ubuntu:latest
+    hostname: ubuntu
+
+  rocky:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: rocky/Dockerfile
+    image: ansible-cis-lab/rocky:latest
+    hostname: rocky
+
+  alma:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: alma/Dockerfile
+    image: ansible-cis-lab/alma:latest
+    hostname: alma
+
+  fedora:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: fedora/Dockerfile
+    image: ansible-cis-lab/fedora:latest
+    hostname: fedora
+
+  opensuse:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: opensuse/Dockerfile
+    image: ansible-cis-lab/opensuse:latest
+    hostname: opensuse
+
+  arch:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: arch/Dockerfile
+    image: ansible-cis-lab/arch:latest
+    hostname: arch
+
+  alpine:
+    <<: *target
+    build:
+      context: ./targets
+      dockerfile: alpine/Dockerfile
+    image: ansible-cis-lab/alpine:latest
+    hostname: alpine
+
+networks:
+  lab:
+    ipam:
+      config:
+        - subnet: 172.31.250.0/24
+
+volumes:
+  lab-keys:

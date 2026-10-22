@@ -1,0 +1,6 @@
+---
+cis_sshd_service: ssh
+cis_cron_service: cron
+cis_cron_allow_supported: true
+cis_shadow_group: shadow
+cis_shadow_mode: "0640"

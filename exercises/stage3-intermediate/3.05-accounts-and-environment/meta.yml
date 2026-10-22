@@ -1,0 +1,22 @@
+---
+id: '3.05'
+slug: accounts-and-environment
+stage: 3
+stage_name: Stage 3 - Intermediate
+stage_name_de: Stufe 3 - Mittelstufe
+title:
+  en: 'Account audit: UID 0, empty passwords, umask, TMOUT'
+  de: 'Konten-Audit: UID 0, leere Passwörter, umask, TMOUT'
+difficulty: 3
+minutes: 50
+cis:
+  section: 5.4.2 / 5.4.3 User accounts and environment
+  level: L1
+hosts: targets
+concepts:
+- parsing files into facts
+- selectattr on lists
+- user module
+- profile.d
+idempotency: true
+solve: ansible-playbook playbook.yml

@@ -1,0 +1,21 @@
+---
+id: '1.05'
+slug: sudo-hardening
+stage: 1
+stage_name: Stage 1 - Beginner
+stage_name_de: Stufe 1 - Einsteiger
+title:
+  en: 'sudo: use a PTY and log to a file'
+  de: 'sudo: PTY erzwingen und in Datei protokollieren'
+difficulty: 2
+minutes: 25
+cis:
+  section: 5.2 Configure privilege escalation
+  level: L1
+hosts: targets
+concepts:
+- sudoers.d
+- 'validate: visudo'
+- lockout prevention
+idempotency: true
+solve: ansible-playbook playbook.yml

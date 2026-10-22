@@ -1,0 +1,21 @@
+---
+- name: Check 1.04 - vsftpd not running and not enabled
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Collect service facts
+      ansible.builtin.service_facts:
+
+    - name: Pick the vsftpd entry (systemd or OpenRC naming)
+      ansible.builtin.set_fact:
+        vsftpd_svc: "{{ ansible_facts.services['vsftpd.service'] | default(ansible_facts.services['vsftpd'] | default({})) }}"
+
+    - name: vsftpd is stopped and disabled (or absent)
+      ansible.builtin.assert:
+        that:
+          - vsftpd_svc.state | default('stopped') not in ['running', 'started']
+          - vsftpd_svc.status | default('disabled') != 'enabled'
+        fail_msg: "vsftpd state={{ vsftpd_svc.state | default('-') }} status={{ vsftpd_svc.status | default('-') }}"
+        success_msg: "{{ 'vsftpd stopped/disabled' if vsftpd_svc else 'vsftpd not present' }}"
+        quiet: true
