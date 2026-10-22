@@ -39,6 +39,7 @@ for f in /etc/sudoers /usr/etc/sudoers; do
   fi
 done
 
+mkdir -p /usr/local/sbin
 install -m 0755 "$LAB/lab-keysync" /usr/local/sbin/lab-keysync
 
 # --------------------------------------------------------------------------
@@ -71,6 +72,7 @@ if [ "$FAMILY" = "alpine" ]; then
   [ -e /etc/init.d/crond ] && rc-update add crond default
   [ -e /etc/init.d/vsftpd ] && rc-update add vsftpd default
 else
+  mkdir -p /etc/systemd/system
   install -m 0644 "$LAB/lab-keysync.service" /etc/systemd/system/lab-keysync.service
   systemctl enable lab-keysync.service
   # Units that make no sense (or are harmful) inside a container.
