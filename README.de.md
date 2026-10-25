@@ -78,6 +78,8 @@ sie starten wieder nicht konform (dein Fortschritt bleibt vermerkt, `lab check` 
 Verloren nur durch `git clean -fdx`, Löschen des Klons oder einen neuen Klon an anderer Stelle - Sicherung mit
 `tar czf lab-backup.tgz work .lab`.
 
+Änderungen pro Version und was neu gebaut werden muss: [`CHANGELOG.md`](CHANGELOG.md).
+
 ## Lernpfad
 
 | Stufe | Schwerpunkt | Aufgaben |
