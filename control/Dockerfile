@@ -10,7 +10,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 LESSCHARSET=utf-8 PAGER="less -FRX" LESS="-FRX" 
     LESSOPEN="|/usr/local/bin/lab-lesspipe %s" EDITOR=vim VISUAL=vim TERM=xterm-256color
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      openssh-client git less nano vim jq procps iputils-ping bash-completion \
+      openssh-client git less nano vim jq procps iputils-ping bash-completion tzdata \
  && rm -rf /var/lib/apt/lists/*
 RUN pip install "ansible==${ANSIBLE_VERSION}" ansible-lint yamllint passlib jmespath rich
 # oh-my-bash, system-wide (read-only); per-user cache goes to ~/.local/state
