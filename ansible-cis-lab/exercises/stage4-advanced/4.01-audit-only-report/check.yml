@@ -1,0 +1,30 @@
+---
+- name: Check 4.01 - compliance report
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Stat report files
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop: [/lab/work/4.01/report.json, /lab/work/4.01/report.md]
+      register: st
+
+    - name: Both reports exist
+      ansible.builtin.assert:
+        that: st.results | map(attribute='stat.exists') | list == [true, true]
+        fail_msg: report.json and report.md must exist in /lab/work/4.01
+
+    - name: Load JSON
+      ansible.builtin.set_fact:
+        rep: "{{ lookup('ansible.builtin.file', '/lab/work/4.01/report.json') | from_json }}"
+
+    - name: Structure is complete
+      ansible.builtin.assert:
+        that:
+          - rep.keys() | sort == groups['targets'] | sort
+          - rep.values() | map(attribute='score') | select('number') | list | length == 8
+          - rep.values() | map(attribute='results') | map('length') | min >= 10
+          - rep.values() | map(attribute='results') | flatten | map(attribute='status') | unique | difference(['pass', 'fail', 'n/a']) | length == 0
+          - rep.values() | map(attribute='results') | flatten | selectattr('id', 'undefined') | list | length == 0
+        fail_msg: "report.json needs one entry per target with 'score' (number) and >= 10 'results' (id/title/status pass|fail|n/a)"
+        success_msg: "Scores: {{ rep | dict2items | map(attribute='value.score') | list }}"

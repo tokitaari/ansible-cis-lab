@@ -1,0 +1,67 @@
+---
+- name: Check 2.04 - kernel parameters
+  hosts: targets
+  become: true
+  gather_facts: false
+  vars:
+    expected_net:
+      net.ipv4.ip_forward: "0"
+      net.ipv4.conf.all.send_redirects: "0"
+      net.ipv4.conf.default.send_redirects: "0"
+      net.ipv4.conf.all.accept_redirects: "0"
+      net.ipv4.conf.default.accept_redirects: "0"
+      net.ipv4.conf.all.secure_redirects: "0"
+      net.ipv4.conf.default.secure_redirects: "0"
+      net.ipv4.conf.all.accept_source_route: "0"
+      net.ipv4.conf.default.accept_source_route: "0"
+      net.ipv4.conf.all.log_martians: "1"
+      net.ipv4.conf.default.log_martians: "1"
+      net.ipv4.icmp_echo_ignore_broadcasts: "1"
+      net.ipv4.icmp_ignore_bogus_error_responses: "1"
+      net.ipv4.conf.all.rp_filter: "1"
+      net.ipv4.conf.default.rp_filter: "1"
+      net.ipv4.tcp_syncookies: "1"
+    expected_kernel:
+      kernel.randomize_va_space: "2"
+      fs.suid_dumpable: "0"
+      kernel.yama.ptrace_scope: "1"
+  tasks:
+    - name: Read live network values
+      ansible.builtin.command: "sysctl -n {{ expected_net.keys() | join(' ') }}"
+      register: live
+      changed_when: false
+      check_mode: false
+
+    - name: Read persistent files
+      ansible.builtin.slurp:
+        src: "{{ item }}"
+      loop: [/etc/sysctl.d/60-cis-network.conf, /etc/sysctl.d/60-cis-kernel.conf]
+      register: files
+      failed_when: false
+
+    - name: Build lookup structures
+      ansible.builtin.set_fact:
+        live_values: "{{ dict(expected_net.keys() | zip(live.stdout_lines | map('trim'))) }}"
+        net_file: "{{ files.results[0].content | default('') | b64decode }}"
+        kernel_file: "{{ files.results[1].content | default('') | b64decode }}"
+
+    - name: Network parameters are active and persisted
+      ansible.builtin.assert:
+        that:
+          - live_values[item.key] == item.value
+          - net_file is search('(?m)^\s*' ~ (item.key | regex_escape) ~ '\s*=\s*' ~ item.value ~ '\s*$')
+        fail_msg: "{{ item.key }}: live={{ live_values[item.key] }} expected={{ item.value }} (and persisted in 60-cis-network.conf)"
+        quiet: true
+      loop: "{{ expected_net | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"
+
+    - name: Global kernel parameters are persisted
+      ansible.builtin.assert:
+        that:
+          - kernel_file is search('(?m)^\s*' ~ (item.key | regex_escape) ~ '\s*=\s*' ~ item.value ~ '\s*$')
+        fail_msg: "{{ item.key }}={{ item.value }} missing in /etc/sysctl.d/60-cis-kernel.conf"
+        quiet: true
+      loop: "{{ expected_kernel | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"

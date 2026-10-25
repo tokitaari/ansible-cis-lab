@@ -1,0 +1,37 @@
+---
+- name: Check 3.04 - auditd configuration
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Read all CIS rule files
+      ansible.builtin.shell: cat /etc/audit/rules.d/50-cis-*.rules 2>/dev/null; true
+      register: rules
+      changed_when: false
+      check_mode: false
+
+    - name: Read finalize file and auditd.conf
+      ansible.builtin.slurp:
+        src: "{{ item }}"
+      loop: [/etc/audit/rules.d/99-cis-finalize.rules, /etc/audit/auditd.conf]
+      register: files
+      failed_when: false
+
+    - name: Rules and retention configured
+      vars:
+        finalize: "{{ files.results[0].content | default('') | b64decode }}"
+        conf: "{{ files.results[1].content | default('') | b64decode }}"
+      ansible.builtin.assert:
+        that:
+          - rules.stdout is search('-k scope')
+          - rules.stdout is search('-k user_emulation')
+          - rules.stdout is search('-k sudo_log_file')
+          - rules.stdout is search('-k time-change')
+          - rules.stdout is search('/etc/shadow -p wa -k identity')
+          - rules.stdout is search('-k logins')
+          - finalize is search('(?m)^-e 2\s*$')
+          - conf is search('(?m)^\s*max_log_file_action\s*=\s*keep_logs')
+          - conf is search('(?m)^\s*space_left_action\s*=\s*email')
+          - conf is search('(?m)^\s*admin_space_left_action\s*=\s*(single|halt)')
+        fail_msg: Rule files (50-cis-*.rules, 99-cis-finalize.rules) or auditd.conf settings missing - see the README
+        quiet: true

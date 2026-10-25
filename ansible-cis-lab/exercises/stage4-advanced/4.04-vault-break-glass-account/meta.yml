@@ -1,0 +1,22 @@
+---
+id: '4.04'
+slug: vault-break-glass-account
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: 'Ansible Vault: break-glass admin account'
+  de: 'Ansible Vault: Notfall-Admin-Konto'
+difficulty: 4
+minutes: 60
+cis:
+  section: 5.4.1 / 5.2
+  level: L1
+hosts: targets:!alpine_family
+concepts:
+- ansible-vault
+- password_hash with stable salt
+- no_log
+- user aging fields
+idempotency: true
+solve: ansible-playbook playbook.yml --vault-password-file .vault-pass

@@ -1,0 +1,16 @@
+---
+- name: Bootstrap Python where it is missing (Alpine)
+  hosts: alpine_family
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install python3 if missing
+      ansible.builtin.raw: test -e /usr/bin/python3 || { apk add --no-cache python3 && echo INSTALLED; }
+      register: bootstrap
+      changed_when: "'INSTALLED' in bootstrap.stdout"
+
+- name: CIS baseline (cis_mode=enforce|audit)
+  hosts: targets
+  become: true
+  roles:
+    - role: cis

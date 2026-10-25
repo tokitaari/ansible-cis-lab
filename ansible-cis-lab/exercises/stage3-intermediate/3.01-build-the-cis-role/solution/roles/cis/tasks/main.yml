@@ -1,0 +1,31 @@
+---
+- name: Load OS family specific variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', cis_vars_candidates) }}"
+  vars:
+    cis_vars_candidates:
+      files:
+        - "{{ ansible_facts.os_family }}.yml"
+        - default.yml
+      paths:
+        - "{{ role_path }}/vars"
+  tags: [always]
+
+- name: Section 1 - initial setup
+  ansible.builtin.import_tasks: section1_initial_setup.yml
+  tags: [section1]
+
+- name: Section 2 - services
+  ansible.builtin.import_tasks: section2_services.yml
+  tags: [section2]
+
+- name: Section 3 - network
+  ansible.builtin.import_tasks: section3_network.yml
+  tags: [section3]
+
+- name: Section 5 - access control
+  ansible.builtin.import_tasks: section5_access_control.yml
+  tags: [section5]
+
+- name: Section 7 - system maintenance
+  ansible.builtin.import_tasks: section7_maintenance.yml
+  tags: [section7]

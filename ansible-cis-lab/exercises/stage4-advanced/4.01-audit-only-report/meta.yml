@@ -1,0 +1,22 @@
+---
+id: '4.01'
+slug: audit-only-report
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: Audit-only compliance report
+  de: Reiner Audit-Lauf mit Compliance-Bericht
+difficulty: 4
+minutes: 75
+cis:
+  section: cross-section
+  level: L1
+hosts: targets
+concepts:
+- read-only plays
+- 'check_mode: false on readers'
+- hostvars aggregation
+- to_nice_json
+idempotency: true
+solve: ansible-playbook playbook.yml

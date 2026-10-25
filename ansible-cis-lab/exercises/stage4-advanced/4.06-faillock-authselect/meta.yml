@@ -1,0 +1,22 @@
+---
+id: '4.06'
+slug: faillock-authselect
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: Account lockout with pam_faillock (authselect)
+  de: Kontosperre mit pam_faillock (authselect)
+difficulty: 4
+minutes: 45
+cis:
+  section: 5.3.2 / 5.3.3.1 pam_faillock
+  level: L1
+hosts: redhat_family
+concepts:
+- authselect features
+- idempotent CLI wrappers
+- faillock.conf
+- lock-out risk analysis
+idempotency: true
+solve: ansible-playbook playbook.yml

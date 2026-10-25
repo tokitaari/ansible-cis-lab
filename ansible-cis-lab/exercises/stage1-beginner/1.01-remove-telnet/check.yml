@@ -1,0 +1,15 @@
+---
+- name: Check 1.01 - telnet client removed
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Collect installed packages
+      ansible.builtin.package_facts:
+
+    - name: Package telnet is not installed
+      ansible.builtin.assert:
+        that: "'telnet' not in ansible_facts.packages"
+        fail_msg: telnet is still installed
+        success_msg: telnet not installed
+        quiet: true

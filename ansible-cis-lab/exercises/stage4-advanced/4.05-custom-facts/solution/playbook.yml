@@ -1,0 +1,54 @@
+---
+- name: Deploy hardening facts
+  hosts: targets
+  become: true
+  vars:
+    cis_fact:
+      baseline: lab-cis
+      version: 1.0.0
+      level: 1
+      managed_by: ansible
+  tasks:
+    - name: Facts directory
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Static fact - what was applied
+      ansible.builtin.copy:
+        dest: /etc/ansible/facts.d/cis.fact
+        content: "{{ cis_fact | to_nice_json }}\n"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Executable fact - what is true now
+      ansible.builtin.copy:
+        src: cis_live.fact
+        dest: /etc/ansible/facts.d/cis_live.fact
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Re-read local facts
+      ansible.builtin.setup:
+        filter: ansible_local
+
+- name: Hardening inventory on the control node
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Ensure the work directory exists
+      ansible.builtin.file:
+        path: /lab/work/4.05
+        state: directory
+        mode: "0755"
+
+    - name: Write inventory.md
+      ansible.builtin.template:
+        src: inventory.md.j2
+        dest: /lab/work/4.05/inventory.md
+        mode: "0644"

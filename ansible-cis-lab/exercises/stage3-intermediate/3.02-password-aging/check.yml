@@ -1,0 +1,38 @@
+---
+- name: Check 3.02 - password aging
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Read effective login.defs (main file + drop-ins, later wins)
+      ansible.builtin.shell: cat /etc/login.defs /etc/login.defs.d/*.defs 2>/dev/null; true
+      register: defs
+      changed_when: false
+      check_mode: false
+
+    - name: Read useradd defaults
+      ansible.builtin.command: useradd -D
+      register: ud
+      changed_when: false
+      check_mode: false
+
+    - name: Extract values
+      ansible.builtin.set_fact:
+        v_max: "{{ defs.stdout | regex_findall('(?m)^\\s*PASS_MAX_DAYS\\s+(\\d+)') | last | default(99999) | int }}"
+        v_min: "{{ defs.stdout | regex_findall('(?m)^\\s*PASS_MIN_DAYS\\s+(\\d+)') | last | default(0) | int }}"
+        v_warn: "{{ defs.stdout | regex_findall('(?m)^\\s*PASS_WARN_AGE\\s+(\\d+)') | last | default(0) | int }}"
+        v_hash: "{{ defs.stdout | regex_findall('(?m)^\\s*ENCRYPT_METHOD\\s+(\\S+)') | last | default('none') | upper }}"
+        v_inactive: "{{ ud.stdout | regex_findall('INACTIVE=(-?\\d+)') | first | default(-1) | int }}"
+
+    - name: Values meet CIS 5.4.1
+      ansible.builtin.assert:
+        that:
+          - v_max | int > 0 and v_max | int <= 365
+          - v_min | int >= 1
+          - v_warn | int >= 7
+          - v_hash in ['SHA512', 'YESCRYPT']
+          - v_inactive | int > 0 and v_inactive | int <= 45
+        fail_msg: >-
+          PASS_MAX_DAYS={{ v_max }} PASS_MIN_DAYS={{ v_min }} PASS_WARN_AGE={{ v_warn }}
+          ENCRYPT_METHOD={{ v_hash }} INACTIVE={{ v_inactive }}
+        quiet: true

@@ -1,0 +1,31 @@
+---
+- name: 7.1 | Account files are 0644 root:root
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: [/etc/passwd, /etc/group]
+  register: cis_r_1
+
+- name: 7.1 | Find shadow files
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop: "{{ cis_shadow_paths }}"
+  register: cis_shadow_stat
+
+- name: 7.1 | Shadow files use the platform convention
+  ansible.builtin.file:
+    path: "{{ item.item }}"
+    owner: root
+    group: "{{ cis_shadow_group }}"
+    mode: "{{ cis_shadow_mode }}"
+  loop: "{{ cis_shadow_stat.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists
+  register: cis_r_2
+
+- name: 7.1 | Results
+  ansible.builtin.set_fact:
+    cis_control_results: ["{{ cis_r_1 }}", "{{ cis_r_2 }}"]

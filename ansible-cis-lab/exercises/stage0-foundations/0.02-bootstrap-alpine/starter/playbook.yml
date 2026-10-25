@@ -1,0 +1,10 @@
+---
+# Exercise 0.02: Bootstrap Python on Alpine with raw
+# Replace the TODOs. Run with: ansible-playbook playbook.yml
+- name: TODO - describe what this play does
+  hosts: alpine_family
+  become: true
+  tasks:
+    - name: TODO - describe the first task
+      ansible.builtin.debug:
+        msg: replace me

@@ -1,0 +1,46 @@
+---
+- name: Check 3.03 - password quality
+  hosts: debian_family:redhat_family
+  become: true
+  gather_facts: true
+  gather_subset: [min]
+  vars:
+    stack:
+      Debian: /etc/pam.d/common-password
+      RedHat: /etc/pam.d/system-auth
+  tasks:
+    - name: Read the drop-in
+      ansible.builtin.slurp:
+        src: /etc/security/pwquality.conf.d/50-cis.conf
+      register: conf
+      failed_when: false
+
+    - name: Read the PAM stack
+      ansible.builtin.slurp:
+        src: "{{ stack[ansible_facts.os_family] }}"
+      register: pam
+
+    - name: Parse
+      ansible.builtin.set_fact:
+        pq: "{{ conf.content | default('') | b64decode }}"
+
+    - name: CIS values configured and module active
+      vars:
+        minlen: "{{ pq | regex_findall('(?m)^\\s*minlen\\s*=\\s*(\\d+)') | last | default(0) | int }}"
+        minclass: "{{ pq | regex_findall('(?m)^\\s*minclass\\s*=\\s*(\\d+)') | last | default(0) | int }}"
+        maxrepeat: "{{ pq | regex_findall('(?m)^\\s*maxrepeat\\s*=\\s*(\\d+)') | last | default(99) | int }}"
+        maxsequence: "{{ pq | regex_findall('(?m)^\\s*maxsequence\\s*=\\s*(\\d+)') | last | default(99) | int }}"
+      ansible.builtin.assert:
+        that:
+          - minlen | int >= 14
+          - minclass | int >= 4
+          - maxrepeat | int in range(1, 4)
+          - maxsequence | int in range(1, 4)
+          - pq is search('(?m)^\s*dictcheck\s*=\s*1')
+          - pq is search('(?m)^\s*enforce_for_root\s*$')
+          - (pam.content | b64decode) is search('pam_pwquality')
+        fail_msg: >-
+          50-cis.conf: minlen={{ minlen }} minclass={{ minclass }} maxrepeat={{ maxrepeat }}
+          maxsequence={{ maxsequence }}; dictcheck/enforce_for_root present and
+          pam_pwquality in {{ stack[ansible_facts.os_family] }} required
+        quiet: true

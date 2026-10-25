@@ -1,0 +1,30 @@
+#!/usr/sbin/nft -f
+{{ ansible_managed | comment }}
+# Idempotent load: declare, delete, define - never 'flush ruleset'.
+table inet cis_filter
+delete table inet cis_filter
+
+table inet cis_filter {
+  chain input {
+    type filter hook input priority filter; policy drop;
+    iif "lo" accept
+    iif != "lo" ip saddr 127.0.0.0/8 drop
+    iif != "lo" ip6 saddr ::1 drop
+    ct state established,related accept
+    ct state invalid drop
+{% for net in cis_fw_ssh_sources %}
+    ip saddr {{ net }} tcp dport 22 ct state new accept
+{% endfor %}
+    icmp type echo-request limit rate 10/second accept
+    icmp type { destination-unreachable, time-exceeded, parameter-problem } accept
+    meta l4proto ipv6-icmp accept
+  }
+
+  chain forward {
+    type filter hook forward priority filter; policy drop;
+  }
+
+  chain output {
+    type filter hook output priority filter; policy accept;
+  }
+}

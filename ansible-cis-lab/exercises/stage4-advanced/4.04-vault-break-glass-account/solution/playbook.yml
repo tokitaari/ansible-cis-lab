@@ -1,0 +1,29 @@
+---
+- name: Break-glass admin account
+  hosts: targets:!alpine_family
+  become: true
+  vars_files:
+    - vault.yml
+  vars:
+    cisadmin_password: "{{ vault_cisadmin_password }}"
+    # deterministic per host -> stable hash -> idempotent
+    cis_salt: "{{ (inventory_hostname | hash('sha256'))[:16] }}"
+  tasks:
+    - name: Create cisadmin with an aging policy
+      ansible.builtin.user:
+        name: cisadmin
+        comment: Break-glass administrator
+        shell: /bin/sh
+        password: "{{ cisadmin_password | password_hash('sha512', cis_salt) }}"
+        password_expire_max: 365
+        password_expire_min: 1
+      no_log: true
+
+    - name: Allow cisadmin to use sudo with password
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/60-cisadmin
+        content: "cisadmin ALL=(ALL) ALL\n"
+        owner: root
+        group: root
+        mode: "0440"
+        validate: /usr/sbin/visudo -cf %s

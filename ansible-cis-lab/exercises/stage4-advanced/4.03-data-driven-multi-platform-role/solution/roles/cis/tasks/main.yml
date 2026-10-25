@@ -1,0 +1,51 @@
+---
+# Most specific file wins: Rocky-10.yml > Rocky.yml > RedHat.yml > default.yml
+- name: Load platform specific variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', cis_vars_candidates) }}"
+  vars:
+    cis_vars_candidates:
+      files:
+        - "{{ ansible_facts.distribution }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution }}.yml"
+        - "{{ ansible_facts.os_family }}.yml"
+        - default.yml
+      paths:
+        - "{{ role_path }}/vars"
+  tags: [always]
+
+- name: Section 1 - initial setup
+  ansible.builtin.import_tasks: section1_initial_setup.yml
+  tags: [section1]
+
+- name: Section 2 - services
+  ansible.builtin.import_tasks: section2_services.yml
+  tags: [section2]
+
+- name: Section 3 - network
+  ansible.builtin.import_tasks: section3_network.yml
+  tags: [section3]
+
+- name: Section 5 - access control
+  ansible.builtin.import_tasks: section5_access_control.yml
+  tags: [section5]
+
+- name: Section 5 - password policy
+  ansible.builtin.import_tasks: section5_password_policy.yml
+  tags: [section5, password]
+
+- name: Section 5 - PAM password quality
+  ansible.builtin.import_tasks: section5_pam.yml
+  tags: [section5, pam]
+
+- name: Section 5 - accounts and environment
+  ansible.builtin.import_tasks: section5_accounts.yml
+  tags: [section5, accounts]
+
+- name: Section 6 - logging and auditing (Level 2)
+  ansible.builtin.import_tasks: section6_logging.yml
+  when: cis_level | int >= 2
+  tags: [section6, auditd]
+
+- name: Section 7 - system maintenance
+  ansible.builtin.import_tasks: section7_maintenance.yml
+  tags: [section7]

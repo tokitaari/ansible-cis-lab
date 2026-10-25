@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+"""lab-view - render lab texts nicely in the terminal.
+
+Markdown files (README, HINTS, EXPLANATION, docs) are rendered with headings,
+tables, lists and highlighted code blocks; other files (solutions) are shown
+with syntax highlighting and line numbers. Long output opens in a pager.
+
+Usage: lab-view [--strip-details] [--title TEXT] [--render] FILE... | -   (- = stdin, markdown)
+  --render   always render with colours, never page (used by 'less' via LESSOPEN)
+Not a TTY (pipes, scripts) or LAB_PLAIN=1: the raw text is printed unchanged.
+"""
+import argparse
+import os
+import re
+import shutil
+import sys
+
+MAX_WIDTH = 110
+LANG_SWITCH = re.compile(r"^\*\[(Deutsch|English)\]\([^)]*\)\*\s*$", re.MULTILINE)
+DETAILS = re.compile(r"<details>.*?</details>", re.DOTALL)
+SUMMARY = re.compile(r"<summary>(.*?)</summary>", re.DOTALL)
+LEXERS = {".yml": "yaml", ".yaml": "yaml", ".j2": "jinja", ".sh": "bash", ".fact": "bash",
+          ".py": "python", ".json": "json", ".md": "markdown", ".nft": "text", ".cfg": "ini"}
+
+
+def read(path):
+    if path == "-":
+        return sys.stdin.read()
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        return fh.read()
+
+
+def prepare_markdown(text, strip_details):
+    text = LANG_SWITCH.sub("", text)          # language links are useless in a terminal
+    text = re.sub(r"(?m)^(\s*)[-*] \[ \] ", r"\1- ☐ ", text)    # task-list checkboxes
+    text = re.sub(r"(?m)^(\s*)[-*] \[[xX]\] ", r"\1- ☑ ", text)
+    if strip_details:
+        text = DETAILS.sub("", text)
+    else:                                       # rich does not render HTML - unfold it
+        text = SUMMARY.sub(lambda m: f"### {m.group(1).strip()}", text)
+        text = text.replace("<details>", "").replace("</details>", "")
+    return text
+
+
+def main():
+    ap = argparse.ArgumentParser(add_help=True)
+    ap.add_argument("--strip-details", action="store_true", help="hide <details> blocks")
+    ap.add_argument("--title", help="title for stdin input")
+    ap.add_argument("--render", action="store_true", help="force coloured output, no pager")
+    ap.add_argument("files", nargs="+")
+    args = ap.parse_args()
+
+    texts = [(f, read(f)) for f in args.files]
+    plain = (not sys.stdout.isatty() and not args.render) or os.environ.get("LAB_PLAIN") == "1"
+    try:
+        if plain:
+            raise ImportError
+        from rich.console import Console, Group
+        from rich.markdown import Markdown
+        from rich.panel import Panel
+        from rich.rule import Rule
+        from rich.syntax import Syntax
+    except ImportError:
+        for f, t in texts:
+            if f.endswith(".md") or f == "-":
+                t = prepare_markdown(t, args.strip_details)
+            sys.stdout.write(t if t.endswith("\n") else t + "\n")
+        return 0
+
+    width = min(shutil.get_terminal_size((100, 40)).columns, MAX_WIDTH)
+    console = Console(width=width, highlight=False, force_terminal=args.render or None)
+    parts = []
+    for f, t in texts:
+        if f == "-" or f.endswith(".md"):
+            if args.title:
+                parts.append(Rule(f"[bold]{args.title}[/bold]", style="cyan"))
+            parts.append(Markdown(prepare_markdown(t, args.strip_details),
+                                  code_theme="monokai", hyperlinks=False))
+        else:
+            ext = os.path.splitext(f)[1]
+            lexer = LEXERS.get(ext) or Syntax.guess_lexer(f, t)
+            label = f.split("/solution/", 1)[-1]
+            parts.append(Panel(Syntax(t.rstrip("\n"), lexer, theme="monokai", line_numbers=True,
+                                      word_wrap=True, background_color="default"),
+                               title=f"[bold]{label}[/bold]", title_align="left",
+                               border_style="cyan", padding=(0, 1)))
+    group = Group(*parts)
+
+    height = len(console.render_lines(group, console.options, pad=False))
+    if not args.render and height > console.size.height:
+        os.environ.setdefault("PAGER", "less -FRX")
+        if "less" in os.environ["PAGER"] and "-R" not in os.environ["PAGER"]:
+            os.environ["PAGER"] += " -R"
+        with console.pager(styles=True):
+            console.print(group)
+    else:
+        console.print(group)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except BrokenPipeError:
+        sys.exit(0)
+    except KeyboardInterrupt:
+        sys.exit(130)

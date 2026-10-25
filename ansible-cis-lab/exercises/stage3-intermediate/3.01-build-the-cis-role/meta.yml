@@ -1,0 +1,24 @@
+---
+id: '3.01'
+slug: build-the-cis-role
+stage: 3
+stage_name: Stage 3 - Intermediate
+stage_name_de: Stufe 3 - Mittelstufe
+title:
+  en: Refactor everything into a role
+  de: Alles in eine Rolle überführen
+difficulty: 3
+minutes: 90
+cis:
+  section: Sections 1, 2, 3, 5, 7
+  level: L1
+hosts: targets
+concepts:
+- roles
+- defaults vs vars
+- include_vars + first_found
+- import_tasks
+- tags
+- ansible-lint
+idempotency: true
+solve: ansible-playbook site.yml

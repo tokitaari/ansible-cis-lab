@@ -1,0 +1,15 @@
+---
+# Lint settings for the lab (learners: run 'ansible-lint --offline <path>')
+offline: true
+exclude_paths:
+  - work/
+  - control/
+  - targets/
+  - .lab/
+  - exercises/**/check.yml
+  - exercises/_common/
+  - exercises/**/starter/
+kinds:
+  - vars: "**/vault.yml"
+  - playbook: "**/solution/*.yml"
+  - tasks: "**/solution/tasks/*.yml"

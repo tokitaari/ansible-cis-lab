@@ -1,0 +1,23 @@
+---
+id: '2.02'
+slug: sshd-template
+stage: 2
+stage_name: Stage 2 - Building blocks
+stage_name_de: Stufe 2 - Bausteine
+title:
+  en: SSH server hardening with a Jinja2 template
+  de: SSH-Server-Härtung mit Jinja2-Template
+difficulty: 3
+minutes: 45
+cis:
+  section: 5.1 SSH server
+  level: L1
+hosts: targets
+concepts:
+- template
+- variables
+- join filter
+- ansible_managed
+- full-config validation
+idempotency: true
+solve: ansible-playbook playbook.yml

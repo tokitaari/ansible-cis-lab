@@ -1,0 +1,32 @@
+---
+- name: 1.1.1 | Ensure /etc/modprobe.d exists
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: 1.1.1 | Disable unneeded kernel modules
+  ansible.builtin.copy:
+    dest: "/etc/modprobe.d/cis-{{ item }}.conf"
+    content: |
+      install {{ item }} /bin/false
+      blacklist {{ item }}
+    owner: root
+    group: root
+    mode: "0644"
+  loop: >-
+    {{ cis_disabled_modules_l1
+       + (cis_disabled_modules_l2 if cis_level | int >= 2 else []) }}
+  tags: [modules]
+
+- name: 1.6 | Deploy login warning banners
+  ansible.builtin.template:
+    src: banner.j2
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ cis_banner_files }}"
+  tags: [banners]
