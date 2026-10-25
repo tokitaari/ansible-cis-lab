@@ -47,6 +47,37 @@ lab explain 1.03     # nach dem Bestehen: Stolperfallen, Alternativen, Praxis
 ```
 Host kaputt? `./lab.sh reset debian` (oder `reset all`) erzeugt ihn im Ursprungszustand neu.
 
+## Komfort im Control Node
+
+| | |
+|---|---|
+| Shell | bash mit [oh-my-bash](https://github.com/ohmybash/oh-my-bash) (Theme `font`; `OSH_THEME` in `~/.bashrc` ändern, Themes in `/opt/oh-my-bash/themes`), Tab-Vervollständigung für `lab` |
+| Editor | `vim` (Syntax, YAML mit 2 Leerzeichen, Cursorspalte für YAML), `nano`; `EDITOR=vim` |
+| Markdown | überall gerendert: `lab view <datei.md>`, `md <datei.md>`, `less <datei.md>`, `lab docs [name]`; vom Host `./lab.sh view <datei.md>` / `.\lab.ps1 view <datei.md>` |
+| Aliase | `ap` = ansible-playbook, `al` = ansible-lint --offline |
+
+## Lab aktualisieren
+
+```bash
+git pull --ff-only
+docker compose build && docker compose up -d     # nur nötig, wenn sich Dockerfiles geändert haben
+```
+Skripte in `control/` (`lab`, `lab-view`, Shell- und vim-Konfiguration) laufen **live aus dem Repository** -
+ein `git pull` reicht. Image-Änderungen (Pakete, oh-my-bash, Basis-Images, `targets/`) brauchen den Build.
+
+**Was ein Update überlebt** (alles in von Git ignorierten Ordnern deines Klons):
+
+| Bleibt erhalten | Wo |
+|---|---|
+| deine Lösungen | `./work/` |
+| Fortschritt (`lab progress`), Sprache, Shell-Historie | `./.lab/` |
+| SSH-Schlüssel des Labs | Docker-Volume `lab-keys` (nur `./lab.sh destroy` entfernt es) |
+
+**Was zurückgesetzt wird:** die Targets, sobald sich ihr Image ändert oder du `./lab.sh reset` ausführst -
+sie starten wieder nicht konform (dein Fortschritt bleibt vermerkt, `lab check` scheitert, bis du neu anwendest).
+Verloren nur durch `git clean -fdx`, Löschen des Klons oder einen neuen Klon an anderer Stelle - Sicherung mit
+`tar czf lab-backup.tgz work .lab`.
+
 ## Lernpfad
 
 | Stufe | Schwerpunkt | Aufgaben |

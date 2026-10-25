@@ -19,6 +19,10 @@ else
 fi
 
 # ---- lab conveniences -----------------------------------------------------------
+# history lives next to your progress in /lab/.lab (gitignored) - survives rebuilds
+if [[ -d /lab/.lab && -w /lab/.lab ]]; then HISTFILE=/lab/.lab/bash_history; fi
+HISTSIZE=10000 HISTFILESIZE=20000
+shopt -s histappend
 export EDITOR=vim VISUAL=vim
 alias md='lab-view'                       # md FILE.md  - render any markdown file
 alias ap='ansible-playbook'

@@ -1,0 +1,15 @@
+#!/bin/sh
+# Live wrapper installed as /usr/local/bin/<tool> (lab, lab-view, lab-lesspipe).
+# Runs the CURRENT version from the mounted repository (/lab/control/<tool>), so
+# script changes apply after 'git pull' without rebuilding the image.
+# Falls back to the copy baked into the image if the mount is missing.
+tool=$(basename "$0")
+live="${LAB_ROOT:-/lab}/control/$tool"
+baked="/usr/local/lib/lab/$tool"
+if [ -f "$live" ] && [ "${LAB_NO_LIVE:-0}" != 1 ]; then script=$live; else script=$baked; fi
+# call the interpreter explicitly: execute bits may be lost on Windows/ZIP checkouts
+case "$tool" in
+  lab-view)     exec python3 "$script" "$@" ;;
+  lab-lesspipe) exec sh "$script" "$@" ;;
+  *)            exec bash "$script" "$@" ;;
+esac
