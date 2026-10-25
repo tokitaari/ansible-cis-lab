@@ -31,6 +31,8 @@ lab - Ansible CIS lab helper
   lab status                connectivity of all targets
   lab progress              exercises you have passed
   lab placement [answers]   placement test to find your starting point (then the key)
+  lab view <file.md>        render any markdown file (also: 'md <file>', 'less <file.md>')
+  lab docs [name]           list the guides in /lab/docs, or show one (e.g. lab docs troubleshooting)
 
 Reset a target to its original (non-compliant) state from the HOST:
   ./lab.sh reset <host|all>      (Windows: .\lab.ps1 reset <host|all>)
@@ -242,6 +244,34 @@ cmd_progress() {
   sort -V "$STATE_DIR/progress"
 }
 
+cmd_view() {
+  local f="${1:-}"
+  [[ -n "$f" ]] || die "usage: lab view <file.md>"
+  [[ -f "$f" ]] || [[ ! -f "$LAB_ROOT/$f" ]] || f="$LAB_ROOT/$f"   # paths relative to the lab root
+  [[ -f "$f" ]] || die "file not found: $1"
+  view "$f"
+}
+
+cmd_docs() {
+  local l name f
+  l="$(lang)"
+  if [[ "${1:-}" == --names ]]; then
+    find "$LAB_ROOT/docs" -maxdepth 1 -name '*.md' ! -name '*.de.md' -printf '%f\n' | sed 's/\.md$//' | tr 'A-Z_' 'a-z-' | sort
+    return
+  fi
+  if [[ -z "${1:-}" ]]; then
+    echo "Guides (lab docs <name>):"
+    cmd_docs --names | sed 's/^/  /'
+    echo "  readme              (lab overview)"
+    return
+  fi
+  name="$(tr 'a-z-' 'A-Z_' <<<"$1")"
+  if [[ "$name" == README ]]; then f="$LAB_ROOT/README"; else f="$LAB_ROOT/docs/$name"; fi
+  if [[ "$l" != en && -f "$f.$l.md" ]]; then f="$f.$l.md"; else f="$f.md"; fi
+  [[ -f "$f" ]] || die "unknown guide '$1' (try: lab docs)"
+  view "$f"
+}
+
 cmd_placement() {
   if [[ "${1:-}" == answers ]]; then view "$(localized "$EX_DIR" PLACEMENT)"
   else view --strip-details "$(localized "$EX_DIR" PLACEMENT)"
@@ -264,6 +294,8 @@ case "$sub" in
   status)    cmd_status ;;
   progress)  cmd_progress ;;
   placement) cmd_placement "$@" ;;
+  view)      cmd_view "$@" ;;
+  docs)      cmd_docs "$@" ;;
   reset)     die "reset needs Docker - run it on the host: ./lab.sh reset <host|all>" ;;
   help|-h|--help) usage ;;
   *) usage; exit 1 ;;

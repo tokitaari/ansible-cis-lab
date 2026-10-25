@@ -4,3 +4,5 @@
 /cis/pdf/*.pdf
 /.ansible/
 **/.ansible/
+__pycache__/
+*.pyc

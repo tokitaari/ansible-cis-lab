@@ -1,8 +1,9 @@
 #!/bin/sh
 # LESSOPEN filter: 'less FILE.md' shows the rendered markdown (via lab-view).
 # Everything else is passed to the distribution's lesspipe, if any.
+# Any failure prints nothing, so less silently falls back to the raw file.
 case "$1" in
-  *.md|*.markdown) exec lab-view --render "$1" ;;
+  *.md|*.markdown) lab-view --render "$1" 2>/dev/null; exit 0 ;;
 esac
 if command -v lesspipe >/dev/null 2>&1; then exec lesspipe "$1"; fi
-exit 1
+exit 0
