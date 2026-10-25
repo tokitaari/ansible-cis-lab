@@ -23,7 +23,7 @@ case "${1:-help}" in
     docker compose up -d --build
     echo "Waiting for targets to accept SSH ..."
     for _ in $(seq 1 60); do
-      if docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true -o >/dev/null 2>&1; then
+      if docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true >/dev/null 2>&1; then
         break
       fi
       sleep 3

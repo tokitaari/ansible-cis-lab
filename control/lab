@@ -30,7 +30,7 @@ lab - Ansible CIS lab helper
   lab lang [en|de]          show or set the language for texts
   lab status                connectivity of all targets
   lab progress              exercises you have passed
-  lab placement             placement test to find your starting point
+  lab placement [answers]   placement test to find your starting point (then the key)
 
 Reset a target to its original (non-compliant) state from the HOST:
   ./lab.sh reset <host|all>      (Windows: .\lab.ps1 reset <host|all>)
@@ -70,8 +70,11 @@ print("" if v is None else v)
 PY
 }
 
+# Render markdown/code nicely (lab-view uses rich; falls back to plain text)
 view() {
-  if [[ -t 1 ]] && command -v less >/dev/null; then less -FRX "$1"; else cat "$1"; fi
+  if command -v lab-view >/dev/null; then lab-view "$@"
+  elif [[ -t 1 ]] && command -v less >/dev/null; then less -FRX "${@: -1}"
+  else cat "${@: -1}"; fi
 }
 
 learner_playbook() { # prints the learner's playbook for <id>, if any
@@ -114,7 +117,7 @@ cmd_hint() {
   local d n f; resolve "${1:-}"; d="$EXD"; n="${2:-1}"
   [[ "$n" =~ ^[1-3]$ ]] || die "hint number must be 1, 2 or 3"
   f="$(localized "$d" HINTS)"
-  awk -v n="$n" '/^## /{c++} c==n' "$f"
+  awk -v n="$n" '/^## /{c++} c==n' "$f" | view -
 }
 
 cmd_start() {
@@ -127,7 +130,7 @@ cmd_start() {
   info "Work directory: $target"
   find "$target" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null
   echo
-  cat "$(localized "$d" README)"
+  view "$(localized "$d" README)"
 }
 
 recap_problems() { # reads ansible output on stdin, prints non-localhost recap lines with changes/failures
@@ -185,10 +188,10 @@ cmd_check() {
 cmd_solution() {
   local d f; resolve "${1:-}"; d="$EXD"
   [[ -d "$d/solution" ]] || die "no solution files"
-  while IFS= read -r f; do
-    echo "${c_bld}----- ${f#"$d"/} -----${c_off}"
-    cat "$f"; echo
-  done < <(find "$d/solution" -type f ! -name '.vault-pass' | sort)
+  local files=()
+  while IFS= read -r f; do files+=("$f"); done \
+    < <(find "$d/solution" -type f ! -name '.vault-pass' ! -name 'vault.yml' | sort)
+  view "${files[@]}"
 }
 
 cmd_solve() {
@@ -210,8 +213,28 @@ cmd_lang() {
 }
 
 cmd_status() {
-  ansible targets -m ansible.builtin.raw -a 'cat /etc/os-release | grep ^PRETTY_NAME' -o 2>&1 |
-    sed -E 's/\| CHANGED \| rc=0 \| \(stdout\) PRETTY_NAME=/ OK  /'
+  # JSON callback instead of the deprecated '-o' / oneline callback (removed in ansible-core 2.23)
+  ANSIBLE_LOAD_CALLBACK_PLUGINS=1 ANSIBLE_STDOUT_CALLBACK=ansible.posix.json ANSIBLE_NOCOLOR=1 \
+    ansible targets -m ansible.builtin.raw -a 'grep ^PRETTY_NAME= /etc/os-release' 2>/dev/null |
+    python3 -c '
+import json, sys
+txt = sys.stdin.read()
+try:
+    hosts = json.loads(txt[txt.index("{"):])["plays"][0]["tasks"][0]["hosts"]
+except (ValueError, KeyError, IndexError):
+    sys.exit("lab status: could not read ansible output - run: ansible targets -m ansible.builtin.ping")
+ok = "\033[32mOK\033[0m" if sys.stdout.isatty() else "OK"
+bad = "\033[31m{}\033[0m" if sys.stdout.isatty() else "{}"
+width = max(map(len, hosts))
+for name, r in sorted(hosts.items()):
+    if r.get("unreachable"):
+        print(f"{name:<{width}}  " + bad.format("UNREACHABLE") + "  " + r.get("msg", "").splitlines()[0][:80])
+    elif r.get("failed") or r.get("rc", 0) != 0:
+        print(f"{name:<{width}}  " + bad.format("FAILED") + "  " + (r.get("stderr") or r.get("msg", "")).strip()[:80])
+    else:
+        print(f"{name:<{width}}  {ok}  " + r.get("stdout", "").strip().split("=", 1)[-1].strip(chr(34)))
+sys.exit(0 if all(not (r.get("unreachable") or r.get("failed")) for r in hosts.values()) else 1)
+'
 }
 
 cmd_progress() {
@@ -219,7 +242,13 @@ cmd_progress() {
   sort -V "$STATE_DIR/progress"
 }
 
-cmd_placement() { view "$(localized "$EX_DIR" PLACEMENT)"; }
+cmd_placement() {
+  if [[ "${1:-}" == answers ]]; then view "$(localized "$EX_DIR" PLACEMENT)"
+  else view --strip-details "$(localized "$EX_DIR" PLACEMENT)"
+       if [[ "$(lang)" == de ]]; then echo "Lösungsschlüssel und Empfehlung:  lab placement answers"
+       else echo "Answer key and recommendation:  lab placement answers"; fi
+  fi
+}
 
 sub="${1:-help}"; shift || true
 case "$sub" in
@@ -234,7 +263,7 @@ case "$sub" in
   lang)      cmd_lang "$@" ;;
   status)    cmd_status ;;
   progress)  cmd_progress ;;
-  placement) cmd_placement ;;
+  placement) cmd_placement "$@" ;;
   reset)     die "reset needs Docker - run it on the host: ./lab.sh reset <host|all>" ;;
   help|-h|--help) usage ;;
   *) usage; exit 1 ;;
