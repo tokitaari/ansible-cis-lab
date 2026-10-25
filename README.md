@@ -77,6 +77,8 @@ non-compliant again (your progress record is kept, `lab check` would fail until 
 Lost only by `git clean -fdx`, deleting the clone, or a fresh clone elsewhere - back up with
 `tar czf lab-backup.tgz work .lab`.
 
+Changes per version and what to rebuild: [`CHANGELOG.md`](CHANGELOG.md).
+
 ## Learning path
 
 | Stage | Focus | Exercises |

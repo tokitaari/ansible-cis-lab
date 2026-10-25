@@ -5,7 +5,8 @@ Markdown files (README, HINTS, EXPLANATION, docs) are rendered with headings,
 tables, lists and highlighted code blocks; other files (solutions) are shown
 with syntax highlighting and line numbers. Long output opens in a pager.
 
-Usage: lab-view [--strip-details] [--title TEXT] FILE... | -   (- = stdin, markdown)
+Usage: lab-view [--strip-details] [--title TEXT] [--render] FILE... | -   (- = stdin, markdown)
+  --render   always render with colours, never page (used by 'less' via LESSOPEN)
 Not a TTY (pipes, scripts) or LAB_PLAIN=1: the raw text is printed unchanged.
 """
 import argparse
@@ -45,11 +46,12 @@ def main():
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--strip-details", action="store_true", help="hide <details> blocks")
     ap.add_argument("--title", help="title for stdin input")
+    ap.add_argument("--render", action="store_true", help="force coloured output, no pager")
     ap.add_argument("files", nargs="+")
     args = ap.parse_args()
 
     texts = [(f, read(f)) for f in args.files]
-    plain = not sys.stdout.isatty() or os.environ.get("LAB_PLAIN") == "1"
+    plain = (not sys.stdout.isatty() and not args.render) or os.environ.get("LAB_PLAIN") == "1"
     try:
         if plain:
             raise ImportError
@@ -66,7 +68,7 @@ def main():
         return 0
 
     width = min(shutil.get_terminal_size((100, 40)).columns, MAX_WIDTH)
-    console = Console(width=width, highlight=False)
+    console = Console(width=width, highlight=False, force_terminal=args.render or None)
     parts = []
     for f, t in texts:
         if f == "-" or f.endswith(".md"):
@@ -85,7 +87,7 @@ def main():
     group = Group(*parts)
 
     height = len(console.render_lines(group, console.options, pad=False))
-    if height > console.size.height:
+    if not args.render and height > console.size.height:
         os.environ.setdefault("PAGER", "less -FRX")
         if "less" in os.environ["PAGER"] and "-R" not in os.environ["PAGER"]:
             os.environ["PAGER"] += " -R"
