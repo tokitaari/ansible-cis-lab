@@ -13,7 +13,7 @@ switch ($Command) {
     docker compose up -d --build
     Write-Host 'Waiting for targets to accept SSH ...'
     for ($i = 0; $i -lt 60; $i++) {
-      docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true -o *> $null
+      docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true *> $null
       if ($LASTEXITCODE -eq 0) { break }
       Start-Sleep -Seconds 3
     }
