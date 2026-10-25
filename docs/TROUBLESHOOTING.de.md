@@ -16,6 +16,7 @@
 | `Fedora 45` gewünscht | das Image-Tag ist `fedora:44`, solange 45 nicht veröffentlicht ist | `BASE_IMAGE` in `targets/fedora/Dockerfile` ändern |
 | Image-Pull scheitert bei `archlinux:latest` auf arm64 | kein offizielles arm64-Arch-Image | auf Apple Silicon den Dienst `arch` entfernen oder ein arm64-Community-Image nutzen |
 | `lab check` besteht die Zustandsprüfung, meldet aber *not idempotent* | dein Playbook meldet `changed` im `--check` | die als `changed` gelisteten Tasks ansehen; typisch: `command` ohne `changed_when`, `copy` mit Zeitstempeln, `password_hash` ohne Salt |
+| Uhr im Control Node weicht 1-2 h ab | Container läuft auf UTC | über `./lab.sh` / `.\lab.ps1` starten (erkennt die Zeitzone des Hosts) oder `LAB_TZ=Europe/Berlin` setzen; dann `docker compose up -d --force-recreate control`. Targets nutzen absichtlich UTC |
 | Docker-DNS im Target kaputt (`apt`/`dnf` lösen nicht auf) | `nft flush ruleset` oder neu gestarteter nftables-Dienst | `./lab.sh reset <host>`; siehe 4.07 |
 
 ## Nützliche Befehle

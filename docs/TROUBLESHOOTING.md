@@ -16,6 +16,7 @@
 | `Fedora 45` wanted | the image tag is `fedora:44` while 45 is not released | change `BASE_IMAGE` in `targets/fedora/Dockerfile` |
 | Image pull fails on `archlinux:latest` for arm64 | no official arm64 Arch image | remove the `arch` service on Apple Silicon or use an arm64 community image |
 | `lab check` passes state checks but reports *not idempotent* | your playbook reports `changed` in `--check` | look at the tasks listed as `changed`; typical: `command` without `changed_when`, `copy` with timestamps, `password_hash` without salt |
+| Clock in the control node is off by 1-2 h | container runs on UTC | start via `./lab.sh` / `.\lab.ps1` (detects the host time zone) or set `LAB_TZ=Europe/Berlin`; then `docker compose up -d --force-recreate control`. Targets use UTC on purpose |
 | Docker DNS broken inside a target (`apt`/`dnf` cannot resolve) | `nft flush ruleset` or a restarted nftables service | `./lab.sh reset <host>`; see 4.07 |
 
 ## Useful commands

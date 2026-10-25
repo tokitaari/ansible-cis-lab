@@ -12,6 +12,16 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
+### Fixed
+- Control node clock showed UTC instead of the host time: `lab.sh` / `lab.ps1` detect the host
+  time zone (IANA name) and pass it as `TZ`; the image now contains `tzdata`. Targets stay on
+  UTC on purpose (server best practice, consistent logs). Override with `LAB_TZ=Europe/Berlin`.
+  Plain `docker compose up` without the wrappers keeps UTC.
+
+Rebuild: *control*
+
+## [1.3.1] - 2026-10-25
+
 ### Added
 - `CHANGELOG.md`.
 
@@ -89,7 +99,8 @@ Rebuild: *targets*
 - Own CIS control catalogue `cis/controls.yml`, docs (learning path, container limits,
   troubleshooting).
 
-[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.0.1...v1.1.0

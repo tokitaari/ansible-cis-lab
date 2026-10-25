@@ -33,6 +33,7 @@ services:
       LAB_UID: ${LAB_UID:-1000}
       LAB_GID: ${LAB_GID:-1000}
       LAB_LANG: ${LAB_LANG:-}
+      TZ: ${LAB_TZ:-UTC}        # host time zone, detected by lab.sh / lab.ps1
     volumes:
       - ./:/lab
       - lab-keys:/lab-keys
