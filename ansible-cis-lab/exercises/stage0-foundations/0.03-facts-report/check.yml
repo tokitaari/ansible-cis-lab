@@ -1,0 +1,37 @@
+---
+- name: Check 0.03 - facts report
+  hosts: localhost
+  gather_facts: false
+  vars:
+    report: /lab/work/0.03/facts.csv
+  tasks:
+    - name: Stat the report
+      ansible.builtin.stat:
+        path: "{{ report }}"
+      register: st
+
+    - name: Report exists
+      ansible.builtin.assert:
+        that: st.stat.exists
+        fail_msg: "{{ report }} not found"
+
+    - name: Parse the report
+      ansible.builtin.set_fact:
+        rows: "{{ lookup('ansible.builtin.file', report).splitlines() | select | list }}"
+
+    - name: Header and one line per target
+      ansible.builtin.assert:
+        that:
+          - rows[0] == 'host,distribution,version,os_family,pkg_mgr,service_mgr,python'
+          - rows | length == 9
+          - rows[1:] | map('split', ',') | map('length') | unique == [7]
+          - (rows[1:] | map('split', ',') | map('first') | sort) == (groups['targets'] | sort)
+        fail_msg: "Expected the exact header plus 8 rows with 7 fields - got {{ rows | length }} lines"
+
+    - name: Facts are real (Alpine uses OpenRC, nobody is unreachable)
+      ansible.builtin.assert:
+        that:
+          - rows | select('search', '^alpine,') | first is search(',openrc,')
+          - rows | select('search', 'unreachable') | length == 0
+        fail_msg: Some values are missing - did every host deliver facts? (Alpine needs 0.02)
+        success_msg: Report looks good

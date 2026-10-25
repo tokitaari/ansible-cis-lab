@@ -1,0 +1,33 @@
+---
+- name: Protect password hashes
+  hosts: targets
+  become: true
+  vars:
+    shadow_perms:
+      Debian: {group: shadow, mode: "0640"}
+      Suse: {group: shadow, mode: "0640"}
+      Alpine: {group: shadow, mode: "0640"}
+      RedHat: {group: root, mode: "0000"}
+      Archlinux: {group: root, mode: "0600"}
+    shadow_paths:
+      - /etc/shadow
+      - /etc/gshadow
+      - /etc/shadow-
+      - /etc/gshadow-
+  tasks:
+    - name: Find which shadow files exist
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop: "{{ shadow_paths }}"
+      register: shadow_files
+
+    - name: Set owner, group and mode per OS family
+      ansible.builtin.file:
+        path: "{{ item.item }}"
+        owner: root
+        group: "{{ shadow_perms[ansible_facts.os_family].group }}"
+        mode: "{{ shadow_perms[ansible_facts.os_family].mode }}"
+      loop: "{{ shadow_files.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+      when: item.stat.exists

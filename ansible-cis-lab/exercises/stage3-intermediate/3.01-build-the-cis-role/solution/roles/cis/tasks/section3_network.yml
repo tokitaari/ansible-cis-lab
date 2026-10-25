@@ -1,0 +1,28 @@
+---
+- name: 3.3 | Ensure /etc/sysctl.d exists
+  ansible.builtin.file:
+    path: /etc/sysctl.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: 3.3 | Set and persist network kernel parameters
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+    sysctl_file: /etc/sysctl.d/60-cis-network.conf
+    sysctl_set: true
+    reload: false
+  loop: "{{ cis_sysctl_network | dict2items }}"
+  tags: [sysctl]
+
+- name: 1.5 | Persist global kernel parameters
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+    sysctl_file: /etc/sysctl.d/60-cis-kernel.conf
+    sysctl_set: "{{ cis_apply_global_sysctl }}"
+    reload: "{{ cis_apply_global_sysctl }}"
+  loop: "{{ cis_sysctl_kernel | dict2items }}"
+  tags: [sysctl]

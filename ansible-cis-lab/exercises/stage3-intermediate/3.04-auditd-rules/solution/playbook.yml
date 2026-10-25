@@ -1,0 +1,87 @@
+---
+- name: CIS 6.3 - auditd (Level 2)
+  hosts: targets
+  become: true
+  vars:
+    cis_audit_package:
+      Debian: auditd
+      RedHat: audit
+      Suse: audit
+      Archlinux: audit
+      Alpine: audit
+    cis_auditd_conf:
+      max_log_file_action: keep_logs
+      space_left_action: email
+      action_mail_acct: root
+      admin_space_left_action: single
+    # The audit subsystem is host-global - never load rules from inside a container
+    cis_manage_auditd_service: "{{ not (lab_in_container | default(false)) }}"
+    cis_audit_rules:
+      scope:
+        - -w /etc/sudoers -p wa -k scope
+        - -w /etc/sudoers.d -p wa -k scope
+      user_emulation:
+        - -a always,exit -F arch=b64 -C euid!=uid -F auid!=unset -S execve -k user_emulation
+      sudo_log:
+        - -w /var/log/sudo.log -p wa -k sudo_log_file
+      time_change:
+        - -a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -k time-change
+        - -w /etc/localtime -p wa -k time-change
+      identity:
+        - -w /etc/group -p wa -k identity
+        - -w /etc/passwd -p wa -k identity
+        - -w /etc/gshadow -p wa -k identity
+        - -w /etc/shadow -p wa -k identity
+        - -w /etc/security/opasswd -p wa -k identity
+        - -w /etc/nsswitch.conf -p wa -k identity
+        - -w /etc/pam.conf -p wa -k identity
+        - -w /etc/pam.d -p wa -k identity
+      logins:
+        - -w /var/log/lastlog -p wa -k logins
+        - -w /var/run/faillock -p wa -k logins
+  tasks:
+    - name: Install the audit framework
+      ansible.builtin.package:
+        name: "{{ cis_audit_package[ansible_facts.os_family] }}"
+        state: present
+
+    - name: Ensure the rules directory exists
+      ansible.builtin.file:
+        path: /etc/audit/rules.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: Deploy one rule file per topic
+      ansible.builtin.template:
+        src: audit.rules.j2
+        dest: "/etc/audit/rules.d/50-cis-{{ item.key }}.rules"
+        owner: root
+        group: root
+        mode: "0640"
+      loop: "{{ cis_audit_rules | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"
+
+    - name: Make the configuration immutable (must be loaded last)
+      ansible.builtin.copy:
+        dest: /etc/audit/rules.d/99-cis-finalize.rules
+        content: "-e 2\n"
+        owner: root
+        group: root
+        mode: "0640"
+
+    - name: Configure log retention and space actions
+      ansible.builtin.lineinfile:
+        path: /etc/audit/auditd.conf
+        regexp: '^\s*{{ item.key }}\s*='
+        line: "{{ item.key }} = {{ item.value }}"
+      loop: "{{ cis_auditd_conf | dict2items }}"
+
+    - name: Enable and start auditd (real hosts only)
+      ansible.builtin.service:
+        name: auditd
+        state: started
+        enabled: true
+      when: cis_manage_auditd_service | bool

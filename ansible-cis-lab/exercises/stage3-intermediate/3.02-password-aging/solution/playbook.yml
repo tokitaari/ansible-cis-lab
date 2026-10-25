@@ -1,0 +1,78 @@
+---
+- name: CIS 5.4.1 - password aging and inactive accounts
+  hosts: targets
+  become: true
+  vars:
+    cis_login_defs:
+      PASS_MAX_DAYS: 365
+      PASS_MIN_DAYS: 1
+      PASS_WARN_AGE: 7
+    cis_inactive_days: 45
+    cis_strong_hash_methods: [SHA512, YESCRYPT]
+  tasks:
+    - name: Check whether /etc/login.defs exists
+      ansible.builtin.stat:
+        path: /etc/login.defs
+      register: cis_login_defs_file
+
+    - name: Set password aging in /etc/login.defs
+      ansible.builtin.lineinfile:
+        path: /etc/login.defs
+        regexp: '^\s*{{ item.key }}\s'
+        line: "{{ item.key }}\t{{ item.value }}"
+      loop: "{{ cis_login_defs | dict2items }}"
+      when: cis_login_defs_file.stat.exists
+
+    - name: Vendor-split systems - create the drop-in directory
+      ansible.builtin.file:
+        path: /etc/login.defs.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: not cis_login_defs_file.stat.exists
+
+    - name: Vendor-split systems - set password aging in a drop-in
+      ansible.builtin.lineinfile:
+        path: /etc/login.defs.d/50-cis.defs
+        create: true
+        owner: root
+        group: root
+        mode: "0644"
+        regexp: '^\s*{{ item.key }}\s'
+        line: "{{ item.key }} {{ item.value }}"
+      loop: "{{ cis_login_defs | dict2items }}"
+      when: not cis_login_defs_file.stat.exists
+
+    - name: Read the current login.defs
+      ansible.builtin.slurp:
+        src: /etc/login.defs
+      register: cis_login_defs_content
+      when: cis_login_defs_file.stat.exists
+
+    - name: Determine the current hashing method
+      ansible.builtin.set_fact:
+        cis_current_hash: >-
+          {{ (cis_login_defs_content.content | default('') | b64decode
+              | regex_findall('(?m)^\s*ENCRYPT_METHOD\s+(\S+)')
+              | last | default('none')) | upper }}
+
+    - name: Use SHA512 only when nothing strong is configured (never downgrade yescrypt)
+      ansible.builtin.lineinfile:
+        path: /etc/login.defs
+        regexp: '^\s*ENCRYPT_METHOD\s'
+        line: "ENCRYPT_METHOD SHA512"
+      when:
+        - cis_login_defs_file.stat.exists
+        - cis_current_hash not in cis_strong_hash_methods
+
+    - name: Read useradd defaults
+      ansible.builtin.command: useradd -D
+      register: cis_useradd_defaults
+      changed_when: false
+      check_mode: false
+
+    - name: Lock accounts after the inactivity period
+      ansible.builtin.command: "useradd -D -f {{ cis_inactive_days }}"
+      when: ("INACTIVE=" ~ cis_inactive_days) not in cis_useradd_defaults.stdout_lines
+      changed_when: true

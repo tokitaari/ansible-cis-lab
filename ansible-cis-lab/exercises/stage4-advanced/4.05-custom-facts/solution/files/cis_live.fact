@@ -1,0 +1,5 @@
+#!/bin/sh
+# Executable Ansible fact: live security indicators (POSIX sh, busybox-compatible)
+uid0=$(awk -F: '$3 == 0' /etc/passwd | wc -l)
+prl=$(/usr/sbin/sshd -T 2>/dev/null | awk '$1 == "permitrootlogin" { print $2 }')
+printf '{"uid0_accounts": %d, "permit_root_login": "%s"}\n' "$uid0" "${prl:-unknown}"

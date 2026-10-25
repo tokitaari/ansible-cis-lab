@@ -1,0 +1,20 @@
+---
+- name: 5.1 | Deploy sshd hardening drop-in
+  ansible.builtin.template:
+    src: sshd_cis.conf.j2
+    dest: /etc/ssh/sshd_config.d/00-cis-hardening.conf
+    owner: root
+    group: root
+    mode: "0600"
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Reload sshd
+  register: cis_r_1
+
+- name: 5.1 | Validate the complete sshd configuration
+  ansible.builtin.command: /usr/sbin/sshd -t
+  changed_when: false
+  check_mode: false
+
+- name: 5.1 | Results
+  ansible.builtin.set_fact:
+    cis_control_results: ["{{ cis_r_1 }}"]

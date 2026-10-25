@@ -1,0 +1,22 @@
+---
+id: '4.05'
+slug: custom-facts
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: 'Custom facts: hosts that describe their own hardening'
+  de: 'Custom Facts: Hosts beschreiben ihre eigene Härtung'
+difficulty: 3
+minutes: 45
+cis:
+  section: (operations)
+  level: '-'
+hosts: targets
+concepts:
+- facts.d
+- static vs executable facts
+- ansible_local
+- no timestamps in managed files
+idempotency: true
+solve: ansible-playbook playbook.yml

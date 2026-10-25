@@ -1,0 +1,39 @@
+---
+- name: Check 1.05 - sudo hardening
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Stat the sudoers drop-in
+      ansible.builtin.stat:
+        path: /etc/sudoers.d/50-cis
+      register: st
+
+    - name: Read the drop-in
+      ansible.builtin.slurp:
+        src: /etc/sudoers.d/50-cis
+      register: content
+      when: st.stat.exists
+
+    - name: Full sudoers configuration is valid
+      ansible.builtin.command: /usr/sbin/visudo -c
+      register: visudo
+      changed_when: false
+      check_mode: false
+      failed_when: false
+
+    - name: use_pty and logfile configured
+      vars:
+        text: "{{ content.content | default('') | b64decode }}"
+      ansible.builtin.assert:
+        that:
+          - st.stat.exists
+          - st.stat.mode == '0440'
+          - st.stat.pw_name == 'root'
+          - text is search('(?m)^\s*Defaults\s+use_pty\s*$')
+          - text is search('(?m)^\s*Defaults\s+logfile\s*=\s*"?/var/log/sudo\.log"?\s*$')
+          - visudo.rc == 0
+        fail_msg: >-
+          /etc/sudoers.d/50-cis must exist (0440 root) with 'Defaults use_pty' and
+          'Defaults logfile="/var/log/sudo.log"'; visudo -c rc={{ visudo.rc }}
+        quiet: true

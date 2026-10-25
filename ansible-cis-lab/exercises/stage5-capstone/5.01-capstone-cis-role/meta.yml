@@ -1,0 +1,23 @@
+---
+id: '5.01'
+slug: capstone-cis-role
+stage: 5
+stage_name: Stage 5 - Capstone
+stage_name_de: Stufe 5 - Abschlussprojekt
+title:
+  en: 'Capstone: CIS role with audit and enforce mode'
+  de: 'Abschlussprojekt: CIS-Rolle mit Audit- und Enforce-Modus'
+difficulty: 5
+minutes: 240
+cis:
+  section: Sections 1-7
+  level: L1 + L2 switch
+hosts: targets
+concepts:
+- control registry
+- check_mode as audit engine
+- dynamic includes with apply
+- reporting
+- ansible-lint production
+idempotency: true
+solve: ansible-playbook site.yml

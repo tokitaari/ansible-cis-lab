@@ -1,0 +1,31 @@
+---
+- name: Load platform specific variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', cis_vars_candidates) }}"
+  vars:
+    cis_vars_candidates:
+      files:
+        - "{{ ansible_facts.distribution }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution }}.yml"
+        - "{{ ansible_facts.os_family }}.yml"
+        - default.yml
+      paths:
+        - "{{ role_path }}/vars"
+
+- name: Validate input
+  ansible.builtin.import_tasks: preflight.yml
+
+- name: Start with an empty result list
+  ansible.builtin.set_fact:
+    cis_findings: []
+
+- name: Run every control of the registry
+  ansible.builtin.include_tasks:
+    file: control.yml
+  loop: "{{ cis_controls }}"
+  loop_control:
+    loop_var: cis_control
+    label: "{{ cis_control.id }}"
+  when: cis_controls_only | length == 0 or cis_control.id in cis_controls_only
+
+- name: Write the compliance report
+  ansible.builtin.import_tasks: report.yml

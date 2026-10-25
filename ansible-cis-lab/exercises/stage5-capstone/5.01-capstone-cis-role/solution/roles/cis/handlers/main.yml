@@ -1,0 +1,7 @@
+---
+- name: Reload sshd
+  ansible.builtin.service:
+    name: "{{ cis_sshd_service }}"
+    state: reloaded
+  # in audit mode a notification only means "would change" - never act on it
+  when: cis_mode == 'enforce'

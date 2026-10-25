@@ -1,0 +1,54 @@
+---
+- name: CIS - kernel parameters
+  hosts: targets
+  become: true
+  vars:
+    cis_sysctl_network:
+      net.ipv4.ip_forward: 0
+      net.ipv4.conf.all.send_redirects: 0
+      net.ipv4.conf.default.send_redirects: 0
+      net.ipv4.conf.all.accept_redirects: 0
+      net.ipv4.conf.default.accept_redirects: 0
+      net.ipv4.conf.all.secure_redirects: 0
+      net.ipv4.conf.default.secure_redirects: 0
+      net.ipv4.conf.all.accept_source_route: 0
+      net.ipv4.conf.default.accept_source_route: 0
+      net.ipv4.conf.all.log_martians: 1
+      net.ipv4.conf.default.log_martians: 1
+      net.ipv4.icmp_echo_ignore_broadcasts: 1
+      net.ipv4.icmp_ignore_bogus_error_responses: 1
+      net.ipv4.conf.all.rp_filter: 1
+      net.ipv4.conf.default.rp_filter: 1
+      net.ipv4.tcp_syncookies: 1
+    cis_sysctl_kernel:
+      kernel.randomize_va_space: 2
+      fs.suid_dumpable: 0
+      kernel.yama.ptrace_scope: 1
+    # Global (non-namespaced) parameters must never be applied from inside a container
+    cis_apply_global_sysctl: "{{ not (lab_in_container | default(false)) }}"
+  tasks:
+    - name: Ensure /etc/sysctl.d exists
+      ansible.builtin.file:
+        path: /etc/sysctl.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Set and persist network parameters (namespaced - safe to apply)
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value | string }}"
+        sysctl_file: /etc/sysctl.d/60-cis-network.conf
+        sysctl_set: true
+        reload: false
+      loop: "{{ cis_sysctl_network | dict2items }}"
+
+    - name: Persist global kernel parameters (applied only on real hosts)
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value | string }}"
+        sysctl_file: /etc/sysctl.d/60-cis-kernel.conf
+        sysctl_set: "{{ cis_apply_global_sysctl }}"
+        reload: "{{ cis_apply_global_sysctl }}"
+      loop: "{{ cis_sysctl_kernel | dict2items }}"

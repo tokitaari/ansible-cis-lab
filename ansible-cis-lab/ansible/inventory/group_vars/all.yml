@@ -1,0 +1,7 @@
+---
+# True inside this lab. Use it to skip actions that would touch the HOST kernel
+# (loading audit rules, unloading kernel modules, writing non-namespaced sysctls).
+lab_in_container: true
+
+# Used by the banner exercises
+lab_org_name: Example Corp

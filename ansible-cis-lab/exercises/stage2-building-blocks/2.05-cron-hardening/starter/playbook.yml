@@ -1,0 +1,10 @@
+---
+# Exercise 2.05: Job schedulers: cron permissions and access
+# Replace the TODOs. Run with: ansible-playbook playbook.yml
+- name: TODO - describe what this play does
+  hosts: targets
+  become: true
+  tasks:
+    - name: TODO - describe the first task
+      ansible.builtin.debug:
+        msg: replace me

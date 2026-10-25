@@ -1,0 +1,41 @@
+# ~/.bashrc of the lab user (copied from /etc/skel when the user is created)
+# shellcheck shell=bash disable=SC2034  # variables are read by oh-my-bash
+[[ $- == *i* ]] || return
+
+# ---- oh-my-bash (installed system-wide in /opt/oh-my-bash) ------------------
+export OSH=/opt/oh-my-bash
+OSH_THEME="${LAB_OSH_THEME:-font}"        # other themes: ls /opt/oh-my-bash/themes - set LAB_OSH_THEME above this line
+OMB_USE_SUDO=false
+DISABLE_AUTO_UPDATE=true                  # the image is rebuilt instead
+OMB_PROMPT_SHOW_PYTHON_VENV=false
+completions=(git ssh docker pip)
+aliases=(general)
+plugins=(git colored-man-pages sudo)
+if [[ -r $OSH/oh-my-bash.sh ]]; then
+  # shellcheck disable=SC1091
+  source "$OSH/oh-my-bash.sh"
+else
+  PS1='\[\e[1;32m\]lab\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
+fi
+
+# ---- lab conveniences -----------------------------------------------------------
+export EDITOR=vim VISUAL=vim
+alias md='lab-view'                       # md FILE.md  - render any markdown file
+alias ap='ansible-playbook'
+alias al='ansible-lint --offline'
+# completion for the lab command
+_lab_complete() {
+  local cmds="list show start hint check explain solution solve lang status progress placement view docs help"
+  if (( COMP_CWORD == 1 )); then
+    mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "${COMP_WORDS[1]}")
+  elif (( COMP_CWORD == 2 )); then
+    case "${COMP_WORDS[1]}" in
+      show|start|hint|check|explain|solution|solve)
+        mapfile -t COMPREPLY < <(compgen -W "$(find /lab/exercises -mindepth 2 -maxdepth 2 -type d -name '[0-9]*' -printf '%f\n' | cut -d- -f1)" -- "${COMP_WORDS[2]}") ;;
+      lang) mapfile -t COMPREPLY < <(compgen -W "en de" -- "${COMP_WORDS[2]}") ;;
+      view) mapfile -t COMPREPLY < <(compgen -f -- "${COMP_WORDS[2]}") ;;
+      docs) mapfile -t COMPREPLY < <(compgen -W "$(lab docs --names 2>/dev/null)" -- "${COMP_WORDS[2]}") ;;
+    esac
+  fi
+}
+complete -F _lab_complete lab

@@ -1,0 +1,23 @@
+---
+id: '4.07'
+slug: nftables-safe-rollout
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: Host firewall with nftables - safe rollout
+  de: Host-Firewall mit nftables - sicherer Rollout
+difficulty: 5
+minutes: 90
+cis:
+  section: 4 Host based firewall
+  level: L1
+hosts: targets:!suse_family
+concepts:
+- own nft table
+- 'validate: nft -c'
+- dead-man switch with background job
+- reset_connection
+- co-existence with Docker
+idempotency: true
+solve: ansible-playbook playbook.yml

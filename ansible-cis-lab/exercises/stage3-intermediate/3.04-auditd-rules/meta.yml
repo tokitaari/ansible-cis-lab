@@ -1,0 +1,22 @@
+---
+id: '3.04'
+slug: auditd-rules
+stage: 3
+stage_name: Stage 3 - Intermediate
+stage_name_de: Stufe 3 - Mittelstufe
+title:
+  en: 'auditd: rules and log retention (Level 2)'
+  de: 'auditd: Regeln und Log-Aufbewahrung (Level 2)'
+difficulty: 3
+minutes: 50
+cis:
+  section: 6.3 Configure auditd
+  level: L2
+hosts: targets
+concepts:
+- dict of lists → files
+- template loop
+- lineinfile on key=value
+- host-global kernel features
+idempotency: true
+solve: ansible-playbook playbook.yml

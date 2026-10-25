@@ -1,0 +1,22 @@
+---
+id: '4.02'
+slug: profiles-and-exceptions
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: Profiles (Level 1/2) and documented exceptions
+  de: Profile (Level 1/2) und dokumentierte Ausnahmen
+difficulty: 4
+minutes: 75
+cis:
+  section: framework
+  level: L1/L2
+hosts: debian
+concepts:
+- variable-driven scoping
+- input validation
+- to_datetime / now()
+- contract testing
+idempotency: false
+solve: ansible-playbook site.yml -l debian

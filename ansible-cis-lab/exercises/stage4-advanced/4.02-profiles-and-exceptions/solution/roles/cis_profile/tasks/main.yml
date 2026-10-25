@@ -1,0 +1,90 @@
+---
+- name: Preflight | profile level is 1 or 2
+  ansible.builtin.assert:
+    that: cis_profile_level | int in [1, 2]
+    fail_msg: "cis_level must be 1 or 2, got {{ cis_profile_level }}"
+    quiet: true
+
+- name: Preflight | every exception is known, justified and not expired
+  ansible.builtin.assert:
+    that:
+      - item.id | default('') in cis_profile_known_ids
+      - (item.reason | default('') | string | trim | length) > 0
+      - item.expires is defined
+      - (item.expires | string | to_datetime('%Y-%m-%d')) > now()
+    fail_msg: "Invalid exception {{ item }}: needs a known id, a reason and a future 'expires' (YYYY-MM-DD)"
+    quiet: true
+  loop: "{{ cis_profile_exceptions }}"
+  loop_control:
+    label: "{{ item.id | default('?') }}"
+
+- name: Preflight | collect exception ids
+  ansible.builtin.set_fact:
+    cis_profile_exception_ids: "{{ cis_profile_exceptions | map(attribute='id') | list }}"
+
+- name: Preflight | show active exceptions
+  ansible.builtin.debug:
+    msg: "EXCEPTION {{ item.id }} until {{ item.expires }}: {{ item.reason }}"
+  loop: "{{ cis_profile_exceptions }}"
+  loop_control:
+    label: "{{ item.id }}"
+
+- name: L1-telnet | Insecure client packages
+  when: "'l1-telnet' not in cis_profile_exception_ids"
+  block:
+    - name: L1-telnet | Remove telnet
+      ansible.builtin.package:
+        name: telnet
+        state: absent
+
+- name: L1-ssh-maxauthtries | SSH authentication attempts
+  when: "'l1-ssh-maxauthtries' not in cis_profile_exception_ids"
+  block:
+    - name: L1-ssh-maxauthtries | Limit authentication attempts
+      ansible.builtin.copy:
+        dest: /etc/ssh/sshd_config.d/01-cis-maxauthtries.conf
+        content: "MaxAuthTries 4\n"
+        owner: root
+        group: root
+        mode: "0600"
+        validate: /usr/sbin/sshd -t -f %s
+
+- name: L2-modules | Level 2 kernel modules
+  when:
+    - cis_profile_level | int >= 2
+    - "'l2-modules' not in cis_profile_exception_ids"
+  block:
+    - name: L2-modules | Disable squashfs and udf
+      ansible.builtin.copy:
+        dest: "/etc/modprobe.d/cis-{{ item }}.conf"
+        content: |
+          install {{ item }} /bin/false
+          blacklist {{ item }}
+        owner: root
+        group: root
+        mode: "0644"
+      loop: [squashfs, udf]
+
+- name: L2-audit-identity | Audit identity files
+  when:
+    - cis_profile_level | int >= 2
+    - "'l2-audit-identity' not in cis_profile_exception_ids"
+  block:
+    - name: L2-audit-identity | Rules directory
+      ansible.builtin.file:
+        path: /etc/audit/rules.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: L2-audit-identity | Identity rules
+      ansible.builtin.copy:
+        dest: /etc/audit/rules.d/50-cis-identity.rules
+        content: |
+          -w /etc/group -p wa -k identity
+          -w /etc/passwd -p wa -k identity
+          -w /etc/shadow -p wa -k identity
+        owner: root
+        group: root
+        mode: "0640"

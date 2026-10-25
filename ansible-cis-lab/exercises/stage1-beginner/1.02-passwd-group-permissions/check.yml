@@ -1,0 +1,23 @@
+---
+- name: Check 1.02 - /etc/passwd and /etc/group permissions
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Stat account files
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop: [/etc/passwd, /etc/group]
+      register: st
+
+    - name: 0644 root:root
+      ansible.builtin.assert:
+        that:
+          - item.stat.mode == '0644'
+          - item.stat.pw_name == 'root'
+          - item.stat.gr_name == 'root'
+        fail_msg: "{{ item.item }} is {{ item.stat.mode }} {{ item.stat.pw_name }}:{{ item.stat.gr_name }} - expected 0644 root:root"
+        quiet: true
+      loop: "{{ st.results }}"
+      loop_control:
+        label: "{{ item.item }}"

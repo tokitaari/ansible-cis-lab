@@ -1,0 +1,21 @@
+---
+id: '4.08'
+slug: aide-async
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: File integrity with AIDE - long-running tasks
+  de: Dateiintegrität mit AIDE - lang laufende Tasks
+difficulty: 4
+minutes: 60
+cis:
+  section: 6.1 Filesystem integrity checking
+  level: L1
+hosts: debian_family:redhat_family
+concepts:
+- async / poll / async_status
+- creates for idempotency
+- systemd timers via templates
+idempotency: true
+solve: ansible-playbook playbook.yml

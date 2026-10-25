@@ -1,0 +1,53 @@
+---
+- name: 5.4.2 | Read account databases
+  ansible.builtin.slurp:
+    src: "{{ item }}"
+  loop: [/etc/passwd, /etc/shadow]
+  register: cis_account_files
+
+- name: 5.4.2 | Find dangerous accounts
+  ansible.builtin.set_fact:
+    cis_uid0_extra: >-
+      {{ (cis_account_files.results[0].content | b64decode).splitlines()
+         | map('split', ':') | selectattr('2', 'equalto', '0')
+         | map(attribute='0') | reject('equalto', 'root') | list }}
+    cis_empty_password: >-
+      {{ (cis_account_files.results[1].content | b64decode).splitlines()
+         | map('split', ':') | selectattr('1', 'equalto', '')
+         | map(attribute='0') | list }}
+
+- name: 5.4.2 | Remove additional UID 0 accounts
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+    force: true
+    remove: false
+  loop: "{{ cis_uid0_extra }}"
+
+- name: 5.4.2 | Lock accounts with an empty password
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password_lock: true
+  loop: "{{ cis_empty_password }}"
+
+- name: 5.4.3 | Default umask
+  ansible.builtin.copy:
+    dest: /etc/profile.d/50-cis-umask.sh
+    content: |
+      # CIS 5.4.3 - default umask
+      umask {{ cis_umask }}
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: 5.4.3 | Shell timeout
+  ansible.builtin.copy:
+    dest: /etc/profile.d/50-cis-tmout.sh
+    content: |
+      # CIS 5.4.3 - shell timeout
+      TMOUT={{ cis_tmout }}
+      readonly TMOUT
+      export TMOUT
+    owner: root
+    group: root
+    mode: "0644"
