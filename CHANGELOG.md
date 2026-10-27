@@ -12,6 +12,10 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.3.3] - 2026-10-27
+
 ### Removed
 - Stray `ansible-cis-lab/` subdirectory: a complete, outdated copy of the repository
   (437 files) that had been committed by accident and was part of the 1.3.2 archive.
@@ -125,7 +129,8 @@ Rebuild: *targets*
 - Own CIS control catalogue `cis/controls.yml`, docs (learning path, container limits,
   troubleshooting).
 
-[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.3...HEAD
+[1.3.3]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.2.0...v1.3.0
