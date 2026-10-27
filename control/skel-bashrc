@@ -8,6 +8,7 @@ OSH_THEME="${LAB_OSH_THEME:-font}"        # other themes: ls /opt/oh-my-bash/the
 OMB_USE_SUDO=false
 DISABLE_AUTO_UPDATE=true                  # the image is rebuilt instead
 OMB_PROMPT_SHOW_PYTHON_VENV=false
+SCM_CHECK=false                           # no git branch/status in the prompt (set true to show it)
 completions=(git ssh docker pip)
 aliases=(general)
 plugins=(git colored-man-pages sudo)

@@ -27,6 +27,9 @@ MINOR: new features or exercises, PATCH: fixes.
 - GitHub Actions workflow `release-check` runs it on every pull request, push to `main` and tag.
 
 ### Changed
+- Shell prompt in the control node no longer shows the git branch and status of `/lab`
+  (`SCM_CHECK=false` in `control/skel-bashrc`; set it to `true` to get it back). The lab
+  repository is not what learners work on, so the information was noise and each prompt ran git.
 - Control image sets `PYTHONDONTWRITEBYTECODE=1`, so nothing writes `__pycache__` into the
   mounted repository.
 - `.gitignore`: also ignore `/ansible-cis-lab*/`, `*.zip`, `*.patch`, `*.orig`, `*.rej`.
