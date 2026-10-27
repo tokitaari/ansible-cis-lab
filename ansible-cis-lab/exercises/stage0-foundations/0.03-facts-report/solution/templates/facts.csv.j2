@@ -1,5 +1,0 @@
-host,distribution,version,os_family,pkg_mgr,service_mgr,python
-{% for h in groups['targets'] | sort %}
-{% set f = hostvars[h]['ansible_facts'] | default({}) %}
-{{ h }},{{ f.get('distribution', 'unreachable') }},{{ f.get('distribution_version', '-') }},{{ f.get('os_family', '-') }},{{ f.get('pkg_mgr', '-') }},{{ f.get('service_mgr', '-') }},{{ f.get('python_version', '-') }}
-{% endfor %}

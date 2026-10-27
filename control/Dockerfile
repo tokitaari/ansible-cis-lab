@@ -4,7 +4,7 @@ FROM ${BASE_IMAGE}
 # Ansible community package 14 = ansible-core 2.21 + curated collections
 # (ansible.posix, community.general, ...). Override with --build-arg.
 ARG ANSIBLE_VERSION=14.*
-ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1 PYTHONDONTWRITEBYTECODE=1
 # UTF-8 locale: without it 'less' treats the exercise texts (★, ä, ö) as binary
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 LESSCHARSET=utf-8 PAGER="less -FRX" LESS="-FRX" \
     LESSOPEN="|/usr/local/bin/lab-lesspipe %s" EDITOR=vim VISUAL=vim TERM=xterm-256color

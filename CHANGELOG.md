@@ -12,7 +12,26 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Removed
+- Stray `ansible-cis-lab/` subdirectory: a complete, outdated copy of the repository
+  (437 files) that had been committed by accident and was part of the 1.3.2 archive.
+- Compiled Python bytecode `control/__pycache__/lab-viewcpython-313.pyc` (and its copy).
+
+### Fixed
+- Executable bit in git for `control/live-wrapper`, `targets/common/bootstrap.sh`,
+  `targets/common/lab-keysync` and `exercises/_common/run_checks.sh`.
+
+### Added
+- `tools/release-check.sh`: fails on tracked bytecode, nested repository copies, archives or
+  patch leftovers, missing executable bits and (with a tag argument) a missing CHANGELOG section.
+- GitHub Actions workflow `release-check` runs it on every pull request, push to `main` and tag.
+
+### Changed
+- Control image sets `PYTHONDONTWRITEBYTECODE=1`, so nothing writes `__pycache__` into the
+  mounted repository.
+- `.gitignore`: also ignore `/ansible-cis-lab*/`, `*.zip`, `*.patch`, `*.orig`, `*.rej`.
+
+Rebuild: *none* (optional *control* for `PYTHONDONTWRITEBYTECODE`)
 
 ## [1.3.2] - 2026-10-25
 

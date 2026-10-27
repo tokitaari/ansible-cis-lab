@@ -1,6 +1,0 @@
-/work/*
-!/work/.gitkeep
-/.lab/
-/cis/pdf/*.pdf
-/.ansible/
-**/.ansible/

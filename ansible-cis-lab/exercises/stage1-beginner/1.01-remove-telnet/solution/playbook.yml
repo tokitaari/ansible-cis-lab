@@ -1,9 +1,0 @@
----
-- name: Remove insecure client packages
-  hosts: targets
-  become: true
-  tasks:
-    - name: Remove telnet client
-      ansible.builtin.package:
-        name: telnet
-        state: absent
