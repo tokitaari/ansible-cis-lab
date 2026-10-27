@@ -14,6 +14,32 @@ MINOR: new features or exercises, PATCH: fixes.
 
 _Nothing yet._
 
+## [1.3.3] - 2026-10-27
+
+### Removed
+- Stray `ansible-cis-lab/` subdirectory: a complete, outdated copy of the repository
+  (437 files) that had been committed by accident and was part of the 1.3.2 archive.
+- Compiled Python bytecode `control/__pycache__/lab-viewcpython-313.pyc` (and its copy).
+
+### Fixed
+- Executable bit in git for `control/live-wrapper`, `targets/common/bootstrap.sh`,
+  `targets/common/lab-keysync` and `exercises/_common/run_checks.sh`.
+
+### Added
+- `tools/release-check.sh`: fails on tracked bytecode, nested repository copies, archives or
+  patch leftovers, missing executable bits and (with a tag argument) a missing CHANGELOG section.
+- GitHub Actions workflow `release-check` runs it on every pull request, push to `main` and tag.
+
+### Changed
+- Shell prompt in the control node no longer shows the git branch and status of `/lab`
+  (`SCM_CHECK=false` in `control/skel-bashrc`; set it to `true` to get it back). The lab
+  repository is not what learners work on, so the information was noise and each prompt ran git.
+- Control image sets `PYTHONDONTWRITEBYTECODE=1`, so nothing writes `__pycache__` into the
+  mounted repository.
+- `.gitignore`: also ignore `/ansible-cis-lab*/`, `*.zip`, `*.patch`, `*.orig`, `*.rej`.
+
+Rebuild: *none* (optional *control* for `PYTHONDONTWRITEBYTECODE`)
+
 ## [1.3.2] - 2026-10-25
 
 ### Fixed
@@ -103,7 +129,8 @@ Rebuild: *targets*
 - Own CIS control catalogue `cis/controls.yml`, docs (learning path, container limits,
   troubleshooting).
 
-[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.3...HEAD
+[1.3.3]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.2.0...v1.3.0

@@ -1,8 +1,0 @@
-# Hardening inventory
-
-| Host | Baseline | Version | Level | UID 0 accounts | PermitRootLogin |
-|---|---|---|---|---|---|
-{% for h in groups['targets'] | sort %}
-{% set l = hostvars[h].ansible_local | default({}) %}
-| {{ h }} | {{ l.cis.baseline | default('-') }} | {{ l.cis.version | default('-') }} | {{ l.cis.level | default('-') }} | {{ l.cis_live.uid0_accounts | default('-') }} | {{ l.cis_live.permit_root_login | default('-') }} |
-{% endfor %}

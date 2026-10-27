@@ -1,5 +1,0 @@
----
-- name: Reload sshd
-  ansible.builtin.service:
-    name: "{{ cis_sshd_service }}"
-    state: reloaded

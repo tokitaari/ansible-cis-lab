@@ -1,6 +1,0 @@
----
-- name: Apply the CIS baseline role
-  hosts: targets
-  become: true
-  roles:
-    - role: cis

@@ -1,6 +1,0 @@
----
-cis_sshd_service: sshd
-cis_cron_service: crond
-cis_cron_allow_supported: true
-cis_shadow_group: root
-cis_shadow_mode: "0000"

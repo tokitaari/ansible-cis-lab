@@ -1,7 +1,0 @@
----
-cis_sshd_service: sshd
-cis_cron_service: crond
-# busybox crontab ignores /etc/cron.allow - restrict the spool instead
-cis_cron_allow_supported: false
-cis_shadow_group: shadow
-cis_shadow_mode: "0640"

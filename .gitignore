@@ -6,3 +6,9 @@
 **/.ansible/
 __pycache__/
 *.pyc
+# stray copies / artefacts that must never be committed
+/ansible-cis-lab*/
+*.zip
+*.patch
+*.orig
+*.rej

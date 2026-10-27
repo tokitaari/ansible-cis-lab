@@ -1,0 +1,14 @@
+---
+name: release-check
+"on":
+  pull_request:
+  push:
+    branches: [main]
+    tags: ["v*"]
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release hygiene (on tags also checks the CHANGELOG section)
+        run: tools/release-check.sh ${{ github.ref_type == 'tag' && github.ref_name || '' }}

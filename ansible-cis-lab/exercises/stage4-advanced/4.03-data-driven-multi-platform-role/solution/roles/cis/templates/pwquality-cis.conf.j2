@@ -1,6 +1,0 @@
-{{ ansible_managed | comment }}
-# CIS 5.3.3.2 - password quality
-{% for key, value in cis_pwquality.items() %}
-{{ key }} = {{ value }}
-{% endfor %}
-enforce_for_root

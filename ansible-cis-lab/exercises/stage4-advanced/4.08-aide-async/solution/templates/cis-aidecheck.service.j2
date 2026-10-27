@@ -1,9 +1,0 @@
-{{ ansible_managed | comment }}
-[Unit]
-Description=CIS 6.1 - AIDE file integrity check
-
-[Service]
-Type=oneshot
-ExecStart={{ cis_aide.binary }} --check --config {{ cis_aide.config }}
-Nice=19
-IOSchedulingClass=idle

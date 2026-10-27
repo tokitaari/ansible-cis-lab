@@ -1,6 +1,0 @@
----
-- name: CIS profile and exception mechanism
-  hosts: targets
-  become: true
-  roles:
-    - role: cis_profile
