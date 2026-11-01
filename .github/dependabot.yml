@@ -1,0 +1,16 @@
+---
+# Weekly update PRs; each one runs the release-check workflow incl. the static gate.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /control
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: control
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci

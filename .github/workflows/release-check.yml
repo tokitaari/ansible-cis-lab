@@ -19,7 +19,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Install the linters (same packages as the control image)
-        run: pip install "ansible==14.*" ansible-lint yamllint
+          cache: pip
+          cache-dependency-path: control/requirements.txt
+      - name: Install the control node packages (pinned, same as the image)
+        run: pip install -r control/requirements.txt
       - name: Static quality gate (yamllint, ansible-lint, meta, EN/DE parity, links, controls)
         run: tools/static-check.sh

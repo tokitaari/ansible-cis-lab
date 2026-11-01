@@ -32,12 +32,20 @@ MINOR: new features or exercises, PATCH: fixes.
   `tools/static-check.sh lint links` runs single checks.
 - GitHub Actions workflow `release-check`: new job `static` runs the gate on every pull request,
   push to `main` and tag.
+- `control/requirements.txt`: pinned Python packages of the control node (ansible 14.5.0,
+  ansible-lint 26.10.1, yamllint 1.38.0, ...), used by the image **and** the CI job, so
+  `ansible-lint` in the lab reports exactly what CI reports. `.github/dependabot.yml` proposes
+  weekly updates for these pins and for the GitHub Actions used.
+
+### Changed
+- Control image installs its Python packages from `control/requirements.txt` instead of
+  unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
 - `cis/controls.yml`: control 5.2 (privilege escalation) now lists exercise 4.04, which
   configures sudo for the break-glass account and names 5.2 in its CIS reference.
 
-Rebuild: *none*
+Rebuild: *control* (pins the linter versions in the image)
 
 ## [1.3.3] - 2026-10-27
 
