@@ -25,6 +25,7 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 Voraussetzungen: Docker Engine 24+ oder Docker Desktop mit Compose v2, ~8 GB freier Platz, 4 GB RAM.
 Unter Windows WSL2 nutzen und das Lab **im Linux-Dateisystem** ablegen (z. B. `~/ansible-cis-lab`, nicht `/mnt/c/...`).
 
+<!-- parity: lang-specific -->
 ```bash
 ./lab.sh up          # bauen + starten (der erste Build dauert)
 ./lab.sh shell       # Shell im Control Node

@@ -7,7 +7,8 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
 
   meta      meta.yml schema, exercise layout, solve/hosts vs. solution and check,
             README header table and INDEX rows vs. meta.yml
-  parity    every EN Markdown file has a DE twin (*.de.md) with the same structure
+  parity    every EN Markdown file has a DE twin (*.de.md) with the same structure;
+            bash/yaml/... code blocks hold the same code (comments may be translated)
   links     relative Markdown links (and #anchors) resolve
   controls  cis/controls.yml schema and cross-references to the exercises
 """
@@ -291,23 +292,42 @@ REF_DEF_RE = re.compile(r"^\s{0,3}\[[^\]]+\]:\s+<?(\S+?)>?(?:\s+.*)?$")
 LIST_RE = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 
 
+PARITY_MARKER = "<!-- parity: lang-specific -->"
+
+
 def md_scan(text):
-    """Split Markdown into (prose lines, code blocks [(info, lines)])."""
-    prose, blocks, fence, info, body = [], [], None, "", []
+    """Split Markdown into (prose lines, code blocks [(info, lines, marked)]).
+
+    marked: the last non-blank line before the fence is PARITY_MARKER.
+    """
+    prose, blocks, fence, info, body, marked, last = [], [], None, "", [], False, ""
     for line in text.splitlines():
         m = FENCE_RE.match(line)
         if fence is None and m:
             fence, info, body = m.group(1)[0] * len(m.group(1)), m.group(2), []
+            marked = last == PARITY_MARKER
         elif fence is not None and line.strip().startswith(fence) and line.strip().strip(fence[0]) == "":
-            blocks.append((info, body))
-            fence = None
+            blocks.append((info, body, marked))
+            fence, last = None, ""
         elif fence is not None:
             body.append(line)
         else:
             prose.append(line)
+            if line.strip():
+                last = line.strip()
     if fence is not None:
-        blocks.append((info + " (unclosed)", body))
+        blocks.append((info + " (unclosed)", body, marked))
     return prose, blocks
+
+
+def code_without_comments(lines):
+    """Code lines without '#' comments (full-line or after whitespace) and blank lines."""
+    out = []
+    for line in lines:
+        line = re.sub(r"(^|\s)#.*$", "", line).rstrip()
+        if line:
+            out.append(line)
+    return out
 
 
 def strip_code_spans(line):
@@ -342,8 +362,7 @@ def md_structure(text):
         "heading levels": headings,
         "list items": lists,
         "table lines": rows,
-        # code may differ (translated comments, an extra 'lab lang de'), the blocks may not
-        "code blocks (info strings)": [i for i, _ in blocks],
+        "code blocks (info strings)": [i for i, _, _ in blocks],
         "link targets (.de.md -> .md)": links,
     }
 
@@ -363,13 +382,33 @@ def check_parity(files):
             continue
         if f in PARITY_EXEMPT:
             fail("parity", f"{f}: listed in PARITY_EXEMPT but {de} exists - remove the entry")
-        en_s, de_s = md_structure(read(os.path.join(ROOT, f))), md_structure(read(os.path.join(ROOT, de)))
+        en_t, de_t = read(os.path.join(ROOT, f)), read(os.path.join(ROOT, de))
+        en_s, de_s = md_structure(en_t), md_structure(de_t)
         for key in en_s:
             if en_s[key] != de_s[key]:
                 fail("parity", f"{f} vs {de}: {key} differ: {short(en_s[key])} vs {short(de_s[key])}")
+        if en_s["code blocks (info strings)"] == de_s["code blocks (info strings)"]:
+            check_code_parity(f, de, md_scan(en_t)[1], md_scan(de_t)[1])
     for f in PARITY_EXEMPT:
         if f not in have:
             fail("parity", f"PARITY_EXEMPT lists {f}, which does not exist - remove the entry")
+
+
+def check_code_parity(en, de, en_blocks, de_blocks):
+    """Code blocks with an info string (bash, yaml, ...) must hold the same code in EN and DE;
+    comments may be translated. Blocks without an info string (diagrams, trees, placeholders)
+    are translated freely. A deliberate difference needs PARITY_MARKER on the line before the
+    block (in either file)."""
+    for n, ((info, a, ma), (_, b, mb)) in enumerate(zip(en_blocks, de_blocks), 1):
+        if not info or ma or mb:
+            continue
+        ca, cb = code_without_comments(a), code_without_comments(b)
+        if ca != cb:
+            diff = next((i for i, (x, y) in enumerate(zip(ca, cb)) if x != y), min(len(ca), len(cb)))
+            got = (ca[diff] if diff < len(ca) else "<end>", cb[diff] if diff < len(cb) else "<end>")
+            fail("parity", f"{en} vs {de}: code block {n} ({info}) differs outside comments: "
+                           f"{got[0]!r} vs {got[1]!r} - fix the code or mark the DE block with "
+                           f"{PARITY_MARKER}")
 
 
 def short(v):

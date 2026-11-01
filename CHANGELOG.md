@@ -20,7 +20,10 @@ MINOR: new features or exercises, PATCH: fixes.
     files, three hints per language, `solve` file exists and runs on `hosts`, README header
     table and `exercises/INDEX*.md` rows match `meta.yml`;
   - *parity*: every EN Markdown file has a `.de.md` twin with the same headings, list items,
-    table lines, code blocks and link targets (exceptions listed in the script, see G8);
+    table lines, code blocks and link targets (exceptions listed in the script, see G8).
+    Code blocks with an info string (`bash`, `yaml`) must contain the same code - comments may
+    be translated; a deliberate difference is marked with `<!-- parity: lang-specific -->` on the
+    line before the DE block (used once: `lab lang de` in the quick start of `README.de.md`);
   - *links*: relative Markdown links and `#anchors` resolve;
   - *controls*: `cis/controls.yml` schema, referenced exercises exist, and every CIS id named
     in an exercise's `meta.yml` is a control that lists the exercise at a matching level.
