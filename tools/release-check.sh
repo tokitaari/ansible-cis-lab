@@ -24,7 +24,8 @@ junk=$(tracked | grep -E '\.(zip|tgz|tar\.gz|patch|orig|rej)$' || true)
 # 4. scripts are executable in the index
 for f in lab.sh control/lab control/lab-view control/lab-lesspipe control/live-wrapper \
          control/entrypoint.sh targets/common/bootstrap.sh targets/common/lab-keysync \
-         exercises/_common/run_checks.sh tools/release-check.sh; do
+         exercises/_common/run_checks.sh tools/release-check.sh tools/static-check.sh \
+         tools/static_check.py; do
   [[ -e "$f" ]] || continue
   mode=$(git ls-files -s -- "$f" | awk '{print $1}')
   [[ "$mode" == 100755 ]] || fail "$f is not executable in git (mode ${mode:-untracked}) - git update-index --chmod=+x $f"

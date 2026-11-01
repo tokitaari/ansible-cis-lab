@@ -79,6 +79,10 @@ Lost only by `git clean -fdx`, deleting the clone, or a fresh clone elsewhere - 
 
 Changes per version and what to rebuild: [`CHANGELOG.md`](CHANGELOG.md).
 
+Changing the lab itself (exercises, docs, solutions)? Run `tools/static-check.sh` before you open
+a pull request - in the control node: `docker compose exec control /lab/tools/static-check.sh`.
+CI runs the same checks.
+
 ## Learning path
 
 | Stage | Focus | Exercises |
@@ -103,6 +107,7 @@ ansible/              ansible.cfg, inventory (grouped by OS family), shared role
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, check
 cis/                  control catalogue + place for your CIS PDFs
 docs/                 getting started, learning path, container limits, troubleshooting
+tools/                maintainer checks: release hygiene, static quality gate (both run in CI)
 work/                 YOUR solutions (mounted to /lab/work)
 ```
 

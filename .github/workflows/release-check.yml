@@ -12,3 +12,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Release hygiene (on tags also checks the CHANGELOG section)
         run: tools/release-check.sh ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: control/requirements.txt
+      - name: Install the control node packages (pinned, same as the image)
+        run: pip install -r control/requirements.txt
+      - name: Static quality gate (yamllint, ansible-lint, meta, EN/DE parity, links, controls)
+        run: tools/static-check.sh

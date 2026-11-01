@@ -1,0 +1,10 @@
+# Python packages of the control node - single source for the image (control/Dockerfile)
+# and CI (.github/workflows/release-check.yml, job "static"), so learners lint with exactly
+# what CI uses. Dependabot proposes updates; a bump needs: docker compose build control.
+# ansible 14.x = ansible-core 2.21 + curated collections (ansible.posix, community.general, ...)
+ansible==14.5.0
+ansible-lint==26.10.1
+yamllint==1.38.0
+passlib==1.7.4
+jmespath==1.1.0
+rich==15.0.0
