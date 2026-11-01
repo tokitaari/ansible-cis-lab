@@ -13,6 +13,7 @@ cis:
   section: 5.3.3 PAM arguments (pwquality)
   level: L1
 hosts: debian_family:redhat_family
+requires: []
 concepts:
 - per-family packages
 - drop-in configs

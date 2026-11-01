@@ -13,6 +13,8 @@ cis:
   section: 2.4 Job schedulers
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - per-family service names
 - stat loops

@@ -13,6 +13,8 @@ cis:
   section: 3.3 Network kernel parameters / 1.5 Process hardening
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - ansible.posix.sysctl
 - dict2items

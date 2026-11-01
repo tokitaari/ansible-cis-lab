@@ -128,8 +128,19 @@ cmd_hint() {
   awk -v n="$n" '/^## /{c++} c==n' "$f" | view -
 }
 
+requires_missing() { # requires_missing <dir> -> ids from meta 'requires' not in the progress file
+  python3 - "$1/meta.yml" "$STATE_DIR/progress" <<'PY'
+import os, sys, yaml
+req = (yaml.safe_load(open(sys.argv[1])) or {}).get("requires") or []
+done = set()
+if os.path.exists(sys.argv[2]):
+    done = {l.split()[0] for l in open(sys.argv[2]) if l.strip()}
+print(" ".join(str(r) for r in req if str(r) not in done))
+PY
+}
+
 cmd_start() {
-  local id="${1:-}" d target
+  local id="${1:-}" d target missing
   resolve "$id"; d="$EXD"; target="$WORK_DIR/$id"
   mkdir -p "$target"
   if [[ -d "$d/starter" ]]; then
@@ -137,6 +148,11 @@ cmd_start() {
   fi
   info "Work directory: $target"
   find "$target" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null
+  missing="$(requires_missing "$d")"
+  if [[ -n "$missing" ]]; then
+    echo "${c_yel}note:${c_off} $id builds on exercises you have not passed yet: $missing"
+    echo "      (lab show <id> for each; this is a warning only)"
+  fi
   echo
   view "$(localized "$d" README)"
 }

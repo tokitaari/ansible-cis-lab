@@ -13,6 +13,8 @@ cis:
   section: (operations)
   level: '-'
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - facts.d
 - static vs executable facts

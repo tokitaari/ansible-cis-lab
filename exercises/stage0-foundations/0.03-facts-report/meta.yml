@@ -13,6 +13,8 @@ cis:
   section: '-'
   level: '-'
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - facts
 - hostvars

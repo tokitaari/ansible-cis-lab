@@ -13,6 +13,8 @@ cis:
   section: 5.1 SSH server
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - copy
 - validate

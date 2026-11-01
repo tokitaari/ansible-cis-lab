@@ -13,6 +13,8 @@ cis:
   section: cross-section
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - read-only plays
 - 'check_mode: false on readers'

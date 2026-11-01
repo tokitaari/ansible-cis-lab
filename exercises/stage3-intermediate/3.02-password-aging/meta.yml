@@ -13,6 +13,8 @@ cis:
   section: 5.4.1 Shadow password suite parameters
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - lineinfile
 - regexp

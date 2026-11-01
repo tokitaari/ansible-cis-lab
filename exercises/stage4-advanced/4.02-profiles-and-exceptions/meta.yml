@@ -13,6 +13,7 @@ cis:
   section: framework
   level: L1/L2
 hosts: debian
+requires: []
 concepts:
 - variable-driven scoping
 - input validation

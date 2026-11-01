@@ -13,6 +13,8 @@ cis:
   section: all
   level: L1/L2
 hosts: (reading)
+requires:
+- '5.01'
 concepts:
 - code review
 - benchmark coverage

@@ -44,6 +44,11 @@ MINOR: new features or exercises, PATCH: fixes.
   the way a learner lays it out (roles under `<work-dir>/roles/`), so `lab check` can verify the
   solution itself, including the idempotency run - groundwork for running the checks in CI.
   Rebuild: *none*
+- `meta.yml` key `requires`: the exercises whose result an exercise technically builds on
+  (target state or files in `work/`, not the suggested learning order) - e.g. 0.02 (Python on
+  Alpine) for every exercise that gathers facts on Alpine, 3.01-3.05 for 4.03, 5.01 for 5.02.
+  `lab start` warns (without blocking) when one of them is not passed yet; the static gate
+  checks that the ids exist, are earlier than the exercise and sorted. Rebuild: *none*
 
 ### Changed
 - Control image installs its Python packages from `control/requirements.txt` instead of

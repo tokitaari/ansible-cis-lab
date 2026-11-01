@@ -13,6 +13,8 @@ cis:
   section: (operations)
   level: '-'
 hosts: targets
+requires:
+- '5.01'
 concepts:
 - any_errors_fatal
 - serial

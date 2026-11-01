@@ -13,6 +13,8 @@ cis:
   section: 4 Host based firewall
   level: L1
 hosts: targets:!suse_family
+requires:
+- '0.02'
 concepts:
 - own nft table
 - 'validate: nft -c'

@@ -13,6 +13,8 @@ cis:
   section: Sections 1, 2, 3, 5, 7
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - roles
 - defaults vs vars
