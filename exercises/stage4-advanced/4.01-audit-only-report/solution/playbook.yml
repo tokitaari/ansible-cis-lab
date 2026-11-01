@@ -84,7 +84,8 @@
   hosts: localhost
   gather_facts: false
   vars:
-    report_dir: /lab/work/4.01
+    # 'lab' exports LAB_WORK_DIR (default /lab/work); CI checks solutions in another work dir
+    report_dir: "{{ lookup('ansible.builtin.env', 'LAB_WORK_DIR', default='/lab/work') }}/4.01"
   tasks:
     - name: Build the report structure
       vars:

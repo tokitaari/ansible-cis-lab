@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Check 5.03 - self-assessed review; only checks that all six questions are answered
 set -u
-f=/lab/work/5.03/review.md
+work="${LAB_WORK_DIR:-/lab/work}"   # set by lab; CI checks solutions in another work dir
+f="$work/5.03/review.md"
 [[ -f "$f" ]] || { echo "FAIL: $f not found"; exit 1; }
 missing=0
 for n in 1 2 3 4 5 6; do

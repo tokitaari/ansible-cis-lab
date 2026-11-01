@@ -36,6 +36,14 @@ MINOR: new features or exercises, PATCH: fixes.
   ansible-lint 26.10.1, yamllint 1.38.0, ...), used by the image **and** the CI job, so
   `ansible-lint` in the lab reports exactly what CI reports. `.github/dependabot.yml` proposes
   weekly updates for these pins and for the GitHub Actions used.
+- `LAB_WORK_DIR` overrides the work directory (default `/lab/work`): `lab` exports it together
+  with a matching `ANSIBLE_ROLES_PATH` (`<work-dir>/roles`, unless already set), and every
+  `check.sh`/`check.yml` and the solutions of 0.03, 4.01 and 4.05 that read or write files in
+  `work/` follow it. Learners see no difference.
+- `tools/stage-solution.sh <id> <work-dir>`: copies a reference solution into a work directory
+  the way a learner lays it out (roles under `<work-dir>/roles/`), so `lab check` can verify the
+  solution itself, including the idempotency run - groundwork for running the checks in CI.
+  Rebuild: *none*
 
 ### Changed
 - Control image installs its Python packages from `control/requirements.txt` instead of

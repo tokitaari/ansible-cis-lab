@@ -40,15 +40,18 @@
 - name: Hardening inventory on the control node
   hosts: localhost
   gather_facts: false
+  vars:
+    # 'lab' exports LAB_WORK_DIR (default /lab/work); CI checks solutions in another work dir
+    report_dir: "{{ lookup('ansible.builtin.env', 'LAB_WORK_DIR', default='/lab/work') }}/4.05"
   tasks:
     - name: Ensure the work directory exists
       ansible.builtin.file:
-        path: /lab/work/4.05
+        path: "{{ report_dir }}"
         state: directory
         mode: "0755"
 
     - name: Write inventory.md
       ansible.builtin.template:
         src: inventory.md.j2
-        dest: /lab/work/4.05/inventory.md
+        dest: "{{ report_dir }}/inventory.md"
         mode: "0644"

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Check 5.01 - capstone acceptance (expects that you already ran enforce mode)
 set -u
-role=/lab/work/roles/cis
-site=/lab/work/5.01/site.yml
-report=/lab/work/5.01/reports/compliance.json
+work="${LAB_WORK_DIR:-/lab/work}"   # set by lab; CI checks solutions in another work dir
+role="$work/roles/cis"
+site="$work/5.01/site.yml"
+report="$work/5.01/reports/compliance.json"
 rc=0
 fail() { echo "FAIL: $*"; rc=1; }
 
@@ -13,10 +14,10 @@ echo "--- ansible-lint (production)"
 ansible-lint --offline --profile production -q "$role" || fail "ansible-lint production profile reported problems"
 
 echo "--- regression checks (state after enforce)"
-bash /lab/exercises/_common/run_checks.sh 0.04 1.01 1.02 1.03 1.04 1.05 2.01 2.02 2.03 2.04 2.05 2.06 3.02 3.03 3.05 -- "$@" || rc=1
+bash "${LAB_ROOT:-/lab}/exercises/_common/run_checks.sh" 0.04 1.01 1.02 1.03 1.04 1.05 2.01 2.02 2.03 2.04 2.05 2.06 3.02 3.03 3.05 -- "$@" || rc=1
 
 echo "--- audit run must change nothing and report no failures"
-out="$(cd /lab/work/5.01 && ANSIBLE_NOCOLOR=1 ansible-playbook site.yml -e cis_mode=audit "$@" 2>&1)" || {
+out="$(cd "$work/5.01" && ANSIBLE_NOCOLOR=1 ansible-playbook site.yml -e cis_mode=audit "$@" 2>&1)" || {
   printf '%s\n' "$out" | tail -n 30; fail "audit run failed"; }
 if printf '%s\n' "$out" | sed -n '/PLAY RECAP/,$p' | grep -E '^[a-z]+ +:' | grep -v '^localhost' | grep -Ev 'changed=0 '; then
   fail "audit mode changed something on the hosts above"

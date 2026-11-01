@@ -31,10 +31,12 @@
 - name: Check 4.05 - report
   hosts: localhost
   gather_facts: false
+  vars:
+    report: "{{ lookup('ansible.builtin.env', 'LAB_WORK_DIR', default='/lab/work') }}/4.05/inventory.md"
   tasks:
     - name: inventory.md lists all targets
       vars:
-        md: "{{ lookup('ansible.builtin.file', '/lab/work/4.05/inventory.md', errors='ignore') | default('', true) }}"
+        md: "{{ lookup('ansible.builtin.file', report, errors='ignore') | default('', true) }}"
       ansible.builtin.assert:
         that: groups['targets'] | reject('in', md) | list | length == 0
-        fail_msg: /lab/work/4.05/inventory.md missing or incomplete
+        fail_msg: "{{ report }} missing or incomplete"
