@@ -80,6 +80,10 @@ Verloren nur durch `git clean -fdx`, Löschen des Klons oder einen neuen Klon an
 
 Änderungen pro Version und was neu gebaut werden muss: [`CHANGELOG.md`](CHANGELOG.md).
 
+Du änderst das Lab selbst (Aufgaben, Doku, Lösungen)? Führe vor dem Pull Request
+`tools/static-check.sh` aus - im Control Node: `docker compose exec control /lab/tools/static-check.sh`.
+CI führt dieselben Prüfungen aus.
+
 ## Lernpfad
 
 | Stufe | Schwerpunkt | Aufgaben |
@@ -104,6 +108,7 @@ ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeins
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
 cis/                  Kontrollkatalog + Ablage für deine CIS-PDFs
 docs/                 Einstieg, Lernpfad, Container-Grenzen, Fehlerbehebung
+tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate (beide in CI)
 work/                 DEINE Lösungen (eingehängt nach /lab/work)
 ```
 

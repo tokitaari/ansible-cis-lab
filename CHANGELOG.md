@@ -12,6 +12,24 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
+### Added
+- `tools/static-check.sh`: static quality gate that needs no containers - `yamllint --strict`,
+  `ansible-lint --profile production` on every `solution/` (4.04 with its vault password, 5.02
+  against the 5.01 reference role), and `tools/static_check.py`:
+  - *meta*: `meta.yml` schema (keys, types, id/slug/stage vs. directory, stage names), required
+    files, three hints per language, `solve` file exists and runs on `hosts`, README header
+    table and `exercises/INDEX*.md` rows match `meta.yml`;
+  - *parity*: every EN Markdown file has a `.de.md` twin with the same headings, list items,
+    table lines, code blocks and link targets (exceptions listed in the script, see G8);
+  - *links*: relative Markdown links and `#anchors` resolve;
+  - *controls*: `cis/controls.yml` schema, referenced exercises exist, and every CIS id named
+    in an exercise's `meta.yml` is a control that lists the exercise at a matching level.
+
+  Run it on the host or in the control node (`docker compose exec control /lab/tools/static-check.sh`);
+  `tools/static-check.sh lint links` runs single checks.
+- GitHub Actions workflow `release-check`: new job `static` runs the gate on every pull request,
+  push to `main` and tag.
+
 ### Fixed
 - `cis/controls.yml`: control 5.2 (privilege escalation) now lists exercise 4.04, which
   configures sudo for the break-glass account and names 5.2 in its CIS reference.
