@@ -12,7 +12,11 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Fixed
+- `cis/controls.yml`: control 5.2 (privilege escalation) now lists exercise 4.04, which
+  configures sudo for the break-glass account and names 5.2 in its CIS reference.
+
+Rebuild: *none*
 
 ## [1.3.3] - 2026-10-27
 
