@@ -60,6 +60,10 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 3.02 check on openSUSE: with the vendor split there is no `/etc/login.defs`, the defaults
+  (`ENCRYPT_METHOD SHA512`) live in `/usr/etc/login.defs`. The check read only `/etc` and
+  reported `ENCRYPT_METHOD=NONE`; it now uses `/etc/login.defs` or else the vendor file, plus
+  the drop-ins of both, as the README already describes. Rebuild: *none*
 - Debian/Ubuntu: the target images ship without an apt package index, so every package
   install failed with `No package matching ...` (3.03, 3.04, 4.07, 4.08 and the roles of 4.03
   and 5.01 - in 4.03 the whole run aborted on the Debian family). The reference solutions now
