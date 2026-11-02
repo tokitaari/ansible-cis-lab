@@ -31,7 +31,7 @@ Scope of this exercise: `debian_family:redhat_family`. The others are a bonus.
 
 ## Requirements
 
-- [ ] Install the right package per family (dict lookup).
+- [ ] Install the right package per family (dict lookup). Debian/Ubuntu: refresh the apt package index first (`ansible.builtin.apt` with `update_cache: true` and `cache_valid_time`) - the lab images ship without one.
 - [ ] Write `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) with the CIS values, generated from a dict variable.
 - [ ] Debian family: `pam_pwquality` appears in `/etc/pam.d/common-password` (installing the package normally enables it - verify, and enable the profile with `pam-auth-update --enable pwquality` only if missing).
 - [ ] Red Hat family: `pam_pwquality` appears in `/etc/pam.d/system-auth`; check `authselect current` and do not edit PAM files directly.

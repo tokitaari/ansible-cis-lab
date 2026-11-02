@@ -34,6 +34,10 @@ non-negotiable.
   and covers older versions.
 - `logfile` is in addition to syslog/journal, not instead.
 - Ansible's own sudo calls now appear in `/var/log/sudo.log` - take a look.
+- openSUSE Leap 16 moves vendor defaults to `/usr/etc` (`/usr/etc/sudoers`, `/usr/etc/login.defs`);
+  files in `/etc` override them. The package ships `/usr/etc/sudoers` with mode 0444, so
+  `visudo -c` exits 1 on an untouched host. That file is not yours - the check tolerates exactly
+  this message and still fails on syntax errors or bad permissions in `/etc`.
 
 ## Reference solution
 

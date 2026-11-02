@@ -6,7 +6,7 @@ Collect raw data first (one task per source, all read-only, `check_mode: false` 
 
 ## Hint 2
 
-For effective sshd values reuse the parsing trick from the checks: `sshd -T` → `dict(lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\\t\\2') | map('split', '\\t'))`. Aggregation: second play on `localhost`, iterate `groups['targets']`, read `hostvars[h].cis_results`.
+For effective sshd values reuse the parsing trick from the checks: `sshd -T` → `pairs = lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\\t\\2') | map('split', '\\t') | list`, then `dict(pairs | map('first') | map('lower') | zip(pairs | map('last')))` - lower-case the keywords, OpenSSH 10.6 prints `PermitRootLogin`. Aggregation: second play on `localhost`, iterate `groups['targets']`, read `hostvars[h].cis_results`.
 
 ## Hint 3
 

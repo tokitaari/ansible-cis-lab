@@ -27,7 +27,7 @@ file before it is installed. (If it happens anyway: `./lab.sh reset <host>`.)
 - [ ] Create `/etc/sudoers.d/50-cis` with `Defaults use_pty` and `Defaults logfile="/var/log/sudo.log"`.
 - [ ] Owner `root:root`, mode `0440`.
 - [ ] Validate with `visudo -cf %s` before installation.
-- [ ] `visudo -c` on the host reports no errors, and Ansible can still become root.
+- [ ] `visudo -c` on the host reports no errors (on openSUSE it also complains about `/usr/etc/sudoers` - see the explanation), and Ansible can still become root.
 
 ## How to work
 

@@ -48,6 +48,12 @@ Geht - aber Distributionen liefern unterschiedliche Hauptdateien, und Paket-Upda
 können sie ersetzen. Ein Drop-in, das komplett dir gehört, ist leichter nachvollziehbar
 und leichter zu entfernen.
 
+### `sshd -T` auswerten
+Die Schlüsselwörter der Ausgabe sind case-insensitiv, und ihre Schreibweise hat sich
+geändert: ältere OpenSSH-Versionen geben `permitrootlogin no` aus, OpenSSH 10.6 (Arch)
+`PermitRootLogin no`. Skripte und Checks vergleichen das Schlüsselwort deshalb klein
+geschrieben (`tolower($1)` in awk, `| lower` in Jinja) - die Werte behalten ihre Schreibweise.
+
 ### Praxis
 Bevor du in Produktion sshd anfasst: zweite Sitzung offen halten, `validate` nutzen
 und in Wellen ausrollen (`serial`, Stufe 5).

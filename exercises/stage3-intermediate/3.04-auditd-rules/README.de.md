@@ -32,7 +32,7 @@ identity (Kontodateien, PAM, nsswitch), logins - plus `99-cis-finalize.rules` mi
 
 ## Anforderungen
 
-- [ ] Paket je Familie: Debian `auditd`, alle anderen `audit`.
+- [ ] Paket je Familie: Debian `auditd`, alle anderen `audit`. Debian/Ubuntu: vorher den apt-Paketindex aktualisieren (`ansible.builtin.apt` mit `update_cache: true` und `cache_valid_time`) - die Lab-Images enthalten keinen.
 - [ ] Die Regeln stammen aus **einer** Dict-Variable (Thema → Liste von Regelzeilen); ein templatebasierter Task mit Schleife schreibt `50-cis-<thema>.rules` (`root:root`, `0640`). Kopiere die Regelliste aus `lab solution 3.04`, wenn du sie nicht abtippen willst - es geht um die Struktur.
 - [ ] `99-cis-finalize.rules` enthält genau `-e 2`.
 - [ ] `/etc/audit/auditd.conf`: `max_log_file_action = keep_logs`, `space_left_action = email`, `action_mail_acct = root`, `admin_space_left_action = single`.

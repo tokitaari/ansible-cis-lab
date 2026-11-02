@@ -2,7 +2,7 @@
 
 ## Hinweis 1
 
-Vorabprüfungen: `ansible.builtin.command: /usr/sbin/sshd -t` und `/usr/sbin/visudo -c` (beide `changed_when: false`, `check_mode: false`); freier Platz aus den Facts: `ansible_facts.mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first`.
+Vorabprüfungen: `ansible.builtin.command: /usr/sbin/sshd -t` und `/usr/sbin/visudo -c` (beide `changed_when: false`, `check_mode: false`; auf openSUSE endet `visudo -c` wegen `/usr/etc/sudoers` mit 1 - siehe 1.05 - also registrieren und per `failed_when` entscheiden); freier Platz aus den Facts: `ansible_facts.mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first`.
 
 ## Hinweis 2
 
