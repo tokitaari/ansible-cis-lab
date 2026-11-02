@@ -47,5 +47,6 @@ if [[ -d "$ex/solution/roles" ]]; then
 fi
 echo "staged $id   $wd/$id"
 solve="$(python3 -c 'import sys, yaml; print(yaml.safe_load(open(sys.argv[1]))["solve"])' "$ex/meta.yml")"
-echo "next:  export LAB_WORK_DIR=$wd ANSIBLE_ROLES_PATH=$wd/roles:$ROOT/ansible/roles"
-echo "       (cd $wd/$id && $solve) && lab check $id"
+# %q: the printed commands stay copy-pasteable for paths with spaces or shell characters
+printf 'next:  export LAB_WORK_DIR=%q ANSIBLE_ROLES_PATH=%q\n' "$wd" "$wd/roles:$ROOT/ansible/roles"
+printf '       (cd %q && %s) && lab check %s\n' "$wd/$id" "$solve" "$id"

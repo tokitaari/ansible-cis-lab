@@ -60,6 +60,9 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 4.03 / 5.01 checks also recognise a quoted level (`-e 'cis_level="2"'`,
+  `-e '{"cis_level": "2"}'`); `lab help` no longer shows a fixed `/lab/work` for `lab start`;
+  `tools/stage-solution.sh` prints its next commands shell-quoted. Rebuild: *none*
 - 3.03, 3.04, 4.07, 4.08 reference solutions: the apt index refresh also runs under `--check`
   (`check_mode: false`, as in the 4.03/5.01 roles). Before, `--check` on a freshly reset
   Debian/Ubuntu host failed with `No package matching ...`, because the apt module skips the

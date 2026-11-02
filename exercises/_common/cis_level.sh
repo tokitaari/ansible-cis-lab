@@ -2,9 +2,10 @@
 # Sourced by the 4.03 and 5.01 checks.
 # cis_level2 <ansible-playbook args> -> true if the args pass cis_level=2, e.g.
 #   lab check 4.03 -e cis_level=2      --extra-vars=cis_level=2      -e '{"cis_level": 2}'
+#   (a quoted value counts too: -e 'cis_level="2"', -e '{"cis_level": "2"}')
 # Variables from a file (-e @vars.yml) are not inspected.
 cis_level2() {
-  local re='cis_level["'"'"']?[[:space:]]*[:=][[:space:]]*2([^0-9]|$)'
+  local re='cis_level["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"']?2([^0-9]|$)'
   [[ " $* " =~ $re ]]
 }
 

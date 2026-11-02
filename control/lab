@@ -24,7 +24,7 @@ lab - Ansible CIS lab helper
 
   lab list                  list all exercises (with your progress)
   lab show <id>             show the exercise description
-  lab start <id>            create /lab/work/<id>/ (with starter files where provided)
+  lab start <id>            create <work-dir>/<id>/ (with starter files where provided)
   lab hint <id> <1|2|3>     show one hint (1 = gentle ... 3 = almost the answer)
   lab check <id> [args]     verify the target state (+ idempotency of your playbook)
                             extra args go to ansible-playbook, e.g. -l debian
@@ -38,7 +38,7 @@ lab - Ansible CIS lab helper
   lab view <file.md>        render any markdown file (also: 'md <file>', 'less <file.md>')
   lab docs [name]           list the guides in /lab/docs, or show one (e.g. lab docs troubleshooting)
 
-Environment: LAB_LANG (en|de), LAB_WORK_DIR (work directory, default /lab/work)
+Environment: LAB_LANG (en|de), LAB_WORK_DIR (<work-dir>, default /lab/work)
 
 Reset a target to its original (non-compliant) state from the HOST:
   ./lab.sh reset <host|all>      (Windows: .\lab.ps1 reset <host|all>)
