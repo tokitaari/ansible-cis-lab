@@ -81,6 +81,7 @@ def read(path):
 # --------------------------------------------------------------------------- exercises
 
 EX_DIR_RE = re.compile(r"^stage(\d)-[a-z0-9-]+/(\d\.\d\d)-([a-z0-9]+(?:-[a-z0-9]+)*)$")
+ID_RE = re.compile(r"^\d\.\d\d$")  # exercise id, e.g. 3.01 (also the format id_key() parses)
 
 
 def exercises():
@@ -161,6 +162,10 @@ def check_meta():
         match = EX_DIR_RE.match(os.path.relpath(d, EX_ROOT))
         if not isinstance(mid, str) or not match:
             fail("meta", f"{r}: directory must be stage<N>-<name>/<N.NN>-<slug>, id a quoted string")
+            continue
+        if not ID_RE.match(mid):
+            # report and skip: everything below (stage prefix, requires order) parses the id
+            fail("meta", f"{r}: id {mid!r} must look like '<stage>.<NN>', e.g. '3.01'")
             continue
         if (match.group(2), match.group(3)) != (mid, m["slug"]):
             fail("meta", f"{r}: directory name != '<id>-<slug>' ({mid}-{m['slug']})")

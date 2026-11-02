@@ -60,6 +60,8 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- Static gate (*meta*): a malformed exercise id (`x5.02`, `5.0x`, `5.3`) is reported instead of
+  aborting the check with a Python `ValueError`. Rebuild: *none*
 - `tools/stage-solution.sh` and `lab`: the exercise id must look like `3.01`. An id such as
   `../stage3-intermediate/3.01` used to resolve and made `stage-solution.sh` remove and write
   directories outside the work directory. Rebuild: *none*
