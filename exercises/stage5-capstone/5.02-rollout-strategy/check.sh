@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Check 5.02 - structure and gate behaviour (check mode only)
 set -u
-pb=/lab/work/5.02/rollout.yml
+work="${LAB_WORK_DIR:-/lab/work}"   # set by lab; CI checks solutions in another work dir
+pb="$work/5.02/rollout.yml"
 [[ -f "$pb" ]] || { echo "FAIL: $pb not found"; exit 1; }
 rc=0
 python3 - "$pb" <<'PY' || rc=1
@@ -22,7 +23,7 @@ expect("cis_rollout_confirm" in text, "confirmation variable cis_rollout_confirm
 sys.exit(0 if ok else 1)
 PY
 
-cd /lab/work/5.02 || exit 1
+cd "$work/5.02" || exit 1
 if ANSIBLE_NOCOLOR=1 ansible-playbook rollout.yml --check "$@" >/tmp/lab-502-noconfirm.log 2>&1; then
   echo "  FAIL running without -e cis_rollout_confirm=true must fail (see /tmp/lab-502-noconfirm.log)"; rc=1
 else

@@ -13,6 +13,8 @@ cis:
   section: 2.1 Server services
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - service
 - package_facts

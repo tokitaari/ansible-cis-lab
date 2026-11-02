@@ -1,0 +1,7 @@
+---
+# Internal platform data, not meant to be overridden: service names, the
+# shadow group/mode, cron.allow support, ... Fallback for unknown platforms.
+# Add one file per os_family next to it: Debian.yml, RedHat.yml, Suse.yml,
+# Alpine.yml, Archlinux.yml (the exact ansible_facts.os_family values).
+# Replace the empty mapping {} with your variables.
+{}

@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    report: /lab/work/0.03/facts.csv
+    report: "{{ lookup('ansible.builtin.env', 'LAB_WORK_DIR', default='/lab/work') }}/0.03/facts.csv"
   tasks:
     - name: Stat the report
       ansible.builtin.stat:

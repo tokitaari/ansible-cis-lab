@@ -13,6 +13,8 @@ cis:
   section: Sections 1-7
   level: L1 + L2 switch
 hosts: targets
+requires:
+- '4.03'
 concepts:
 - control registry
 - check_mode as audit engine

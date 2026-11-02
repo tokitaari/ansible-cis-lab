@@ -8,7 +8,7 @@ while [[ $# -gt 0 && "$1" != "--" ]]; do ids+=("$1"); shift; done
 rc=0
 for id in "${ids[@]}"; do
   dir=""
-  for d in /lab/exercises/stage*/"$id"-*; do [[ -d "$d" ]] && dir="$d"; done
+  for d in "${LAB_ROOT:-/lab}"/exercises/stage*/"$id"-*; do [[ -d "$d" ]] && dir="$d"; done
   if [[ -z "$dir" || ! -f "$dir/check.yml" ]]; then
     echo "  ?    $id (no check.yml)"; continue
   fi

@@ -2,7 +2,7 @@
 
 ## Hinweis 1
 
-Beginne mit dem Gerüst (`ansible-galaxy role init`), kopiere deine funktionierenden Tasks in die Abschnittsdateien und verschiebe dann jeden festen Wert nach `defaults/main.yml`. Templates kommen nach `templates/` - `src:` braucht dann keinen Pfad.
+Beginne mit dem Gerüst, das `lab start 3.01` in `/lab/work/roles/cis` angelegt hat - seine Kommentare sagen, welche Übung in welche Abschnittsdatei gehört. Kopiere deine funktionierenden Tasks dorthin und verschiebe dann jeden festen Wert nach `defaults/main.yml`. Templates kommen nach `templates/` - `src:` braucht dann keinen Pfad.
 
 ## Hinweis 2
 

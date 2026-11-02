@@ -1,0 +1,6 @@
+---
+# Section 1 - initial setup: kernel modules (1.1.1), login banners (1.6)
+# Move the tasks of 2.03, 0.04 and 2.06 here; topic tags: modules, banners.
+# Literal values become cis_* defaults, platform differences go to vars/.
+# Replace the empty list [] with your tasks.
+[]

@@ -13,6 +13,8 @@ cis:
   section: 5.2 Configure privilege escalation
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - sudoers.d
 - 'validate: visudo'

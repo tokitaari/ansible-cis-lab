@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Check 4.02 - black-box contract test (check mode only, host debian)
 set -u
-site=/lab/work/4.02/site.yml
+work="${LAB_WORK_DIR:-/lab/work}"   # set by lab; CI checks solutions in another work dir
+site="$work/4.02/site.yml"
 [[ -f "$site" ]] || { echo "FAIL: $site not found"; exit 1; }
-cd /lab/work/4.02 || exit 1
+cd "$work/4.02" || exit 1
 
 run() { # run <name> <extra-vars-json> -> writes /tmp/lab-402-<name>.json, returns rc
   ANSIBLE_STDOUT_CALLBACK=ansible.posix.json ANSIBLE_NOCOLOR=1 \

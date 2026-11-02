@@ -31,6 +31,9 @@ ohne sich zu langweilen oder überfordert zu sein:
 - Die Aufgaben in Stufe 2 sind voneinander unabhängig.
 - **3.01** fasst 0.04-2.06 zu einer Rolle zusammen; **4.03** erweitert sie um Stufe 3; **5.01** macht daraus das Abschlussprojekt.
 - 4.01, 4.02, 4.04-4.08 sind unabhängige "Werkzeugkasten"-Aufgaben - nach Interesse wählen.
+- **Starter-Dateien** gibt es für die Playbook-Übungen der Stufen 0-2, dazu das leere Rollengerüst von 3.01. Ab Stufe 3 erweiterst du
+  deine eigene Rolle und Playbooks, `lab start` legt dann meist nur das Arbeitsverzeichnis an.
+- `lab start` warnt, wenn eine Übung auf einer aufbaut, die du noch nicht bestanden hast (`requires` in ihrer `meta.yml`).
 - Vor 3.01, 4.03 und 5.01: `./lab.sh reset all`, damit die Regressionschecks beweisen, dass deine Rolle auf frischen Hosts funktioniert.
 
 ## Arbeitsweise, die sich auszahlt

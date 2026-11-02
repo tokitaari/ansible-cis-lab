@@ -36,12 +36,35 @@ MINOR: new features or exercises, PATCH: fixes.
   ansible-lint 26.10.1, yamllint 1.38.0, ...), used by the image **and** the CI job, so
   `ansible-lint` in the lab reports exactly what CI reports. `.github/dependabot.yml` proposes
   weekly updates for these pins and for the GitHub Actions used.
+- `LAB_WORK_DIR` overrides the work directory (default `/lab/work`): `lab` exports it together
+  with a matching `ANSIBLE_ROLES_PATH` (`<work-dir>/roles`, unless already set), and every
+  `check.sh`/`check.yml` and the solutions of 0.03, 4.01 and 4.05 that read or write files in
+  `work/` follow it. Learners see no difference.
+- `tools/stage-solution.sh <id> <work-dir>`: copies a reference solution into a work directory
+  the way a learner lays it out (roles under `<work-dir>/roles/`), so `lab check` can verify the
+  solution itself, including the idempotency run - groundwork for running the checks in CI.
+  Rebuild: *none*
+- `meta.yml` key `requires`: the exercises whose result an exercise technically builds on
+  (target state or files in `work/`, not the suggested learning order) - e.g. 0.02 (Python on
+  Alpine) for every exercise that gathers facts on Alpine, 3.01-3.05 for 4.03, 5.01 for 5.02.
+  `lab start` warns (without blocking) when one of them is not passed yet; the static gate
+  checks that the ids exist, are earlier than the exercise and sorted. Rebuild: *none*
+- 3.01 starter: `lab start 3.01` also creates an empty role skeleton in `/lab/work/roles/cis`
+  (the section task files, `defaults/`, `vars/default.yml`, `handlers/`, `templates/`,
+  `meta/main.yml`) whose TODO comments say which exercise goes where. Generally, a
+  `starter/roles/<name>/` directory goes to `work/roles/`; existing files are never
+  overwritten. `docs/LEARNING_PATH` explains that later stages have no starters. Rebuild: *none*
 
 ### Changed
 - Control image installs its Python packages from `control/requirements.txt` instead of
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 4.03 / 5.01: the regression checks now include 3.04 (auditd, CIS Level 2) when the check
+  gets `-e cis_level=2` (`lab check 4.03 -e cis_level=2`), as the READMEs require; at level 1
+  the check says that 3.04 was skipped. The READMEs show the level 2 run and check.
+- 3.03 names the task file for the role (`section5_pam.yml`) that the 4.03 check expects.
+  Rebuild: *none*
 - `cis/controls.yml`: control 5.2 (privilege escalation) now lists exercise 4.04, which
   configures sudo for the break-glass account and names 5.2 in its CIS reference.
 

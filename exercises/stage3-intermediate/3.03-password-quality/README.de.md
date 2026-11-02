@@ -35,7 +35,7 @@ Umfang dieser Aufgabe: `debian_family:redhat_family`. Die anderen sind Bonus.
 - [ ] `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) mit den CIS-Werten schreiben, erzeugt aus einer Dict-Variable.
 - [ ] Debian-Familie: `pam_pwquality` steht in `/etc/pam.d/common-password` (die Paketinstallation aktiviert es normalerweise - prüfen und das Profil nur bei Fehlen mit `pam-auth-update --enable pwquality` aktivieren).
 - [ ] Red-Hat-Familie: `pam_pwquality` steht in `/etc/pam.d/system-auth`; `authselect current` prüfen und PAM-Dateien nicht direkt bearbeiten.
-- [ ] Zweiter Lauf: `changed=0`. Die Tasks in deine Rolle aufnehmen (Tag `pam`).
+- [ ] Zweiter Lauf: `changed=0`. Die Tasks als `section5_pam.yml` (Tag `pam`) in deine Rolle aufnehmen.
 
 ## Vorgehen
 

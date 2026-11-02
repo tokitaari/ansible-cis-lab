@@ -4,8 +4,12 @@ set -uo pipefail
 
 LAB_ROOT="${LAB_ROOT:-/lab}"
 EX_DIR="$LAB_ROOT/exercises"
-WORK_DIR="$LAB_ROOT/work"
+# LAB_WORK_DIR overrides the work directory (CI checks the reference solutions in a temporary
+# one, see tools/stage-solution.sh). Exported for check.sh/check.yml; roles_path follows it.
+WORK_DIR="${LAB_WORK_DIR:-$LAB_ROOT/work}"
 STATE_DIR="$LAB_ROOT/.lab"
+export LAB_ROOT LAB_WORK_DIR="$WORK_DIR"
+export ANSIBLE_ROLES_PATH="${ANSIBLE_ROLES_PATH:-$WORK_DIR/roles:$LAB_ROOT/ansible/roles}"
 mkdir -p "$STATE_DIR" "$WORK_DIR" 2>/dev/null || true
 
 c_red=$'\e[31m'; c_grn=$'\e[32m'; c_yel=$'\e[33m'; c_bld=$'\e[1m'; c_off=$'\e[0m'
@@ -20,7 +24,7 @@ lab - Ansible CIS lab helper
 
   lab list                  list all exercises (with your progress)
   lab show <id>             show the exercise description
-  lab start <id>            create /lab/work/<id>/ (with a starter file where provided)
+  lab start <id>            create /lab/work/<id>/ (with starter files where provided)
   lab hint <id> <1|2|3>     show one hint (1 = gentle ... 3 = almost the answer)
   lab check <id> [args]     verify the target state (+ idempotency of your playbook)
                             extra args go to ansible-playbook, e.g. -l debian
@@ -33,6 +37,8 @@ lab - Ansible CIS lab helper
   lab placement [answers]   placement test to find your starting point (then the key)
   lab view <file.md>        render any markdown file (also: 'md <file>', 'less <file.md>')
   lab docs [name]           list the guides in /lab/docs, or show one (e.g. lab docs troubleshooting)
+
+Environment: LAB_LANG (en|de), LAB_WORK_DIR (work directory, default /lab/work)
 
 Reset a target to its original (non-compliant) state from the HOST:
   ./lab.sh reset <host|all>      (Windows: .\lab.ps1 reset <host|all>)
@@ -122,15 +128,39 @@ cmd_hint() {
   awk -v n="$n" '/^## /{c++} c==n' "$f" | view -
 }
 
+requires_missing() { # requires_missing <dir> -> ids from meta 'requires' not in the progress file
+  python3 - "$1/meta.yml" "$STATE_DIR/progress" <<'PY'
+import os, sys, yaml
+req = (yaml.safe_load(open(sys.argv[1])) or {}).get("requires") or []
+done = set()
+if os.path.exists(sys.argv[2]):
+    done = {l.split()[0] for l in open(sys.argv[2]) if l.strip()}
+print(" ".join(str(r) for r in req if str(r) not in done))
+PY
+}
+
 cmd_start() {
-  local id="${1:-}" d target
+  local id="${1:-}" d target missing
   resolve "$id"; d="$EXD"; target="$WORK_DIR/$id"
   mkdir -p "$target"
   if [[ -d "$d/starter" ]]; then
-    cp -rn "$d/starter/." "$target/" 2>/dev/null || true
+    # starter/roles/<name>/ is a role skeleton -> $WORK_DIR/roles/ (in roles_path); the rest
+    # goes to the exercise directory. -n: never overwrite the learner's files.
+    find "$d/starter" -mindepth 1 -maxdepth 1 ! -name roles -exec cp -rn {} "$target/" \; 2>/dev/null || true
+    if [[ -d "$d/starter/roles" ]]; then
+      mkdir -p "$WORK_DIR/roles"
+      cp -rn "$d/starter/roles/." "$WORK_DIR/roles/" 2>/dev/null || true
+      info "Role skeleton (existing files kept): $WORK_DIR/roles/"
+      find "$d/starter/roles" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null
+    fi
   fi
   info "Work directory: $target"
   find "$target" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null
+  missing="$(requires_missing "$d")"
+  if [[ -n "$missing" ]]; then
+    echo "${c_yel}note:${c_off} $id builds on exercises you have not passed yet: $missing"
+    echo "      (lab show <id> for each; this is a warning only)"
+  fi
   echo
   view "$(localized "$d" README)"
 }

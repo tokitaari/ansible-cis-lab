@@ -31,6 +31,9 @@ being bored or overwhelmed:
 - Stage 2 exercises are independent of each other.
 - **3.01** collects 0.04-2.06 into a role; **4.03** extends it with stage 3; **5.01** turns it into the capstone.
 - 4.01, 4.02, 4.04-4.08 are independent "toolbox" exercises - pick by interest.
+- **Starter files** exist for the playbook exercises of stages 0-2, plus the empty role skeleton of 3.01. From stage 3 on you
+  extend your own role and playbooks, so `lab start` mostly just creates the work directory.
+- `lab start` warns when an exercise builds on one you have not passed yet (`requires` in its `meta.yml`).
 - Before 3.01, 4.03 and 5.01: `./lab.sh reset all` so that the regression checks prove your role works on fresh hosts.
 
 ## Working style that pays off

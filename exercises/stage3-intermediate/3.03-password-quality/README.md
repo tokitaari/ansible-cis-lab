@@ -35,7 +35,7 @@ Scope of this exercise: `debian_family:redhat_family`. The others are a bonus.
 - [ ] Write `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) with the CIS values, generated from a dict variable.
 - [ ] Debian family: `pam_pwquality` appears in `/etc/pam.d/common-password` (installing the package normally enables it - verify, and enable the profile with `pam-auth-update --enable pwquality` only if missing).
 - [ ] Red Hat family: `pam_pwquality` appears in `/etc/pam.d/system-auth`; check `authselect current` and do not edit PAM files directly.
-- [ ] Second run: `changed=0`. Add the tasks to your role (tag `pam`).
+- [ ] Second run: `changed=0`. Add the tasks to your role as `section5_pam.yml` (tag `pam`).
 
 ## How to work
 

@@ -13,6 +13,8 @@ cis:
   section: 2.2 Client services
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - package
 - 'state: absent'

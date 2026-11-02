@@ -49,6 +49,9 @@ cd /lab/work/5.01
 # write site.yml, then run it:
 ansible-playbook site.yml
 lab check 5.01            # verifies the state and that a second run changes nothing
+# Level 2: run with -e cis_level=2, then check with it - only then 3.04 (auditd) is checked
+ansible-playbook site.yml -e cis_level=2
+lab check 5.01 -e cis_level=2
 ```
 
 Stuck? `lab hint 5.01 1` (gentle) ... `lab hint 5.01 3` (almost the answer).  

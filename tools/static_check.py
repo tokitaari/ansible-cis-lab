@@ -5,7 +5,8 @@ Called by tools/static-check.sh (which also runs yamllint and ansible-lint):
     python3 tools/static_check.py [meta] [parity] [links] [controls]
 Without arguments all checks run. Exit code 1 if any check reports a failure.
 
-  meta      meta.yml schema, exercise layout, solve/hosts vs. solution and check,
+  meta      meta.yml schema (incl. requires: earlier, known ids), exercise layout,
+            solve/hosts vs. solution and check,
             README header table and INDEX rows vs. meta.yml
   parity    every EN Markdown file has a DE twin (*.de.md) with the same structure;
             bash/yaml/... code blocks hold the same code (comments may be translated)
@@ -109,7 +110,7 @@ def exercises():
 # --------------------------------------------------------------------------- meta
 
 META_KEYS = ["id", "slug", "stage", "stage_name", "stage_name_de", "title", "difficulty",
-             "minutes", "cis", "hosts", "concepts", "idempotency", "solve"]
+             "minutes", "cis", "hosts", "requires", "concepts", "idempotency", "solve"]
 EX_FILES = ["README.md", "README.de.md", "HINTS.md", "HINTS.de.md",
             "EXPLANATION.md", "EXPLANATION.de.md"]
 HINT_HEADINGS = {"HINTS.md": "Hint", "HINTS.de.md": "Hinweis"}
@@ -145,6 +146,7 @@ def check_meta():
     exs = exercises()
     seen = {}
     stage_names = {}
+    requires = {}
     for d, m in exs:
         r = rel(d)
         keys = list(m)
@@ -184,6 +186,11 @@ def check_meta():
             fail("meta", f"{r}: cis must have exactly the string keys section, level")
         if not is_str(m["hosts"]):
             fail("meta", f"{r}: hosts must be a non-empty string")
+        rq = m["requires"]
+        if not (isinstance(rq, list) and all(is_str(x) for x in rq)):
+            fail("meta", f"{r}: requires must be a list of exercise ids (strings), [] for none")
+        else:
+            requires[r] = (mid, rq)
         cc = m["concepts"]
         if not (isinstance(cc, list) and cc and all(is_str(x) for x in cc)):
             fail("meta", f"{r}: concepts must be a non-empty list of strings")
@@ -193,9 +200,29 @@ def check_meta():
             fail("meta", f"{r}: solve must be a non-empty string")
             continue
         check_layout(d, m)
+    check_requires(requires, seen)
     check_readme_headers(exs)
     check_index(exs)
     return exs
+
+
+def id_key(i):
+    return tuple(int(x) for x in i.split("."))
+
+
+def check_requires(requires, seen):
+    """requires = direct technical prerequisites (target state, files in work/), not the
+    didactic order: known ids, earlier than the exercise itself (no cycles), sorted, unique."""
+    for r, (mid, rq) in requires.items():
+        unknown = [x for x in rq if x not in seen]
+        if unknown:
+            fail("meta", f"{r}: requires unknown exercise ids {unknown}")
+            continue
+        later = [x for x in rq if id_key(x) >= id_key(mid)]
+        if later:
+            fail("meta", f"{r}: requires {later} - only earlier exercises can be prerequisites")
+        if rq != sorted(set(rq), key=id_key):
+            fail("meta", f"{r}: requires must be sorted and free of duplicates")
 
 
 def check_layout(d, m):

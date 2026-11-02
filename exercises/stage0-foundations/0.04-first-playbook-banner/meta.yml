@@ -13,6 +13,8 @@ cis:
   section: 1.6 Command line warning banners
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - playbook
 - copy

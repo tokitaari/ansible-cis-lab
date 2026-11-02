@@ -1,0 +1,6 @@
+---
+# Section 3 - network: network kernel parameters (3.3); global ones (1.5) too
+# Move the tasks of 2.04 here; topic tags: sysctl.
+# Literal values become cis_* defaults, platform differences go to vars/.
+# Replace the empty list [] with your tasks.
+[]

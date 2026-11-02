@@ -7,15 +7,18 @@
 - name: Write the platform report on the control node
   hosts: localhost
   gather_facts: false
+  vars:
+    # 'lab' exports LAB_WORK_DIR (default /lab/work); CI checks solutions in another work dir
+    report_dir: "{{ lookup('ansible.builtin.env', 'LAB_WORK_DIR', default='/lab/work') }}/0.03"
   tasks:
     - name: Ensure the work directory exists
       ansible.builtin.file:
-        path: /lab/work/0.03
+        path: "{{ report_dir }}"
         state: directory
         mode: "0755"
 
     - name: Render facts.csv
       ansible.builtin.template:
         src: facts.csv.j2
-        dest: /lab/work/0.03/facts.csv
+        dest: "{{ report_dir }}/facts.csv"
         mode: "0644"

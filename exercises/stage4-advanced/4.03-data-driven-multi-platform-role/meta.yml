@@ -13,6 +13,12 @@ cis:
   section: Sections 1-7
   level: L1 (+L2 auditd)
 hosts: targets
+requires:
+- '3.01'
+- '3.02'
+- '3.03'
+- '3.04'
+- '3.05'
 concepts:
 - first_found variable hierarchy
 - feature flags instead of os_family checks

@@ -2,11 +2,13 @@
 - name: Check 4.04 - vault file
   hosts: localhost
   gather_facts: false
+  vars:
+    vault_file: "{{ lookup('ansible.builtin.env', 'LAB_WORK_DIR', default='/lab/work') }}/4.04/vault.yml"
   tasks:
     - name: vault.yml is encrypted
       ansible.builtin.assert:
-        that: lookup('ansible.builtin.pipe', 'head -c 14 /lab/work/4.04/vault.yml 2>/dev/null || true') == '$ANSIBLE_VAULT'
-        fail_msg: /lab/work/4.04/vault.yml missing or not encrypted with ansible-vault
+        that: lookup('ansible.builtin.pipe', 'head -c 14 ' ~ (vault_file | quote) ~ ' 2>/dev/null || true') == '$ANSIBLE_VAULT'
+        fail_msg: "{{ vault_file }} missing or not encrypted with ansible-vault"
 
 - name: Check 4.04 - break-glass account
   hosts: targets:!alpine_family

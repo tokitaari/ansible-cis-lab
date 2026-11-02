@@ -1,0 +1,6 @@
+---
+# The role's interface: every knob a user may turn, prefixed cis_
+# (ansible-lint enforces the role prefix), e.g. the module list of 2.03 or the
+# sysctl values of 2.04. Lowest precedence - inventory and -e override them.
+# Replace the empty mapping {} with your defaults.
+{}

@@ -21,7 +21,7 @@ einen CIS-Abschnitt oder ein Thema (`--tags ssh`). Ab jetzt erweitert jede Aufga
 
 ## Anforderungen
 
-- [ ] Rolle unter `/lab/work/roles/cis` (der Pfad ist in `roles_path`) mit mindestens `tasks/`, `defaults/`, `vars/`, `handlers/`, `templates/`, `meta/`.
+- [ ] Rolle unter `/lab/work/roles/cis` (der Pfad ist in `roles_path`) mit mindestens `tasks/`, `defaults/`, `vars/`, `handlers/`, `templates/`, `meta/` - `lab start 3.01` legt dieses Gerüst mit TODO-Kommentaren an.
 - [ ] `tasks/main.yml` lädt `vars/<os_family>.yml` (Fallback `vars/default.yml`) und importiert eine Task-Datei pro CIS-Abschnitt: `section1_initial_setup.yml`, `section2_services.yml`, `section3_network.yml`, `section5_access_control.yml`, `section7_maintenance.yml`.
 - [ ] Jeder Import ist mit `section1` ... `section7` getaggt; Tasks tragen zusätzlich Themen-Tags (`ssh`, `sudo`, `cron`, `sysctl`, `modules`, `banners`, `packages`, `services`, `permissions`).
 - [ ] Alle Stellschrauben stehen in `defaults/main.yml` mit dem Präfix `cis_` (ansible-lint erzwingt Rollenpräfixe). Plattformunterschiede (Dienstnamen, shadow-Gruppe/-Modus, cron.allow-Unterstützung) stehen in `vars/`.
@@ -32,7 +32,7 @@ einen CIS-Abschnitt oder ein Thema (`--tags ssh`). Ab jetzt erweitert jede Aufga
 ## Vorgehen
 
 ```bash
-lab start 3.01            # legt /lab/work/3.01/ an
+lab start 3.01            # legt /lab/work/3.01/ und das Rollengerüst /lab/work/roles/cis an
 cd /lab/work/3.01
 # site.yml schreiben, dann ausführen:
 ansible-playbook site.yml
@@ -45,6 +45,6 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 ## Bonus (optional)
 
-- `ansible-galaxy role init --init-path /lab/work/roles cis` erzeugt das Gerüst - vergleiche mit dem, was du wirklich brauchst.
+- Vergleiche das Gerüst aus `lab start` mit `ansible-galaxy role init --init-path /tmp cis` - welche Teile braucht eine CIS-Rolle wirklich?
 - Nur SSH ausführen: `ansible-playbook site.yml --tags ssh`. Alles auflisten: `--list-tags`, `--list-tasks`.
 - Mach den Python-Bootstrap für Alpine (0.02) zu einem `pre_tasks`-Block in `site.yml` - warum nicht in der Rolle?

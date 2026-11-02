@@ -13,6 +13,8 @@ cis:
   section: 5.4.2 / 5.4.3 User accounts and environment
   level: L1
 hosts: targets
+requires:
+- '0.02'
 concepts:
 - parsing files into facts
 - selectattr on lists

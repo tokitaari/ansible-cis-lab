@@ -13,6 +13,7 @@ cis:
   section: '-'
   level: '-'
 hosts: targets
+requires: []
 concepts:
 - inventory
 - groups

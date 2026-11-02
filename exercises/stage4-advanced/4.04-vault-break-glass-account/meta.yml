@@ -13,6 +13,7 @@ cis:
   section: 5.4.1 / 5.2
   level: L1
 hosts: targets:!alpine_family
+requires: []
 concepts:
 - ansible-vault
 - password_hash with stable salt
