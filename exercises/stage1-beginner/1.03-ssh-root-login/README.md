@@ -20,6 +20,7 @@ that has an empty password (there is one on two hosts...) and anyone can log in.
 
 Important sshd rule: **the first value found wins**. `sshd_config` includes
 `sshd_config.d/*.conf` at its top, files are read in lexical order. Check the *effective* configuration with `sshd -T` (as root), not the file.
+Keywords are case-insensitive: older OpenSSH prints `permitrootlogin no`, OpenSSH 10.6 `PermitRootLogin no`.
 
 A broken sshd config + restart = you are locked out. Two Ansible features prevent
 that: `validate` (test the file before it is put in place) and handlers (restart

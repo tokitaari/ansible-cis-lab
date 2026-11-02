@@ -37,7 +37,9 @@
 
     - name: Evaluate controls
       vars:
-        sshd: "{{ dict(cis_sshd_t.stdout_lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\t\\2') | map('split', '\t')) }}"
+        # keywords lower-cased: OpenSSH 10.6 prints them as written in sshd_config
+        sshd_pairs: "{{ cis_sshd_t.stdout_lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\t\\2') | map('split', '\t') | list }}"
+        sshd: "{{ dict(sshd_pairs | map('first') | map('lower') | zip(sshd_pairs | map('last'))) }}"
         passwd_st: "{{ cis_stat.results[0].stat }}"
         shadow_st: "{{ cis_stat.results[1].stat }}"
         cron_allow_st: "{{ cis_stat.results[2].stat }}"

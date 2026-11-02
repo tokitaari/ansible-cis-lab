@@ -60,6 +60,10 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- `sshd -T` keywords are compared case-insensitively. OpenSSH 10.6 (Arch) prints
+  `PermitRootLogin no` instead of `permitrootlogin no`, which broke the checks of 1.03 and 2.02
+  on Arch and would break the 4.01, 4.05 and 5.02 solutions. 1.03 explains the change; the
+  4.01/4.05 hints show the case-insensitive variant. Rebuild: *none*
 - 4.03 / 5.01: the regression checks now include 3.04 (auditd, CIS Level 2) when the check
   gets `-e cis_level=2` (`lab check 4.03 -e cis_level=2`), as the READMEs require; at level 1
   the check says that 3.04 was skipped. The READMEs show the level 2 run and check.

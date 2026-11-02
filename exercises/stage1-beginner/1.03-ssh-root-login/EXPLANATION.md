@@ -47,6 +47,12 @@ gentler habit.
 You can - but distributions ship different main files, and package updates may
 replace them. A drop-in you own completely is easier to reason about and to remove.
 
+### Reading `sshd -T`
+The keywords in the output are case-insensitive, and their spelling changed: older
+OpenSSH releases print `permitrootlogin no`, OpenSSH 10.6 (Arch) prints
+`PermitRootLogin no`. Scripts and checks therefore compare the keyword in lower case
+(`tolower($1)` in awk, `| lower` in Jinja) - the values keep their case.
+
 ### Real world
 Before touching sshd in production: keep a second session open, use `validate`,
 and roll out in batches (`serial`, stage 5).
