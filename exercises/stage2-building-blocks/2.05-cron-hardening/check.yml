@@ -50,12 +50,17 @@
     - name: Collect service facts
       ansible.builtin.service_facts:
 
+    # Enabled: systemd/sysv report status=enabled; OpenRC (Alpine) reports no status, only the
+    # runlevels the service is added to (rc-update add crond default).
     - name: Cron service enabled and running
       vars:
         svc: "{{ ansible_facts.services[cron_service[ansible_facts.os_family] ~ '.service'] | default(ansible_facts.services[cron_service[ansible_facts.os_family]] | default({})) }}"
+        svc_enabled: "{{ svc.status | default('') == 'enabled' or 'default' in (svc.runlevels | default([], true)) }}"
       ansible.builtin.assert:
         that:
           - svc.state | default('') in ['running', 'started']
-          - svc.status | default('') == 'enabled'
-        fail_msg: "{{ cron_service[ansible_facts.os_family] }}: state={{ svc.state | default('missing') }} status={{ svc.status | default('missing') }}"
+          - svc_enabled | bool
+        fail_msg: >-
+          {{ cron_service[ansible_facts.os_family] }}: state={{ svc.state | default('missing') }}
+          status={{ svc.status | default('missing') }} runlevels={{ svc.runlevels | default('-') }}
         quiet: true

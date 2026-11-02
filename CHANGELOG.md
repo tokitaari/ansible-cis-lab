@@ -60,6 +60,10 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- Alpine (OpenRC): `service_facts` reports no `status` for OpenRC services, only their
+  `runlevels`. The 2.05 check therefore always failed on Alpine (cron never "enabled"), and
+  the 1.04 check and the 4.01 solution could not notice an enabled vsftpd there. "Enabled" now
+  means `status == 'enabled'` or the service is in the `default` runlevel. Rebuild: *none*
 - 1.05 check and 5.02 reference preflight: openSUSE Leap 16 ships `/usr/etc/sudoers` with mode
   0444, so `visudo -c` exits 1 even on an untouched host and the check could never pass there.
   Exactly that message is now tolerated; syntax errors and bad permissions in `/etc` still fail.
