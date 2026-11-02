@@ -19,10 +19,17 @@
       changed_when: false
       check_mode: false
 
+    # openSUSE Leap 16 ships /usr/etc/sudoers with mode 0444 -> 'visudo -c' exits 1 on a
+    # healthy host; tolerate exactly that complaint, fail on everything else.
     - name: Current sudo configuration is valid
       ansible.builtin.command: /usr/sbin/visudo -c
+      register: cis_visudo
       changed_when: false
       check_mode: false
+      failed_when: >-
+        cis_visudo.rc != 0 and
+        ((cis_visudo.stdout_lines + cis_visudo.stderr_lines) | reject('search', ': parsed OK$')
+         | reject('match', '^/usr/etc/[^:]+: bad permissions') | list) | length > 0
 
     - name: Enough free space on /
       vars:

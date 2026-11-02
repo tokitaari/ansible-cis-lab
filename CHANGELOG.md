@@ -60,6 +60,10 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 1.05 check and 5.02 reference preflight: openSUSE Leap 16 ships `/usr/etc/sudoers` with mode
+  0444, so `visudo -c` exits 1 even on an untouched host and the check could never pass there.
+  Exactly that message is now tolerated; syntax errors and bad permissions in `/etc` still fail.
+  1.05 explains the `/usr/etc` vendor split, the 5.02 hint mentions it. Rebuild: *none*
 - `sshd -T` keywords are compared case-insensitively. OpenSSH 10.6 (Arch) prints
   `PermitRootLogin no` instead of `permitrootlogin no`, which broke the checks of 1.03 and 2.02
   on Arch and would break the 4.01, 4.05 and 5.02 solutions. 1.03 explains the change; the
