@@ -21,7 +21,7 @@ topic (`--tags ssh`). From now on every exercise extends this role.
 
 ## Requirements
 
-- [ ] Role at `/lab/work/roles/cis` (that path is in `roles_path`) with at least `tasks/`, `defaults/`, `vars/`, `handlers/`, `templates/`, `meta/`.
+- [ ] Role at `/lab/work/roles/cis` (that path is in `roles_path`) with at least `tasks/`, `defaults/`, `vars/`, `handlers/`, `templates/`, `meta/` - `lab start 3.01` creates this skeleton with TODO comments.
 - [ ] `tasks/main.yml` loads `vars/<os_family>.yml` (fallback `vars/default.yml`) and imports one task file per CIS section: `section1_initial_setup.yml`, `section2_services.yml`, `section3_network.yml`, `section5_access_control.yml`, `section7_maintenance.yml`.
 - [ ] Each import is tagged `section1` ... `section7`; tasks additionally carry topic tags (`ssh`, `sudo`, `cron`, `sysctl`, `modules`, `banners`, `packages`, `services`, `permissions`).
 - [ ] All tunables live in `defaults/main.yml` with the prefix `cis_` (ansible-lint enforces role prefixes). Platform differences (service names, shadow group/mode, cron.allow support) live in `vars/`.
@@ -32,7 +32,7 @@ topic (`--tags ssh`). From now on every exercise extends this role.
 ## How to work
 
 ```bash
-lab start 3.01            # creates /lab/work/3.01/
+lab start 3.01            # creates /lab/work/3.01/ and the role skeleton /lab/work/roles/cis
 cd /lab/work/3.01
 # write site.yml, then run it:
 ansible-playbook site.yml
@@ -45,6 +45,6 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 ## Bonus (optional)
 
-- `ansible-galaxy role init --init-path /lab/work/roles cis` creates the skeleton - compare it with what you really need.
+- Compare the skeleton from `lab start` with `ansible-galaxy role init --init-path /tmp cis` - which parts does a CIS role really need?
 - Run only SSH: `ansible-playbook site.yml --tags ssh`. List everything: `--list-tags`, `--list-tasks`.
 - Make Alpine's Python bootstrap (0.02) a `pre_tasks` block in `site.yml` - why not inside the role?

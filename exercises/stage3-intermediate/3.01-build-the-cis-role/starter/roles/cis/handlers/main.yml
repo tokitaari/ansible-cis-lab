@@ -1,0 +1,4 @@
+---
+# Handlers, e.g. reloading sshd after the drop-in of 2.02 changed.
+# Replace the empty list [] with your handlers.
+[]

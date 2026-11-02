@@ -1,0 +1,8 @@
+---
+# 3.01 starter - lab start copied the role skeleton to /lab/work/roles/cis
+# (in roles_path). Run: ansible-playbook site.yml
+- name: Apply the CIS baseline role
+  hosts: targets
+  become: true
+  roles:
+    - role: cis

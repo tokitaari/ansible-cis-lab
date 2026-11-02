@@ -1,0 +1,6 @@
+---
+# Section 2 - services: client packages (2.2), server services (2.1), cron (2.4)
+# Move the tasks of 1.01, 1.04 and 2.05 here; topic tags: packages, services, cron.
+# Literal values become cis_* defaults, platform differences go to vars/.
+# Replace the empty list [] with your tasks.
+[]

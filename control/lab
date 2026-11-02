@@ -24,7 +24,7 @@ lab - Ansible CIS lab helper
 
   lab list                  list all exercises (with your progress)
   lab show <id>             show the exercise description
-  lab start <id>            create /lab/work/<id>/ (with a starter file where provided)
+  lab start <id>            create /lab/work/<id>/ (with starter files where provided)
   lab hint <id> <1|2|3>     show one hint (1 = gentle ... 3 = almost the answer)
   lab check <id> [args]     verify the target state (+ idempotency of your playbook)
                             extra args go to ansible-playbook, e.g. -l debian
@@ -144,7 +144,15 @@ cmd_start() {
   resolve "$id"; d="$EXD"; target="$WORK_DIR/$id"
   mkdir -p "$target"
   if [[ -d "$d/starter" ]]; then
-    cp -rn "$d/starter/." "$target/" 2>/dev/null || true
+    # starter/roles/<name>/ is a role skeleton -> $WORK_DIR/roles/ (in roles_path); the rest
+    # goes to the exercise directory. -n: never overwrite the learner's files.
+    find "$d/starter" -mindepth 1 -maxdepth 1 ! -name roles -exec cp -rn {} "$target/" \; 2>/dev/null || true
+    if [[ -d "$d/starter/roles" ]]; then
+      mkdir -p "$WORK_DIR/roles"
+      cp -rn "$d/starter/roles/." "$WORK_DIR/roles/" 2>/dev/null || true
+      info "Role skeleton (existing files kept): $WORK_DIR/roles/"
+      find "$d/starter/roles" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null
+    fi
   fi
   info "Work directory: $target"
   find "$target" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null

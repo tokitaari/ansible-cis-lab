@@ -1,0 +1,7 @@
+---
+# Entry point of the role. TODO:
+# 1. Load the platform data: vars/<os_family>.yml, fallback vars/default.yml
+#    (include_vars + first_found; tag the task 'always' - why? see lab hint 3.01 2).
+# 2. import_tasks one file per CIS section, each import tagged section1 ... section7.
+# Replace the empty list [] with your tasks.
+[]

@@ -1,0 +1,6 @@
+---
+# Section 5 - access control: sshd (5.1), sudo (5.2)
+# Move the tasks of 1.03, 2.02 and 1.05 here; topic tags: ssh, sudo.
+# Literal values become cis_* defaults, platform differences go to vars/.
+# Replace the empty list [] with your tasks.
+[]

@@ -1,0 +1,6 @@
+---
+# Section 7 - system maintenance: permissions of account files (7.1)
+# Move the tasks of 1.02 and 2.01 here; topic tags: permissions.
+# Literal values become cis_* defaults, platform differences go to vars/.
+# Replace the empty list [] with your tasks.
+[]

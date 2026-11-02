@@ -49,6 +49,11 @@ MINOR: new features or exercises, PATCH: fixes.
   Alpine) for every exercise that gathers facts on Alpine, 3.01-3.05 for 4.03, 5.01 for 5.02.
   `lab start` warns (without blocking) when one of them is not passed yet; the static gate
   checks that the ids exist, are earlier than the exercise and sorted. Rebuild: *none*
+- 3.01 starter: `lab start 3.01` also creates an empty role skeleton in `/lab/work/roles/cis`
+  (the section task files, `defaults/`, `vars/default.yml`, `handlers/`, `templates/`,
+  `meta/main.yml`) whose TODO comments say which exercise goes where. Generally, a
+  `starter/roles/<name>/` directory goes to `work/roles/`; existing files are never
+  overwritten. `docs/LEARNING_PATH` explains that later stages have no starters. Rebuild: *none*
 
 ### Changed
 - Control image installs its Python packages from `control/requirements.txt` instead of

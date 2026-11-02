@@ -2,7 +2,7 @@
 
 ## Hint 1
 
-Start with the skeleton (`ansible-galaxy role init`), copy your working tasks into the section files, then move every literal value into `defaults/main.yml`. Templates go to `templates/` - `src:` then needs no path.
+Start with the skeleton that `lab start 3.01` created in `/lab/work/roles/cis` - its comments say which exercise goes into which section file. Copy your working tasks there, then move every literal value into `defaults/main.yml`. Templates go to `templates/` - `src:` then needs no path.
 
 ## Hint 2
 
