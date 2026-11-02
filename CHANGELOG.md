@@ -60,6 +60,18 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 4.03 / 5.01 checks also recognise a quoted level (`-e 'cis_level="2"'`,
+  `-e '{"cis_level": "2"}'`); `lab help` no longer shows a fixed `/lab/work` for `lab start`;
+  `tools/stage-solution.sh` prints its next commands shell-quoted. Rebuild: *none*
+- 3.03, 3.04, 4.07, 4.08 reference solutions: the apt index refresh also runs under `--check`
+  (`check_mode: false`, as in the 4.03/5.01 roles). Before, `--check` on a freshly reset
+  Debian/Ubuntu host failed with `No package matching ...`, because the apt module skips the
+  update in check mode. 4.01 German hint: "then" -> "dann". Rebuild: *none*
+- Static gate (*meta*): a malformed exercise id (`x5.02`, `5.0x`, `5.3`) is reported instead of
+  aborting the check with a Python `ValueError`. Rebuild: *none*
+- `tools/stage-solution.sh` and `lab`: the exercise id must look like `3.01`. An id such as
+  `../stage3-intermediate/3.01` used to resolve and made `stage-solution.sh` remove and write
+  directories outside the work directory. Rebuild: *none*
 - 3.02 check on openSUSE: with the vendor split there is no `/etc/login.defs`, the defaults
   (`ENCRYPT_METHOD SHA512`) live in `/usr/etc/login.defs`. The check read only `/etc` and
   reported `ENCRYPT_METHOD=NONE`; it now uses `/etc/login.defs` or else the vendor file, plus

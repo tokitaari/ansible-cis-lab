@@ -16,6 +16,9 @@ ROOT="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 
 id="${1:-}" wd="${2:-}"
 [[ -n "$id" && -n "$wd" ]] || { echo "usage: $0 <id> <work-dir>" >&2; exit 2; }
+# The id becomes part of paths that are removed below - accept only '<stage>.<NN>'
+# (e.g. 3.01), never '..' or '/'.
+[[ "$id" =~ ^[0-9]\.[0-9]{2}$ ]] || { echo "invalid exercise id '$id' (expected e.g. 3.01)" >&2; exit 2; }
 
 ex=""
 for d in "$ROOT"/exercises/stage*/"$id"-*; do [[ -d "$d" ]] && ex="$d"; done
@@ -44,5 +47,6 @@ if [[ -d "$ex/solution/roles" ]]; then
 fi
 echo "staged $id   $wd/$id"
 solve="$(python3 -c 'import sys, yaml; print(yaml.safe_load(open(sys.argv[1]))["solve"])' "$ex/meta.yml")"
-echo "next:  export LAB_WORK_DIR=$wd ANSIBLE_ROLES_PATH=$wd/roles:$ROOT/ansible/roles"
-echo "       (cd $wd/$id && $solve) && lab check $id"
+# %q: the printed commands stay copy-pasteable for paths with spaces or shell characters
+printf 'next:  export LAB_WORK_DIR=%q ANSIBLE_ROLES_PATH=%q\n' "$wd" "$wd/roles:$ROOT/ansible/roles"
+printf '       (cd %q && %s) && lab check %s\n' "$wd/$id" "$solve" "$id"
