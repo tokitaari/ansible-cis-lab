@@ -6,7 +6,7 @@ Sammle zuerst die Rohdaten (ein Task pro Quelle, alle lesend, `check_mode: false
 
 ## Hinweis 2
 
-Für wirksame sshd-Werte den Parse-Trick aus den Checks wiederverwenden: `sshd -T` → `pairs = lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\\t\\2') | map('split', '\\t') | list`, then `dict(pairs | map('first') | map('lower') | zip(pairs | map('last')))` - Schlüsselwörter kleinschreiben, OpenSSH 10.6 gibt `PermitRootLogin` aus. Aggregation: zweites Play auf `localhost`, über `groups['targets']` iterieren, `hostvars[h].cis_results` lesen.
+Für wirksame sshd-Werte den Parse-Trick aus den Checks wiederverwenden: `sshd -T` → `pairs = lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\\t\\2') | map('split', '\\t') | list`, dann `dict(pairs | map('first') | map('lower') | zip(pairs | map('last')))` - Schlüsselwörter kleinschreiben, OpenSSH 10.6 gibt `PermitRootLogin` aus. Aggregation: zweites Play auf `localhost`, über `groups['targets']` iterieren, `hostvars[h].cis_results` lesen.
 
 ## Hinweis 3
 

@@ -26,6 +26,7 @@
         paths: /var/lib/apt/lists
         patterns: "*_Packages*"
       register: cis_apt_lists
+      check_mode: false
       when: ansible_facts.os_family == 'Debian'
 
     - name: Refresh the apt package index (missing, or older than a day)
@@ -33,6 +34,7 @@
         update_cache: true
         cache_valid_time: "{{ 0 if cis_apt_lists.matched == 0 else 86400 }}"
       changed_when: false
+      check_mode: false  # apt skips the update in check mode -> --check on a fresh host fails
       when: ansible_facts.os_family == 'Debian'
 
     - name: Install pwquality
