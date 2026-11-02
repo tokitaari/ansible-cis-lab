@@ -60,6 +60,12 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- Debian/Ubuntu: the target images ship without an apt package index, so every package
+  install failed with `No package matching ...` (3.03, 3.04, 4.07, 4.08 and the roles of 4.03
+  and 5.01 - in 4.03 the whole run aborted on the Debian family). The reference solutions now
+  refresh the index (`apt: update_cache`, `cache_valid_time: 86400`, `changed_when: false`;
+  in the roles via the platform flag `cis_apt_cache_refresh`). 3.03/3.04 READMEs and
+  TROUBLESHOOTING tell learners. Rebuild: *none*
 - Alpine (OpenRC): `service_facts` reports no `status` for OpenRC services, only their
   `runlevels`. The 2.05 check therefore always failed on Alpine (cron never "enabled"), and
   the 1.04 check and the 4.01 solution could not notice an enabled vsftpd there. "Enabled" now

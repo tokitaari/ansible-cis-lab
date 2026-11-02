@@ -12,3 +12,5 @@ cis_pwquality_supported: false
 cis_pwquality_package: ''
 cis_pam_password_stack: ''
 cis_platform_features: []
+# refresh the apt package index before installing (container images ship without one)
+cis_apt_cache_refresh: false

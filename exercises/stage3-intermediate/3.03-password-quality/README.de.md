@@ -31,7 +31,7 @@ Umfang dieser Aufgabe: `debian_family:redhat_family`. Die anderen sind Bonus.
 
 ## Anforderungen
 
-- [ ] Das richtige Paket pro Familie installieren (Dict-Lookup).
+- [ ] Das richtige Paket pro Familie installieren (Dict-Lookup). Debian/Ubuntu: vorher den apt-Paketindex aktualisieren (`ansible.builtin.apt` mit `update_cache: true` und `cache_valid_time`) - die Lab-Images enthalten keinen.
 - [ ] `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) mit den CIS-Werten schreiben, erzeugt aus einer Dict-Variable.
 - [ ] Debian-Familie: `pam_pwquality` steht in `/etc/pam.d/common-password` (die Paketinstallation aktiviert es normalerweise - prüfen und das Profil nur bei Fehlen mit `pam-auth-update --enable pwquality` aktivieren).
 - [ ] Red-Hat-Familie: `pam_pwquality` steht in `/etc/pam.d/system-auth`; `authselect current` prüfen und PAM-Dateien nicht direkt bearbeiten.

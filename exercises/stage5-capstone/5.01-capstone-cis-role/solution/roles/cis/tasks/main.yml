@@ -11,6 +11,17 @@
       paths:
         - "{{ role_path }}/vars"
 
+# Debian/Ubuntu container images ship without a package index; without it every package
+# install fails. The index is a cache, not configuration -> no 'changed', also in check mode.
+- name: Refresh the apt package index where the platform needs it
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 86400
+  changed_when: false
+  check_mode: false
+  when: cis_apt_cache_refresh
+  tags: [always]
+
 - name: Validate input
   ansible.builtin.import_tasks: preflight.yml
 

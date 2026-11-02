@@ -18,6 +18,15 @@
         init_cmd: sh -c 'aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz'
     cis_aide: "{{ cis_aide_platform[ansible_facts.os_family] }}"
   tasks:
+    # The Debian/Ubuntu targets ship without a package index (like most container images).
+    # The index is a cache, not configuration: changed_when false keeps the play idempotent.
+    - name: Refresh the apt package index
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 86400
+      changed_when: false
+      when: ansible_facts.os_family == 'Debian'
+
     - name: Install AIDE
       ansible.builtin.package:
         name: "{{ cis_aide.packages }}"

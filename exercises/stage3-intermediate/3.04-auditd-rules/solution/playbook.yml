@@ -40,6 +40,15 @@
         - -w /var/log/lastlog -p wa -k logins
         - -w /var/run/faillock -p wa -k logins
   tasks:
+    # The Debian/Ubuntu targets ship without a package index (like most container images).
+    # The index is a cache, not configuration: changed_when false keeps the play idempotent.
+    - name: Refresh the apt package index
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 86400
+      changed_when: false
+      when: ansible_facts.os_family == 'Debian'
+
     - name: Install the audit framework
       ansible.builtin.package:
         name: "{{ cis_audit_package[ansible_facts.os_family] }}"

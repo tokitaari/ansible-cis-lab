@@ -11,3 +11,5 @@ cis_pwquality_supported: true
 cis_pwquality_package: libpam-pwquality
 cis_pam_password_stack: /etc/pam.d/common-password
 cis_platform_features: [pam, pwquality]
+# refresh the apt package index before installing (container images ship without one)
+cis_apt_cache_refresh: true
