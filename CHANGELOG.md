@@ -60,6 +60,29 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 3.02 check on openSUSE: with the vendor split there is no `/etc/login.defs`, the defaults
+  (`ENCRYPT_METHOD SHA512`) live in `/usr/etc/login.defs`. The check read only `/etc` and
+  reported `ENCRYPT_METHOD=NONE`; it now uses `/etc/login.defs` or else the vendor file, plus
+  the drop-ins of both, as the README already describes. Rebuild: *none*
+- Debian/Ubuntu: the target images ship without an apt package index, so every package
+  install failed with `No package matching ...` (3.03, 3.04, 4.07, 4.08 and the roles of 4.03
+  and 5.01 - in 4.03 the whole run aborted on the Debian family). The reference solutions now
+  refresh the index when no `*_Packages*` file exists in `/var/lib/apt/lists` or it is older
+  than a day (`cache_valid_time` alone treats the empty index as fresh, because apt judges the
+  age by the directory's mtime), with `changed_when: false`; in the roles via the platform flag
+  `cis_apt_cache_refresh`. 3.03/3.04 READMEs and TROUBLESHOOTING tell learners. Rebuild: *none*
+- Alpine (OpenRC): `service_facts` reports no `status` for OpenRC services, only their
+  `runlevels`. The 2.05 check therefore always failed on Alpine (cron never "enabled"), and
+  the 1.04 check and the 4.01 solution could not notice an enabled vsftpd there. "Enabled" now
+  means `status == 'enabled'` or the service is in the `default` runlevel. Rebuild: *none*
+- 1.05 check and 5.02 reference preflight: openSUSE Leap 16 ships `/usr/etc/sudoers` with mode
+  0444, so `visudo -c` exits 1 even on an untouched host and the check could never pass there.
+  Exactly that message is now tolerated; syntax errors and bad permissions in `/etc` still fail.
+  1.05 explains the `/usr/etc` vendor split, the 5.02 hint mentions it. Rebuild: *none*
+- `sshd -T` keywords are compared case-insensitively. OpenSSH 10.6 (Arch) prints
+  `PermitRootLogin no` instead of `permitrootlogin no`, which broke the checks of 1.03 and 2.02
+  on Arch and would break the 4.01, 4.05 and 5.02 solutions. 1.03 explains the change; the
+  4.01/4.05 hints show the case-insensitive variant. Rebuild: *none*
 - 4.03 / 5.01: the regression checks now include 3.04 (auditd, CIS Level 2) when the check
   gets `-e cis_level=2` (`lab check 4.03 -e cis_level=2`), as the READMEs require; at level 1
   the check says that 3.04 was skipped. The READMEs show the level 2 run and check.

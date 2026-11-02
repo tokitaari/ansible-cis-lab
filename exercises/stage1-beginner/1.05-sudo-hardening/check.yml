@@ -22,9 +22,15 @@
       check_mode: false
       failed_when: false
 
+    # openSUSE Leap 16 ships the vendor file /usr/etc/sudoers with mode 0444, so 'visudo -c'
+    # exits 1 even on an untouched host. Only that complaint is tolerated, any other line
+    # (syntax/parse errors, bad permissions on files in /etc) still fails.
     - name: use_pty and logfile configured
       vars:
         text: "{{ content.content | default('') | b64decode }}"
+        visudo_problems: >-
+          {{ (visudo.stdout_lines + visudo.stderr_lines) | reject('search', ': parsed OK$')
+                         | reject('match', '^/usr/etc/[^:]+: bad permissions') | list }}
       ansible.builtin.assert:
         that:
           - st.stat.exists
@@ -32,8 +38,8 @@
           - st.stat.pw_name == 'root'
           - text is search('(?m)^\s*Defaults\s+use_pty\s*$')
           - text is search('(?m)^\s*Defaults\s+logfile\s*=\s*"?/var/log/sudo\.log"?\s*$')
-          - visudo.rc == 0
+          - visudo.rc == 0 or visudo_problems | length == 0
         fail_msg: >-
           /etc/sudoers.d/50-cis must exist (0440 root) with 'Defaults use_pty' and
-          'Defaults logfile="/var/log/sudo.log"'; visudo -c rc={{ visudo.rc }}
+          'Defaults logfile="/var/log/sudo.log"'; visudo -c rc={{ visudo.rc }} {{ visudo_problems }}
         quiet: true

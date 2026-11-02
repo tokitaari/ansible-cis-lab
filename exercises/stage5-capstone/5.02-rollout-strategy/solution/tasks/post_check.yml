@@ -14,6 +14,7 @@
 
 - name: Post-check | root login is still disabled
   ansible.builtin.assert:
-    that: "'permitrootlogin no' in cis_post_sshd.stdout_lines"
+    # (?i): OpenSSH 10.6 prints 'PermitRootLogin no', older releases 'permitrootlogin no'
+    that: cis_post_sshd.stdout_lines | select('match', '(?i)permitrootlogin\\s+no$') | list | length == 1
     fail_msg: sshd allows root login after the rollout
     quiet: true

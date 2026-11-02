@@ -1,6 +1,8 @@
 ---
 # Shared by the check playbooks: reads the *effective* sshd configuration
-# (sshd -T, as root) and exposes it as the dict 'sshd_cfg' (keys are lower case).
+# (sshd -T, as root) and exposes it as the dict 'sshd_cfg'. Keys are lower-cased here:
+# older OpenSSH releases print them in lower case, OpenSSH 10.6 (Arch) prints them
+# as written in sshd_config (PermitRootLogin). Values keep their case.
 - name: Run sshd -T
   ansible.builtin.command: /usr/sbin/sshd -T
   register: sshd_t
@@ -8,5 +10,7 @@
   check_mode: false
 
 - name: Parse into sshd_cfg
+  vars:
+    sshd_pairs: "{{ sshd_t.stdout_lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\t\\2') | map('split', '\t') | list }}"
   ansible.builtin.set_fact:
-    sshd_cfg: "{{ dict(sshd_t.stdout_lines | map('regex_replace', '^(\\S+)\\s+(.*)$', '\\1\t\\2') | map('split', '\t')) }}"
+    sshd_cfg: "{{ dict(sshd_pairs | map('first') | map('lower') | zip(sshd_pairs | map('last'))) }}"

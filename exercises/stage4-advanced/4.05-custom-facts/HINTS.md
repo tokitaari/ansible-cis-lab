@@ -6,7 +6,7 @@ Static: `copy` with `content: "{{ {'baseline': 'lab-cis', 'version': '1.0.0', 'l
 
 ## Hint 2
 
-Executable fact script: `uid0=$(awk -F: '$3 == 0' /etc/passwd | wc -l)`, `prl=$(/usr/sbin/sshd -T 2>/dev/null | awk '$1=="permitrootlogin"{print $2}')`, then `printf '{"uid0_accounts": %d, "permit_root_login": "%s"}\n' "$uid0" "${prl:-unknown}"`.
+Executable fact script: `uid0=$(awk -F: '$3 == 0' /etc/passwd | wc -l)`, `prl=$(/usr/sbin/sshd -T 2>/dev/null | awk 'tolower($1)=="permitrootlogin"{print $2}')`, then `printf '{"uid0_accounts": %d, "permit_root_login": "%s"}\n' "$uid0" "${prl:-unknown}"`.
 
 ## Hint 3
 

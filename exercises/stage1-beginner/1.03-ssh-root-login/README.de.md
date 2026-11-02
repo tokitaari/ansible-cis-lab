@@ -21,6 +21,7 @@ Konto mit leerem Passwort (gibt es auf zwei Hosts...) kann sich jeder anmelden.
 Wichtige sshd-Regel: **der erste gefundene Wert gewinnt**. `sshd_config` bindet
 `sshd_config.d/*.conf` ganz oben ein, die Dateien werden lexikalisch sortiert gelesen.
 Prüfe die *wirksame* Konfiguration mit `sshd -T` (als root), nicht die Datei.
+Schlüsselwörter sind case-insensitiv: ältere OpenSSH-Versionen geben `permitrootlogin no` aus, OpenSSH 10.6 `PermitRootLogin no`.
 
 Kaputte sshd-Konfiguration + Neustart = ausgesperrt. Zwei Ansible-Funktionen verhindern
 das: `validate` (Datei testen, bevor sie an ihren Platz kommt) und Handler (nur bei

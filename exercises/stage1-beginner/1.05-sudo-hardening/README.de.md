@@ -27,7 +27,7 @@ prüft eine Datei, bevor sie installiert wird. (Falls es doch passiert: `./lab.s
 - [ ] Lege `/etc/sudoers.d/50-cis` mit `Defaults use_pty` und `Defaults logfile="/var/log/sudo.log"` an.
 - [ ] Eigentümer `root:root`, Modus `0440`.
 - [ ] Vor der Installation mit `visudo -cf %s` validieren.
-- [ ] `visudo -c` meldet auf dem Host keine Fehler, und Ansible kann weiterhin root werden.
+- [ ] `visudo -c` meldet auf dem Host keine Fehler (auf openSUSE bemängelt es zusätzlich `/usr/etc/sudoers` - siehe Erklärung), und Ansible kann weiterhin root werden.
 
 ## Vorgehen
 

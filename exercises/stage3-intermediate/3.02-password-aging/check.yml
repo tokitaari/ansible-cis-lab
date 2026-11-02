@@ -4,8 +4,13 @@
   become: true
   gather_facts: false
   tasks:
+    # Vendor split (openSUSE Leap 16): no /etc/login.defs, the defaults live in
+    # /usr/etc/login.defs. /etc/login.defs replaces the vendor file; drop-ins add to it.
     - name: Read effective login.defs (main file + drop-ins, later wins)
-      ansible.builtin.shell: cat /etc/login.defs /etc/login.defs.d/*.defs 2>/dev/null; true
+      ansible.builtin.shell: |
+        base=/etc/login.defs
+        [ -e "$base" ] || base=/usr/etc/login.defs
+        cat "$base" /usr/etc/login.defs.d/*.defs /etc/login.defs.d/*.defs 2>/dev/null; true
       register: defs
       changed_when: false
       check_mode: false

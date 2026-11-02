@@ -34,6 +34,10 @@ ist dieses Muster nicht verhandelbar.
   die Absicht und deckt ältere Versionen ab.
 - `logfile` ergänzt syslog/journal, ersetzt es nicht.
 - Ansibles eigene sudo-Aufrufe stehen jetzt in `/var/log/sudo.log` - schau rein.
+- openSUSE Leap 16 verlegt Hersteller-Vorgaben nach `/usr/etc` (`/usr/etc/sudoers`, `/usr/etc/login.defs`);
+  Dateien in `/etc` überschreiben sie. Das Paket liefert `/usr/etc/sudoers` mit Modus 0444, daher
+  endet `visudo -c` schon auf einem unberührten Host mit 1. Die Datei gehört nicht dir - der Check
+  toleriert genau diese Meldung und schlägt bei Syntaxfehlern oder falschen Rechten in `/etc` weiter fehl.
 
 ## Musterlösung
 

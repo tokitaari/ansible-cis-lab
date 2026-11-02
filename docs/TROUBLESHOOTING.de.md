@@ -18,6 +18,7 @@
 | `lab check` besteht die Zustandsprüfung, meldet aber *not idempotent* | dein Playbook meldet `changed` im `--check` | die als `changed` gelisteten Tasks ansehen; typisch: `command` ohne `changed_when`, `copy` mit Zeitstempeln, `password_hash` ohne Salt |
 | Uhr im Control Node weicht 1-2 h ab | Container läuft auf UTC | über `./lab.sh` / `.\lab.ps1` starten (erkennt die Zeitzone des Hosts) oder `LAB_TZ=Europe/Berlin` setzen; dann `docker compose up -d --force-recreate control`. Targets nutzen absichtlich UTC |
 | Docker-DNS im Target kaputt (`apt`/`dnf` lösen nicht auf) | `nft flush ruleset` oder neu gestarteter nftables-Dienst | `./lab.sh reset <host>`; siehe 4.07 |
+| `No package matching '...' is available` auf `debian`/`ubuntu` | die Images enthalten keinen apt-Paketindex (`/var/lib/apt/lists` ist leer) | vor dem Installieren aktualisieren (`ansible.builtin.apt: update_cache: true`, `changed_when: false`). Vorsicht: `cache_valid_time` allein misst das Alter an der mtime von `/var/lib/apt/lists` und hält den leeren Index für frisch - die Musterlösungen suchen zuerst nach `*_Packages*`-Dateien |
 
 ## Nützliche Befehle
 
