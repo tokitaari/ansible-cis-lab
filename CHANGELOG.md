@@ -55,6 +55,11 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 4.03 / 5.01: the regression checks now include 3.04 (auditd, CIS Level 2) when the check
+  gets `-e cis_level=2` (`lab check 4.03 -e cis_level=2`), as the READMEs require; at level 1
+  the check says that 3.04 was skipped. The READMEs show the level 2 run and check.
+- 3.03 names the task file for the role (`section5_pam.yml`) that the 4.03 check expects.
+  Rebuild: *none*
 - `cis/controls.yml`: control 5.2 (privilege escalation) now lists exercise 4.04, which
   configures sudo for the break-glass account and names 5.2 in its CIS reference.
 

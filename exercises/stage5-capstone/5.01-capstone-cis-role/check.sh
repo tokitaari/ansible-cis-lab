@@ -14,7 +14,10 @@ echo "--- ansible-lint (production)"
 ansible-lint --offline --profile production -q "$role" || fail "ansible-lint production profile reported problems"
 
 echo "--- regression checks (state after enforce)"
-bash "${LAB_ROOT:-/lab}/exercises/_common/run_checks.sh" 0.04 1.01 1.02 1.03 1.04 1.05 2.01 2.02 2.03 2.04 2.05 2.06 3.02 3.03 3.05 -- "$@" || rc=1
+. "${LAB_ROOT:-/lab}/exercises/_common/cis_level.sh"
+read -ra ids <<<"$(regression_ids "$@")"
+bash "${LAB_ROOT:-/lab}/exercises/_common/run_checks.sh" "${ids[@]}" -- "$@" || rc=1
+level_note 5.01 "$@"
 
 echo "--- audit run must change nothing and report no failures"
 out="$(cd "$work/5.01" && ANSIBLE_NOCOLOR=1 ansible-playbook site.yml -e cis_mode=audit "$@" 2>&1)" || {

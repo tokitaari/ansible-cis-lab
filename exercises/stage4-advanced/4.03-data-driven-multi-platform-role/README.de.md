@@ -46,6 +46,9 @@ cd /lab/work/4.03
 # site.yml schreiben, dann ausführen:
 ansible-playbook site.yml
 lab check 4.03            # prüft den Zustand und dass ein zweiter Lauf nichts ändert
+# Level 2: mit -e cis_level=2 ausführen und prüfen - nur dann wird 3.04 (auditd) geprüft
+ansible-playbook site.yml -e cis_level=2
+lab check 4.03 -e cis_level=2
 ```
 
 Festgefahren? `lab hint 4.03 1` (sanft) ... `lab hint 4.03 3` (fast die Lösung).  

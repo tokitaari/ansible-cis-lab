@@ -23,5 +23,8 @@ echo "--- ansible-lint"
 ansible-lint --offline --profile moderate -q "$role" || fail "ansible-lint reported problems"
 
 echo "--- regression checks"
-bash "${LAB_ROOT:-/lab}/exercises/_common/run_checks.sh" 0.04 1.01 1.02 1.03 1.04 1.05 2.01 2.02 2.03 2.04 2.05 2.06 3.02 3.03 3.05 -- "$@" || rc=1
+. "${LAB_ROOT:-/lab}/exercises/_common/cis_level.sh"
+read -ra ids <<<"$(regression_ids "$@")"
+bash "${LAB_ROOT:-/lab}/exercises/_common/run_checks.sh" "${ids[@]}" -- "$@" || rc=1
+level_note 4.03 "$@"
 exit $rc
