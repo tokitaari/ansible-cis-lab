@@ -67,9 +67,10 @@ MINOR: new features or exercises, PATCH: fixes.
 - Debian/Ubuntu: the target images ship without an apt package index, so every package
   install failed with `No package matching ...` (3.03, 3.04, 4.07, 4.08 and the roles of 4.03
   and 5.01 - in 4.03 the whole run aborted on the Debian family). The reference solutions now
-  refresh the index (`apt: update_cache`, `cache_valid_time: 86400`, `changed_when: false`;
-  in the roles via the platform flag `cis_apt_cache_refresh`). 3.03/3.04 READMEs and
-  TROUBLESHOOTING tell learners. Rebuild: *none*
+  refresh the index when no `*_Packages*` file exists in `/var/lib/apt/lists` or it is older
+  than a day (`cache_valid_time` alone treats the empty index as fresh, because apt judges the
+  age by the directory's mtime), with `changed_when: false`; in the roles via the platform flag
+  `cis_apt_cache_refresh`. 3.03/3.04 READMEs and TROUBLESHOOTING tell learners. Rebuild: *none*
 - Alpine (OpenRC): `service_facts` reports no `status` for OpenRC services, only their
   `runlevels`. The 2.05 check therefore always failed on Alpine (cron never "enabled"), and
   the 1.04 check and the 4.01 solution could not notice an enabled vsftpd there. "Enabled" now

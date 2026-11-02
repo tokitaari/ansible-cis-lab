@@ -18,7 +18,7 @@
 | `lab check` passes state checks but reports *not idempotent* | your playbook reports `changed` in `--check` | look at the tasks listed as `changed`; typical: `command` without `changed_when`, `copy` with timestamps, `password_hash` without salt |
 | Clock in the control node is off by 1-2 h | container runs on UTC | start via `./lab.sh` / `.\lab.ps1` (detects the host time zone) or set `LAB_TZ=Europe/Berlin`; then `docker compose up -d --force-recreate control`. Targets use UTC on purpose |
 | Docker DNS broken inside a target (`apt`/`dnf` cannot resolve) | `nft flush ruleset` or a restarted nftables service | `./lab.sh reset <host>`; see 4.07 |
-| `No package matching '...' is available` on `debian`/`ubuntu` | the images ship without an apt package index (`/var/lib/apt/lists` is empty) | refresh it before installing: `ansible.builtin.apt: update_cache: true` with `cache_valid_time: 86400` and `changed_when: false` (the reference solutions do this) |
+| `No package matching '...' is available` on `debian`/`ubuntu` | the images ship without an apt package index (`/var/lib/apt/lists` is empty) | refresh it before installing (`ansible.builtin.apt: update_cache: true`, `changed_when: false`). Careful: `cache_valid_time` alone judges the age by the mtime of `/var/lib/apt/lists` and treats the empty index as fresh - the reference solutions first look for `*_Packages*` files |
 
 ## Useful commands
 

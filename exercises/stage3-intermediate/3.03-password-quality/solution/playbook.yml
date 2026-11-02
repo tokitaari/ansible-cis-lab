@@ -17,11 +17,21 @@
       dictcheck: 1
   tasks:
     # The Debian/Ubuntu targets ship without a package index (like most container images).
-    # The index is a cache, not configuration: changed_when false keeps the play idempotent.
-    - name: Refresh the apt package index
+    # cache_valid_time alone does not help: apt judges the age by the mtime of
+    # /var/lib/apt/lists, which the image build touched - an empty index looks fresh.
+    # So look for index files first. The index is a cache, not configuration:
+    # changed_when false keeps the play idempotent.
+    - name: Look for an apt package index
+      ansible.builtin.find:
+        paths: /var/lib/apt/lists
+        patterns: "*_Packages*"
+      register: cis_apt_lists
+      when: ansible_facts.os_family == 'Debian'
+
+    - name: Refresh the apt package index (missing, or older than a day)
       ansible.builtin.apt:
         update_cache: true
-        cache_valid_time: 86400
+        cache_valid_time: "{{ 0 if cis_apt_lists.matched == 0 else 86400 }}"
       changed_when: false
       when: ansible_facts.os_family == 'Debian'
 
