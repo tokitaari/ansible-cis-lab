@@ -16,6 +16,9 @@ ROOT="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 
 id="${1:-}" wd="${2:-}"
 [[ -n "$id" && -n "$wd" ]] || { echo "usage: $0 <id> <work-dir>" >&2; exit 2; }
+# The id becomes part of paths that are removed below - accept only '<stage>.<NN>'
+# (e.g. 3.01), never '..' or '/'.
+[[ "$id" =~ ^[0-9]\.[0-9]{2}$ ]] || { echo "invalid exercise id '$id' (expected e.g. 3.01)" >&2; exit 2; }
 
 ex=""
 for d in "$ROOT"/exercises/stage*/"$id"-*; do [[ -d "$d" ]] && ex="$d"; done

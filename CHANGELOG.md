@@ -60,6 +60,9 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- `tools/stage-solution.sh` and `lab`: the exercise id must look like `3.01`. An id such as
+  `../stage3-intermediate/3.01` used to resolve and made `stage-solution.sh` remove and write
+  directories outside the work directory. Rebuild: *none*
 - 3.02 check on openSUSE: with the vendor split there is no `/etc/login.defs`, the defaults
   (`ENCRYPT_METHOD SHA512`) live in `/usr/etc/login.defs`. The check read only `/etc` and
   reported `ENCRYPT_METHOD=NONE`; it now uses `/etc/login.defs` or else the vendor file, plus
