@@ -3,7 +3,7 @@
 #   tools/static-check.sh                 all checks
 #   tools/static-check.sh lint links      only the named checks
 # Checks: yaml (yamllint), lint (ansible-lint, profile production, on every solution/),
-#         meta, parity, links, controls (tools/static_check.py - see its docstring).
+#         meta, parity, links, controls, lessons (tools/static_check.py - see its docstring).
 # Needs python3 + PyYAML, yamllint and ansible-lint - all present in the control node:
 #   docker compose exec control /lab/tools/static-check.sh
 # CI runs it in .github/workflows/release-check.yml (job "static").
@@ -11,7 +11,7 @@ set -uo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.." || exit 2
 ROOT=$PWD
 
-ALL=(yaml lint meta parity links controls)
+ALL=(yaml lint meta parity links controls lessons)
 want=("$@")
 [[ ${#want[@]} -gt 0 ]] || want=("${ALL[@]}")
 for c in "${want[@]}"; do
@@ -51,7 +51,7 @@ if wanted lint; then
     ansible-lint --profile production --nocolor exercises/*/*/solution
 fi
 
-for c in meta parity links controls; do
+for c in meta parity links controls lessons; do
   wanted "$c" || continue
   need python3
   step "$c" python3 tools/static_check.py "$c"
