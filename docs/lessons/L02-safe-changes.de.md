@@ -389,7 +389,7 @@ richtigen Namen. Namen als Daten zu behandeln ist das Thema von L04.
 | Übung | Was diese Lektion dafür vorbereitet |
 |---|---|
 | [1.01](../../exercises/stage1-beginner/1.01-remove-telnet/README.de.md) | was `--check --diff` für ein Paket zeigt, das es vielleicht nicht gibt; übersprungen versus fehlgeschlagen |
-| [1.02](../../exercises/stage1-beginner/1.02-passwd-group-permissions/README.de.md) | einen Rechte-Diff lesen; gequotete Modi; warum eine fehlende Datei Überlegung braucht |
+| [1.02](../../exercises/stage1-beginner/1.02-passwd-group-permissions/README.de.md) | einen Rechte-Diff in `--check --diff` lesen; prüfen, ob eine Datei existiert (`stat` und `when`); die Modi selbst folgen in [L03](L03-base-hardening.de.md) |
 | [1.03](../../exercises/stage1-beginner/1.03-ssh-root-login/README.de.md) | `validate`, `notify` und Handler, die Grenzen von `validate`, eine Änderung, die dich aussperren kann |
 | [1.04](../../exercises/stage1-beginner/1.04-disable-ftp-server/README.de.md) | `package_facts` mit `when`, ein Task für systemd und OpenRC, übersprungene Hosts |
 | [1.05](../../exercises/stage1-beginner/1.05-sudo-hardening/README.de.md) | `validate` als Schutz vor dem Aussperren, eine riskante Änderung ordnen |
