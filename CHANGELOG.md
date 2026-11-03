@@ -38,6 +38,15 @@ MINOR: new features or exercises, PATCH: fixes.
   `block`/`rescue`) - with tested examples, platform table, pitfalls and self-check
   questions. Prepares 1.01-1.05. Read it with `lab view docs/lessons/L02-safe-changes.md`.
   Rebuild: *none*
+- Lesson L03 *Base hardening: packages, services, file permissions, SSH and sudo* in
+  `docs/lessons/` (EN and DE): the layers of attack surface (installed, running, enabled,
+  masked) and why `service_facts` differs between systemd and OpenRC, verifying a removal by
+  its effect, package names across distributions, file modes (octal and symbolic, the
+  unquoted-mode trap, why compliance is a bound), how sshd combines several files (first value
+  wins, `Match`, `sshd -T`, reload versus restart) and how sudo reads `sudoers.d` (later
+  wins, dotted names ignored, sudo-rs) - with tested examples, platform table, pitfalls and
+  self-check questions. Prepares 1.01-1.05 and 2.01. Read it with
+  `lab view docs/lessons/L03-base-hardening.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
