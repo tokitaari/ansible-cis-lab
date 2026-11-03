@@ -28,7 +28,7 @@ Hintergrund; `async_status` holt die Ergebnisse später ab.
 ## Anforderungen
 
 - [ ] Pakete pro Familie installieren (Dict).
-- [ ] Die Datenbank mit `async` (z. B. 1800 s) und `poll: 0` initialisieren, dann mit `ansible.builtin.async_status` warten (`until`-Schleife). Die Initialisierung muss übersprungen werden, wenn die Datenbank existiert (`creates:`).
+- [ ] Die Datenbank mit `async` (z. B. 1800 s) und `poll: 0` initialisieren, dann mit `ansible.builtin.async_status` warten (`until`-Schleife). Die Initialisierung muss *übersprungen* werden (nicht `changed`), wenn die Datenbank existiert.
 - [ ] Templatebasierte Units `cis-aidecheck.service` (oneshot, führt `aide --check` mit der Konfiguration der Familie aus) und `cis-aidecheck.timer` (täglich, `Persistent=true`); Timer aktiviert und gestartet; `daemon_reload`, wenn sich Units ändern.
 - [ ] Zweiter Lauf: `changed=0` und kein zweiter Scan.
 

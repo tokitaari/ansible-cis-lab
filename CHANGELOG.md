@@ -60,6 +60,11 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 4.08: the reference solution was not idempotent - with `poll: 0` the init task reports
+  `changed` as soon as the background job starts, `creates:` only acts inside the job. It now
+  checks for the database with `stat` first and skips the init. EXPLANATION and hint corrected
+  (they claimed `--check` shows `skipped`); TROUBLESHOOTING explains the harmless
+  `junk after the JSON data: ]3008;...` warning of async tasks. Rebuild: *none*
 - 4.04 on Arch: shadow 4.20 removed the minimum password age (`chage -m/--mindays`,
   `PASS_MIN_DAYS`, `sp_min`), so the reference solution failed in `ansible.builtin.user`
   (`password_expire_min`). Solution and check now ask `chage --help` and set/require the minimum

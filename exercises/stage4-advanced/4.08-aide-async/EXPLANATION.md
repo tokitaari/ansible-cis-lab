@@ -16,9 +16,26 @@ All five hosts start their scan within seconds; the wait loop then collects them
 With `poll: 15` instead of `0` Ansible would block per host but keep the connection
 short-lived - also valid, less parallel.
 
-### creates = idempotency for commands
-`creates: /var/lib/aide/aide.db` → the command is skipped when the file exists. In
-check mode Ansible can evaluate it, so `--check` shows `skipped`, not `changed`.
+### creates is not enough with poll: 0
+`creates: /var/lib/aide/aide.db` normally makes a command idempotent: skipped when the file
+exists. With `poll: 0`, however, the task result is only "job started" - `changed`, every
+run, also under `--check`. The module (and its `creates:` test) runs later in the background,
+and nobody looks at its result. So decide *before* starting the job:
+```yaml
+- ansible.builtin.stat:
+    path: /var/lib/aide/aide.db
+  register: db
+- ansible.builtin.command:
+    cmd: aideinit -y -f
+    creates: /var/lib/aide/aide.db
+  async: 1800
+  poll: 0
+  register: job
+  when: not db.stat.exists
+```
+Now the second run shows `skipped`, the wait task skips too (no job id), and on the first
+run `async_status` reports the real result. `creates:` stays as a guard in case two runs
+overlap.
 
 ### Timers instead of cron
 systemd timers log to the journal, support `Persistent=true` (run missed jobs after

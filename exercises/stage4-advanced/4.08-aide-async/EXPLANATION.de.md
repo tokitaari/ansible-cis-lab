@@ -16,9 +16,27 @@ Alle fünf Hosts starten ihren Scan innerhalb von Sekunden; die Warteschleife sa
 dann ein. Mit `poll: 15` statt `0` würde Ansible pro Host blockieren, die Verbindung aber
 kurzlebig halten - auch gültig, weniger parallel.
 
-### creates = Idempotenz für Befehle
-`creates: /var/lib/aide/aide.db` → der Befehl wird übersprungen, wenn die Datei existiert.
-Im Check-Modus kann Ansible das auswerten, `--check` zeigt also `skipped`, nicht `changed`.
+### creates reicht bei poll: 0 nicht
+`creates: /var/lib/aide/aide.db` macht einen Befehl normalerweise idempotent: übersprungen,
+wenn die Datei existiert. Mit `poll: 0` ist das Task-Ergebnis aber nur "Job gestartet" -
+`changed`, bei jedem Lauf, auch unter `--check`. Das Modul (und sein `creates:`-Test) läuft
+später im Hintergrund, und niemand sieht sich sein Ergebnis an. Also *vor* dem Start des Jobs
+entscheiden:
+```yaml
+- ansible.builtin.stat:
+    path: /var/lib/aide/aide.db
+  register: db
+- ansible.builtin.command:
+    cmd: aideinit -y -f
+    creates: /var/lib/aide/aide.db
+  async: 1800
+  poll: 0
+  register: job
+  when: not db.stat.exists
+```
+Jetzt zeigt der zweite Lauf `skipped`, der Warte-Task wird ebenfalls übersprungen (keine
+Job-ID), und beim ersten Lauf meldet `async_status` das echte Ergebnis. `creates:` bleibt als
+Absicherung, falls sich zwei Läufe überschneiden.
 
 ### Timer statt cron
 systemd-Timer loggen ins Journal, unterstützen `Persistent=true` (verpasste Läufe nach

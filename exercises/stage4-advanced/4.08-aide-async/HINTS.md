@@ -2,7 +2,7 @@
 
 ## Hint 1
 
-Init task: `ansible.builtin.command:` with `cmd: "{{ cis_aide.init_cmd }}"` and `creates: "{{ cis_aide.db }}"`, `async: 1800`, `poll: 0`, `register: cis_aide_job`. RedHat init needs a shell (`aide --init && mv ...`) → use `ansible.builtin.shell` there or `sh -c` in the command.
+Init task: `ansible.builtin.command:` with `cmd: "{{ cis_aide.init_cmd }}"` and `creates: "{{ cis_aide.db }}"`, `async: 1800`, `poll: 0`, `register: cis_aide_job`. With `poll: 0` the task reports `changed` as soon as the job starts - `creates:` only acts inside the job - so add a `stat` on the database before it and `when: not cis_aide_db.stat.exists`. RedHat init needs a shell (`aide --init && mv ...`) → use `ansible.builtin.shell` there or `sh -c` in the command.
 
 ## Hint 2
 
