@@ -20,6 +20,15 @@ MINOR: new features or exercises, PATCH: fixes.
   platform table, container notes, pitfalls and self-check questions. Prepares 0.01-0.04. Read
   it with `lab view docs/lessons/L00-lab-and-ansible-basics.md` (`lab lesson` follows).
   Rebuild: *none*
+- Lesson L01 *CIS Benchmarks: structure, levels and the lab catalogue* in `docs/lessons/` (EN
+  and DE): what a Benchmark is and how it is made (consensus process, licence, CIS Controls,
+  CIS-CAT), the fields of a recommendation, *Automated* vs. *Manual*, why recommendation numbers
+  move between versions, Level 1/2 and Server/Workstation profiles, mapping audit and
+  remediation to Ansible tasks (and what does not automate), exceptions, and how
+  `cis/controls.yml` and the exercises' `meta.yml` connect to the PDFs - with a tested play
+  that queries the catalogue, container values, pitfalls and self-check questions. Background
+  for all exercises, applied directly in 4.01, 4.02 and 5.03. Read it with
+  `lab view docs/lessons/L01-cis-benchmarks.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
