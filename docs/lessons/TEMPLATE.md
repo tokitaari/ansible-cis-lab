@@ -14,7 +14,7 @@ italic placeholder. tools/static-check.sh lessons enforces the structure:
 - line 1 is '# LNN - <title>' with NN from the file name, then the language switch line,
   then the header table above (same values in EN and DE, only the time unit differs)
 - Exercises: exercise ids, sorted, comma-separated, or '-'; the same ids (and only those)
-  appear in the table of the Exercises section
+  appear in the table of the Exercises section, each linking to its exercise's README.md
 - CIS sections: ids from cis/controls.yml, sorted, comma-separated, or '-'; list the sections
   the lesson's exercises cover - other ids may be named in the text with a catalogue link
 - Reading time: '~N min' (DE '~N Min.'), aim for 15-30 minutes

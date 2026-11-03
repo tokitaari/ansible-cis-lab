@@ -27,6 +27,9 @@ MINOR: new features or exercises, PATCH: fixes.
   run unchanged in the lab, exercises link to their README (the template's INDEX link is only a
   placeholder), platform tables may add columns but keep one row per `os_family`.
   Rebuild: *none*
+- Static gate check `lessons`: every row of a lesson's Exercises table must link to the README
+  of exactly the exercise it names (`README.de.md` in German lessons); before, any existing
+  file passed. Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

@@ -14,7 +14,7 @@ Platzhalter ersetzen. tools/static-check.sh lessons prüft die Struktur:
 - Zeile 1 ist '# LNN - <Titel>' mit NN aus dem Dateinamen, dann die Sprachumschaltung,
   dann die Kopftabelle oben (gleiche Werte in EN und DE, nur die Zeiteinheit unterscheidet sich)
 - Übungen: Übungs-IDs, sortiert, kommagetrennt, oder '-'; genau diese IDs stehen auch in der
-  Tabelle des Abschnitts Übungen
+  Tabelle des Abschnitts Übungen, jede mit Link auf die README.de.md ihrer Übung
 - CIS-Abschnitte: IDs aus cis/controls.yml, sortiert, kommagetrennt, oder '-'; die Abschnitte,
   die die Übungen der Lektion abdecken - weitere IDs dürfen im Text mit Katalog-Link vorkommen
 - Lesezeit: '~N Min.' (EN '~N min'), Ziel 15-30 Minuten

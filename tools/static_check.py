@@ -19,6 +19,7 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
 """
 import collections
 import os
+import posixpath
 import re
 import subprocess
 import sys
@@ -623,8 +624,10 @@ def lesson_sections(prose):
     return order, body
 
 
-def check_lesson(f, exs_known, controls, lessons):
-    """One lesson file; returns its header cells (or None) for the EN/DE comparison."""
+def check_lesson(f, ex_dirs, controls, lessons):
+    """One lesson file; returns its header cells (or None) for the EN/DE comparison.
+
+    ex_dirs maps exercise id -> exercise directory (repo-relative)."""
     lang = "de" if f.endswith(".de.md") else "en"
     stem = os.path.basename(f)[:-6 if lang == "de" else -3]
     template = stem == LESSON_TEMPLATE
@@ -680,7 +683,7 @@ def check_lesson(f, exs_known, controls, lessons):
     if template:
         return None  # placeholder values
     where = f"{f}: header table"
-    ex = lesson_list(where, LESSON_HEAD[lang][0], cells[0], ID_RE, exs_known, id_key)
+    ex = lesson_list(where, LESSON_HEAD[lang][0], cells[0], ID_RE, set(ex_dirs), id_key)
     lesson_list(where, LESSON_HEAD[lang][1], cells[1], CIS_ID_RE, controls, id_key)
     if not LESSON_TIME_RE[lang].match(cells[2]):
         fail("lessons", f"{where}: {LESSON_HEAD[lang][2]} must look like "
@@ -693,9 +696,20 @@ def check_lesson(f, exs_known, controls, lessons):
     if ex is not None:
         rows = table_rows("\n".join(body.get(LESSON_SECTIONS[lang][5], [])))
         listed = []
+        readme = "README.de.md" if lang == "de" else "README.md"
         for row in rows[1:]:
-            lm = re.match(r"^\[([^\]]+)\]\(", row[0])
+            lm = re.match(r"^\[([^\]]+)\]\(([^)\s]*)\)", row[0])
             listed.append(lm.group(1) if lm else row[0])
+            # each row links to the README of exactly the exercise named in its link text
+            eid = lm.group(1) if lm else row[0]
+            if eid not in ex_dirs:
+                continue  # unknown ids are reported by the header comparison below
+            want = os.path.relpath(f"{ex_dirs[eid]}/{readme}", LESSON_DIR).replace(os.sep, "/")
+            got = lm.group(2) if lm else None
+            if got is None or posixpath.normpath(posixpath.join(LESSON_DIR, got)) != \
+                    posixpath.normpath(posixpath.join(LESSON_DIR, want)):
+                fail("lessons", f"{f}: {LESSON_SECTIONS[lang][5]}: {eid} must link to {want}"
+                                + (f", not {got}" if got else " (no link)"))
         if listed != ex:
             fail("lessons", f"{f}: {LESSON_SECTIONS[lang][5]}: table lists {listed}, header table "
                             f"says {ex}")
@@ -718,11 +732,11 @@ def check_lessons(files, exs):
             lessons[lid] = f
     if paths and f"{LESSON_DIR}/{LESSON_TEMPLATE}.md" not in paths:
         fail("lessons", f"{LESSON_DIR}/{LESSON_TEMPLATE}.md missing")
-    known = {m.get("id") for _, m in exs}
+    ex_dirs = {m.get("id"): rel(d) for d, m in exs}
     controls = control_ids()
     heads = {}
     for f in sorted(paths):
-        heads[f] = check_lesson(f, known, controls, lessons)
+        heads[f] = check_lesson(f, ex_dirs, controls, lessons)
     for f, en in heads.items():
         de = heads.get(f[:-3] + ".de.md") if not f.endswith(".de.md") else None
         if en is None or de is None:
