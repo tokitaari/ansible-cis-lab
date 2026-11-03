@@ -29,6 +29,15 @@ MINOR: new features or exercises, PATCH: fixes.
   that queries the catalogue, container values, pitfalls and self-check questions. Background
   for all exercises, applied directly in 4.01, 4.02 and 5.03. Read it with
   `lab view docs/lessons/L01-cis-benchmarks.md`. Rebuild: *none*
+- Lesson L02 *Safe changes: check mode, validate, handlers and conditionals* in
+  `docs/lessons/` (EN and DE): what `--check --diff` can and cannot predict (skipped
+  `command` tasks, `check_mode: false`, `diff: false`), what `validate` proves and what it
+  does not, handlers (run once, `flush_handlers`, `listen`, `force_handlers`, lost handlers
+  after a failure), conditionals with `package_facts`, `failed_when` instead of
+  `ignore_errors`, and ordering a risky change (`--limit`, `--step`, `backup`,
+  `block`/`rescue`) - with tested examples, platform table, pitfalls and self-check
+  questions. Prepares 1.01-1.05. Read it with `lab view docs/lessons/L02-safe-changes.md`.
+  Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
