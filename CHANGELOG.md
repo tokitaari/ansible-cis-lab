@@ -21,6 +21,13 @@ MINOR: new features or exercises, PATCH: fixes.
   it with `lab view docs/lessons/L00-lab-and-ansible-basics.md` (`lab lesson` follows).
   Rebuild: *none*
 
+### Changed
+- Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
+  the CIS sections of the lesson's exercises (other ids may appear in the text), examples must
+  run unchanged in the lab, exercises link to their README (the template's INDEX link is only a
+  placeholder), platform tables may add columns but keep one row per `os_family`.
+  Rebuild: *none*
+
 ## [1.4.0] - 2026-11-03
 
 ### Added

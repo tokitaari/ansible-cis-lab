@@ -15,7 +15,8 @@ Platzhalter ersetzen. tools/static-check.sh lessons prüft die Struktur:
   dann die Kopftabelle oben (gleiche Werte in EN und DE, nur die Zeiteinheit unterscheidet sich)
 - Übungen: Übungs-IDs, sortiert, kommagetrennt, oder '-'; genau diese IDs stehen auch in der
   Tabelle des Abschnitts Übungen
-- CIS-Abschnitte: IDs aus cis/controls.yml, sortiert, kommagetrennt, oder '-'
+- CIS-Abschnitte: IDs aus cis/controls.yml, sortiert, kommagetrennt, oder '-'; die Abschnitte,
+  die die Übungen der Lektion abdecken - weitere IDs dürfen im Text mit Katalog-Link vorkommen
 - Lesezeit: '~N Min.' (EN '~N min'), Ziel 15-30 Minuten
 - Baut auf: frühere, vorhandene Lektionen (L00, L03), sortiert, oder '-'
 - genau die acht '##'-Abschnitte dieser Vorlage, in dieser Reihenfolge, mit diesen Titeln;
@@ -27,12 +28,16 @@ Schreibregeln:
 - Eine Lektion erklärt Konzepte VOR den Übungen. Nie die Referenzlösung einer Übung oder
   eine Lösung ihrer Anforderungen zeigen - dafür ist EXPLANATION.md da.
 - Beispiele sind klein und generisch (ein Task, eine Hostgruppe) und anders als die Lösung.
+  Sie laufen unverändert im Lab - jedes testen. L00 meidet alpine (kein Python vor 0.02);
+  spätere Lektionen dürfen 0.02 voraussetzen.
 - CIS: nur eigene Formulierungen, nie Benchmark-Text. Empfehlungen über die Abschnitts-IDs
   aus cis/controls.yml benennen; exakte Nummern unterscheiden sich je Benchmark und Version.
 - Plattformwerte wie in den Facts: os_family Debian, RedHat, Suse, Alpine, Archlinux.
 - Getaggte Code-Blöcke (yaml, bash) enthalten in EN und DE denselben Code, inklusive
   Task-'name:'-Werten (bleiben englisch); nur '#'-Kommentare werden übersetzt.
-- Jeder relative Link muss auflösen (static-check links); Übungen auf ihre README.de.md verlinken.
+- Jeder relative Link muss auflösen (static-check links); Übungen auf ihre README.de.md verlinken
+  (der Platzhalter unten zeigt nur auf INDEX.de.md, damit die Vorlage den Link-Check besteht).
+- Plattformunterschiede: Spalten nach Bedarf ergänzen (z. B. Hosts), aber eine Zeile pro os_family.
 - Das details-Tag nur in der Selbstkontrolle schreiben: eine Ansicht mit ausgeblendeten Antworten
   schneidet vom ersten öffnenden bis zum nächsten schließenden Tag, auch in diesem Kommentar.
 -->
