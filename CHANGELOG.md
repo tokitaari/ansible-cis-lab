@@ -30,6 +30,10 @@ MINOR: new features or exercises, PATCH: fixes.
 - Static gate check `lessons`: every row of a lesson's Exercises table must link to the README
   of exactly the exercise it names (`README.de.md` in German lessons); before, any existing
   file passed. Rebuild: *none*
+- `tools/static-check.sh` (*lint*): the ansible-lint warning "Directory expansion discovered N
+  file(s)" is no longer shown - ansible-lint prints it for every directory argument and offers
+  no setting to turn it off, while the gate lints the solution directories on purpose. Other
+  messages and the exit code are unchanged. Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 
