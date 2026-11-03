@@ -47,6 +47,15 @@ MINOR: new features or exercises, PATCH: fixes.
   wins, dotted names ignored, sudo-rs) - with tested examples, platform table, pitfalls and
   self-check questions. Prepares 1.01-1.05 and 2.01. Read it with
   `lab view docs/lessons/L03-base-hardening.md`. Rebuild: *none*
+- Lesson L04 *Platform differences as data: dictionaries, loops, Jinja2 and templates* in
+  `docs/lessons/` (EN and DE): a dictionary keyed by `os_family` instead of a chain of `when`
+  conditions (and what a missing key or a `default` means), registered loop results
+  (`results`, `item.item`, `selectattr`), Jinja2 expressions, filters, tests and undefined
+  values in ansible-core 2.21, templates (block trimming, `ansible_managed`, deterministic
+  output, `--diff`) and where a variable gets its value (layers, `ansible-inventory --host`) -
+  with tested examples, platform table, pitfalls and self-check questions. Prepares 2.01, 2.02
+  and 2.06. Read it with `lab view docs/lessons/L04-platform-differences-as-data.md`.
+  Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
