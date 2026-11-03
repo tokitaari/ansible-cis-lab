@@ -54,6 +54,11 @@ MINOR: new features or exercises, PATCH: fixes.
   `meta/main.yml`) whose TODO comments say which exercise goes where. Generally, a
   `starter/roles/<name>/` directory goes to `work/roles/`; existing files are never
   overwritten. `docs/LEARNING_PATH` explains that later stages have no starters. Rebuild: *none*
+- `docs/lessons/TEMPLATE.md` (+ `.de.md`): template for the upcoming self-study lessons - one
+  lesson per topic with learning goals, theory, CIS background, platform differences, pitfalls,
+  links to the exercises it prepares and self-check questions with folded answers. Lessons
+  explain concepts before an exercise and never show its solution (that stays in
+  `EXPLANATION.md`). Rebuild: *none*
 
 ### Changed
 - Control image installs its Python packages from `control/requirements.txt` instead of
