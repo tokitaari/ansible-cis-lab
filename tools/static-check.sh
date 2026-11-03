@@ -45,10 +45,24 @@ if wanted lint; then
   #   reference role. Without this, ansible resolves 'cis' relative to the working
   #   directory and picks up the catalogue directory cis/ as an (empty) role.
   #   Solutions that bring their own roles/ (3.01, 4.03, 5.01) still use those first.
-  step lint env -u ANSIBLE_CONFIG \
-    ANSIBLE_VAULT_PASSWORD_FILE="$ROOT/exercises/stage4-advanced/4.04-vault-break-glass-account/solution/.vault-pass" \
-    ANSIBLE_ROLES_PATH="$ROOT/exercises/stage5-capstone/5.01-capstone-cis-role/solution/roles" \
-    ansible-lint --profile production --nocolor exercises/*/*/solution
+  #
+  # ansible-lint (since 26.x) warns "Directory expansion discovered N file(s)" for every
+  # directory argument that expands to any file - no threshold, no setting to turn it off.
+  # Passing the solution directories is intended, so exactly this message is dropped from
+  # stderr (also when a narrow terminal wraps it, at most 5 lines); every other message and
+  # the exit code of ansible-lint stay unchanged.
+  lint_solutions() {
+    { env -u ANSIBLE_CONFIG \
+        ANSIBLE_VAULT_PASSWORD_FILE="$ROOT/exercises/stage4-advanced/4.04-vault-break-glass-account/solution/.vault-pass" \
+        ANSIBLE_ROLES_PATH="$ROOT/exercises/stage5-capstone/5.01-capstone-cis-role/solution/roles" \
+        ansible-lint --profile production --nocolor exercises/*/*/solution 2>&1 1>&3 |
+        awk '/^WARNING +Directory expansion discovered [0-9]+ file\(s\)\./ { skip = 5 }
+             skip > 0 { skip--; if ($0 ~ /configuring\/ *$/) skip = 0; next }
+             { print }' >&2
+      return "${PIPESTATUS[0]}"
+    } 3>&1
+  }
+  step lint lint_solutions
 fi
 
 for c in meta parity links controls lessons; do

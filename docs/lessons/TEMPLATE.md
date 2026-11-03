@@ -14,8 +14,9 @@ italic placeholder. tools/static-check.sh lessons enforces the structure:
 - line 1 is '# LNN - <title>' with NN from the file name, then the language switch line,
   then the header table above (same values in EN and DE, only the time unit differs)
 - Exercises: exercise ids, sorted, comma-separated, or '-'; the same ids (and only those)
-  appear in the table of the Exercises section
-- CIS sections: ids from cis/controls.yml, sorted, comma-separated, or '-'
+  appear in the table of the Exercises section, each linking to its exercise's README.md
+- CIS sections: ids from cis/controls.yml, sorted, comma-separated, or '-'; list the sections
+  the lesson's exercises cover - other ids may be named in the text with a catalogue link
 - Reading time: '~N min' (DE '~N Min.'), aim for 15-30 minutes
 - Builds on: earlier lessons that exist (L00, L03), sorted, or '-'
 - exactly the eight '##' sections of this template, in this order, with these titles;
@@ -27,12 +28,16 @@ Writing rules:
 - A lesson explains concepts BEFORE the exercises. Never show an exercise's reference
   solution or a solution to its requirements - that is what EXPLANATION.md is for.
 - Examples are small and generic (one task, one host group) and different from the solution.
+  They run unchanged in the lab - test each one. L00 avoids alpine (no Python before 0.02);
+  later lessons may assume 0.02 is done.
 - CIS: own wording only, never benchmark text. Name recommendation numbers by the section
   ids used in cis/controls.yml; exact numbers differ per benchmark and version.
 - Platform values as in the facts: os_family Debian, RedHat, Suse, Alpine, Archlinux.
 - Tagged code blocks (yaml, bash) hold identical code in EN and DE, task 'name:' values
   included (keep them English); only '#' comments are translated.
-- Every relative link must resolve (static-check links); link exercises to their README.md.
+- Every relative link must resolve (static-check links); link exercises to their README.md
+  (the placeholder below points to INDEX.md only so that the template passes the link check).
+- Platform differences: add columns as needed (e.g. Hosts) but keep one row per os_family.
 - Write the details tag only in the self-check: a hidden-answers view cuts from the first
   opening tag to the next closing tag, even inside this comment.
 -->

@@ -12,7 +12,28 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+- Lesson L00 *Lab architecture and Ansible basics* in `docs/lessons/` (EN and DE), the first
+  self-study lesson: how the control node reaches the targets (SSH key, `ansible` account,
+  sudo, `ANSIBLE_CONFIG`), inventory and patterns, how a module runs and why `raw` needs
+  `changed_when`, facts and `hostvars`, idempotency and `--check --diff`; with
+  platform table, container notes, pitfalls and self-check questions. Prepares 0.01-0.04. Read
+  it with `lab view docs/lessons/L00-lab-and-ansible-basics.md` (`lab lesson` follows).
+  Rebuild: *none*
+
+### Changed
+- Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
+  the CIS sections of the lesson's exercises (other ids may appear in the text), examples must
+  run unchanged in the lab, exercises link to their README (the template's INDEX link is only a
+  placeholder), platform tables may add columns but keep one row per `os_family`.
+  Rebuild: *none*
+- Static gate check `lessons`: every row of a lesson's Exercises table must link to the README
+  of exactly the exercise it names (`README.de.md` in German lessons); before, any existing
+  file passed. Rebuild: *none*
+- `tools/static-check.sh` (*lint*): the ansible-lint warning "Directory expansion discovered N
+  file(s)" is no longer shown - ansible-lint prints it for every directory argument and offers
+  no setting to turn it off, while the gate lints the solution directories on purpose. Other
+  messages and the exit code are unchanged. Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 
