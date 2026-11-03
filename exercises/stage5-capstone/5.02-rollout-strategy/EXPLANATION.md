@@ -12,6 +12,27 @@
 - **Post-check with a new connection**: the existing SSH master survives many breakages;
   only a *fresh* login proves that the next operator can still get in.
 
+### Free space: what a host can know about itself
+`ansible_facts.mounts` looks like the obvious source, but the facts skip every mount whose
+device does not start with `/` - the `overlay` root of a container, `tmpfs`, many network
+file systems. In the lab there is simply no entry for `/`, and a `default(0)` turns that into
+"0 MB free" on every host. `df -Pk /` asks the kernel instead and works everywhere (`-P` is
+POSIX, also busybox; `-k` fixes the unit):
+```yaml
+- ansible.builtin.command: df -Pk /
+  register: cis_df_root
+  changed_when: false
+  check_mode: false
+- ansible.builtin.assert:
+    that: (cis_df_root.stdout_lines[-1].split()[3] | int) * 1024 >= 209715200
+```
+Even the right number can be misleading: with **thin provisioning** a host sees the free
+space of its *virtual* disk, not of the storage behind it. In the lab the targets report
+the capacity of the WSL2/Docker Desktop VHDX (up to 1 TB) while the Windows drive holding
+it may have only a few GB left; the same applies to qcow2 images, thin LVM pools, VMware
+thin disks and SAN LUNs. A preflight inside the host cannot see that - capacity of the
+backing storage belongs to the monitoring of the platform.
+
 ### Dry runs
 `--check` still runs preflight (read-only commands with `check_mode: false`), so you
 can test the gate logic without touching hosts.

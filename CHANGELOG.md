@@ -60,6 +60,12 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 5.02 reference preflight: "Enough free space on /" failed on every target with "only 0.0 MB
+  free" - `ansible_facts.mounts` skips mounts whose device does not start with `/`, so the
+  container's `overlay` root has no entry and `default(0)` applied. Free space now comes from
+  `df -Pk /` (POSIX, busybox too); the hint suggested the facts and is corrected. 5.02
+  EXPLANATION and CONTAINER_LIMITS explain the facts gap and thin provisioning (a VHDX/qcow2
+  reports its virtual capacity, not the space left on the storage behind it). Rebuild: *none*
 - 4.08: the reference solution was not idempotent - with `poll: 0` the init task reports
   `changed` as soon as the background job starts, `creates:` only acts inside the job. It now
   checks for the database with `stat` first and skips the init. EXPLANATION and hint corrected

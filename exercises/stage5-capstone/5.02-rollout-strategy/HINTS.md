@@ -2,7 +2,7 @@
 
 ## Hint 1
 
-Preflight checks: `ansible.builtin.command: /usr/sbin/sshd -t` and `/usr/sbin/visudo -c` (both `changed_when: false`, `check_mode: false`; on openSUSE `visudo -c` exits 1 because of `/usr/etc/sudoers` - see 1.05 - so register it and decide with `failed_when`); free space from facts: `ansible_facts.mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first`.
+Preflight checks: `ansible.builtin.command: /usr/sbin/sshd -t` and `/usr/sbin/visudo -c` (both `changed_when: false`, `check_mode: false`; on openSUSE `visudo -c` exits 1 because of `/usr/etc/sudoers` - see 1.05 - so register it and decide with `failed_when`); free space: `df -Pk /` (also `changed_when: false`, `check_mode: false`), 4th field of the last line in KiB - not from `ansible_facts.mounts`, which has no entry for a container's overlay root (see the explanation).
 
 ## Hint 2
 
