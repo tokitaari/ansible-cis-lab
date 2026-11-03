@@ -31,6 +31,12 @@ Vendor-Defaults in `/usr` und nur Admin-Überschreibungen in `/etc`. Härtungsco
 "die Datei anlegt, falls sie fehlt", kann alle Vendor-Defaults auf einmal löschen.
 Prüfe immer, wie eine Komponente ihre Konfiguration liest, bevor du sie schreibst.
 
+### shadow 4.20: kein Mindestalter mehr
+shadow 4.20 (Arch zuerst) hat `PASS_MIN_DAYS`, `chage -m` und das Feld `sp_min` als
+Schwachstelle entfernt. Die `PASS_MIN_DAYS`-Zeile aus dieser Übung wird dann einfach
+ignoriert - `useradd` funktioniert weiter, und CIS-Benchmarks für solche Releases streichen
+den Punkt. Pro Benutzer per `chage -m` setzen scheitert dort; 4.04 zeigt, wie man das erkennt.
+
 ### Bestehende Benutzer (Bonus)
 `login.defs` wird von `useradd` gelesen - bestehende Konten behalten ihre Werte. CIS
 prüft beides: den Default und jeden Benutzer mit Passwort. `chage --maxdays 365

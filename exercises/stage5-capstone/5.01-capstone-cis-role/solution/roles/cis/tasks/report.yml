@@ -26,9 +26,15 @@
   changed_when: false
 
 - name: Report | write JSON
+  vars:
+    # Every host that has run the role in this playbook run - not ansible_play_hosts: under
+    # 'serial' (5.02) that lists the hosts of later batches too, which have no cis_summary yet.
+    # hostvars survive across plays, so the canary play's hosts stay in the report and the
+    # last batch writes the complete one.
+    cis_report_hosts: "{{ groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname') | sort }}"
   ansible.builtin.copy:
     dest: "{{ cis_report_dir }}/compliance.json"
-    content: "{{ dict(ansible_play_hosts | zip(ansible_play_hosts | map('extract', hostvars, 'cis_summary'))) | to_nice_json }}\n"
+    content: "{{ dict(cis_report_hosts | zip(cis_report_hosts | map('extract', hostvars, 'cis_summary'))) | to_nice_json }}\n"
     mode: "0644"
   delegate_to: localhost
   become: false
@@ -38,6 +44,9 @@
   changed_when: false
 
 - name: Report | write Markdown
+  vars:
+    # same host list as the JSON report
+    cis_report_hosts: "{{ groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname') | sort }}"
   ansible.builtin.template:
     src: report.md.j2
     dest: "{{ cis_report_dir }}/compliance.md"

@@ -10,4 +10,4 @@ Starte von deiner 4.03-Rolle. Verschiebe die Tasks jedes Abschnitts in kleine Da
 
 ## Hinweis 3
 
-Bericht: auf `localhost` mit `run_once` + `delegate_to: localhost`, `check_mode: false`; sammle `ansible_play_hosts | map('extract', hostvars, 'cis_summary')`. Die vollständige Referenz: `lab solution 5.01` - vergleiche *nachdem* du deine eigene Version hast.
+Bericht: auf `localhost` mit `run_once` + `delegate_to: localhost`, `check_mode: false`; sammle jeden Host, der ein `cis_summary` hat: `groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname')` - nicht `ansible_play_hosts`, das unter `serial` (5.02) auch Hosts enthält, die noch nicht gelaufen sind. Die vollständige Referenz: `lab solution 5.01` - vergleiche *nachdem* du deine eigene Version hast.

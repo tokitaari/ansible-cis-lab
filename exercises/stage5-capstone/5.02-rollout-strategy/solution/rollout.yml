@@ -31,9 +31,18 @@
         ((cis_visudo.stdout_lines + cis_visudo.stderr_lines) | reject('search', ': parsed OK$')
          | reject('match', '^/usr/etc/[^:]+: bad permissions') | list) | length > 0
 
+    # Not from ansible_facts.mounts: the facts skip every mount whose device does not start
+    # with '/' - the overlay root of a container ('overlay'), tmpfs, ... -> no entry for '/'.
+    # 'df -P' is POSIX (busybox too), '-k' fixes the unit to KiB.
+    - name: Read free space on /
+      ansible.builtin.command: df -Pk /
+      register: cis_df_root
+      changed_when: false
+      check_mode: false
+
     - name: Enough free space on /
       vars:
-        root_free: "{{ ansible_facts.mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first | default(0) }}"
+        root_free: "{{ (cis_df_root.stdout_lines[-1].split()[3] | int) * 1024 }}"
       ansible.builtin.assert:
         that: root_free | int >= cis_min_free_bytes
         fail_msg: "only {{ (root_free | int / 1048576) | round }} MB free on /"

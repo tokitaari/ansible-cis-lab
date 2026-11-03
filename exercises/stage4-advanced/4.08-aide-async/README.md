@@ -28,7 +28,7 @@ time (and may hit timeouts). `async` + `poll: 0` starts the job in the backgroun
 ## Requirements
 
 - [ ] Install the packages per family (dict).
-- [ ] Initialise the database with `async` (e.g. 1800 s) and `poll: 0`, then wait with `ansible.builtin.async_status` (`until` loop). The init must be skipped when the database exists (`creates:`).
+- [ ] Initialise the database with `async` (e.g. 1800 s) and `poll: 0`, then wait with `ansible.builtin.async_status` (`until` loop). The init must be *skipped* (not `changed`) when the database exists.
 - [ ] Templated units `cis-aidecheck.service` (oneshot, runs `aide --check` with the family's config) and `cis-aidecheck.timer` (daily, `Persistent=true`); timer enabled and started; `daemon_reload` when units change.
 - [ ] Second run: `changed=0` and no second scan.
 

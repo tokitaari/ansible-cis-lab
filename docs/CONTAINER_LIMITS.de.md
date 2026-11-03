@@ -45,6 +45,12 @@ volle Arbeit.
   Standard; wenn du das vermeiden willst, maskiere die Unit in den Target-Images
   (`systemctl mask systemd-sysctl.service` in `targets/common/bootstrap.sh`).
 - Privilegierte Container sehen Host-Geräte. Nichts in den Aufgaben fasst sie an.
+- Freier Platz: `df /` in einem Target zeigt das Overlay des Docker-Hosts, unter WSL2/Docker
+  Desktop also die virtuelle Platte (VHDX, bis 1 TB), nicht das Windows-Laufwerk dahinter -
+  ist dieses voll, scheitern Schreibzugriffe, obwohl `df` noch reichlich meldet (Thin
+  Provisioning, siehe 5.02). `ansible_facts.mounts` hat für `/` gar keinen Eintrag (das Device
+  `overlay` beginnt nicht mit `/`); `df -Pk /` nutzen. Den echten Platz auf dem Host prüfen
+  (`docker system df`, freier Platz des Laufwerks mit der VHDX).
 
 ## Das volle Bild?
 

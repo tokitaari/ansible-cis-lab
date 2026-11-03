@@ -44,6 +44,14 @@
         name: "{{ cis_aide.packages }}"
         state: present
 
+    # With poll: 0 the task result only says "job started" - always changed. The module and
+    # its creates: run later in the background, too late for the task status. So decide
+    # before starting the job; creates: stays as a guard inside the job.
+    - name: Look for an existing database
+      ansible.builtin.stat:
+        path: "{{ cis_aide.db }}"
+      register: cis_aide_db
+
     - name: Build the initial database in the background
       ansible.builtin.command:
         cmd: "{{ cis_aide.init_cmd }}"
@@ -51,6 +59,7 @@
       async: 1800
       poll: 0
       register: cis_aide_job
+      when: not cis_aide_db.stat.exists
 
     - name: Wait for the database
       ansible.builtin.async_status:

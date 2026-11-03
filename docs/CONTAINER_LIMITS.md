@@ -43,6 +43,12 @@ is the switch the reference solutions use. The same code does the full job on re
   default on modern hosts; if you prefer to avoid it, mask the unit in the target images
   (`systemctl mask systemd-sysctl.service` in `targets/common/bootstrap.sh`).
 - Privileged containers can see host devices. Nothing in the exercises touches them.
+- Free space: `df /` in a target shows the overlay of the Docker host, i.e. on WSL2/Docker
+  Desktop the virtual disk (VHDX, up to 1 TB), not the Windows drive behind it - when that
+  drive is full, writes fail although `df` still reports plenty (thin provisioning, see 5.02).
+  `ansible_facts.mounts` has no entry for `/` at all (the device `overlay` does not start
+  with `/`); use `df -Pk /`. Check the real space on the host (`docker system df`, free space
+  of the drive holding the VHDX).
 
 ## Want the full picture?
 
