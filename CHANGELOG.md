@@ -59,6 +59,13 @@ MINOR: new features or exercises, PATCH: fixes.
   links to the exercises it prepares and self-check questions with folded answers. Lessons
   explain concepts before an exercise and never show its solution (that stays in
   `EXPLANATION.md`). Rebuild: *none*
+- Static gate check `lessons` (`tools/static-check.sh lessons`): every file in `docs/lessons/`
+  is named `LNN-slug(.de).md`, starts with `# LNN - <title>`, the language switch and the header
+  table; exercises, CIS ids (`cis/controls.yml`) and prerequisite lessons in that table exist,
+  are sorted and earlier; the eight sections of the template appear in order; the exercises
+  table lists exactly the header's exercises; every self-check question has one folded answer
+  and `<details>` appears nowhere else; EN and DE header values match. The template itself is
+  checked for structure only. Rebuild: *none*
 
 ### Changed
 - Control image installs its Python packages from `control/requirements.txt` instead of

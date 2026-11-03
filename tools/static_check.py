@@ -2,7 +2,7 @@
 """Container-free consistency checks for the lab repository.
 
 Called by tools/static-check.sh (which also runs yamllint and ansible-lint):
-    python3 tools/static_check.py [meta] [parity] [links] [controls]
+    python3 tools/static_check.py [meta] [parity] [links] [controls] [lessons]
 Without arguments all checks run. Exit code 1 if any check reports a failure.
 
   meta      meta.yml schema (incl. requires: earlier, known ids), exercise layout,
@@ -12,6 +12,10 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
             bash/yaml/... code blocks hold the same code (comments may be translated)
   links     relative Markdown links (and #anchors) resolve
   controls  cis/controls.yml schema and cross-references to the exercises
+  lessons   docs/lessons/LNN-slug(.de).md: title, language switch, header table (exercises,
+            CIS ids, reading time, earlier lessons - all known, sorted), the eight fixed
+            sections, self-check questions with one folded answer each; EN/DE header values
+            equal. TEMPLATE(.de).md: structure only
 """
 import collections
 import os
@@ -560,9 +564,177 @@ def check_controls(exs):
                                  f"L{c['level']} of control {tok}")
 
 
+# --------------------------------------------------------------------------- lessons
+
+LESSON_DIR = "docs/lessons"
+LESSON_NAME_RE = re.compile(r"^L(\d\d)-[a-z0-9]+(?:-[a-z0-9]+)*$")
+LESSON_TEMPLATE = "TEMPLATE"
+LESSON_SECTIONS = {
+    "en": ["Learning goals", "Theory", "CIS background", "Platform differences", "Pitfalls",
+           "Exercises", "Self-check", "Further reading"],
+    "de": ["Lernziele", "Theorie", "CIS-Hintergrund", "Plattformunterschiede", "Stolperfallen",
+           "Übungen", "Selbstkontrolle", "Weiterführendes"],
+}
+LESSON_HEAD = {"en": ["Exercises", "CIS sections", "Reading time", "Builds on"],
+               "de": ["Übungen", "CIS-Abschnitte", "Lesezeit", "Baut auf"]}
+LESSON_TIME_RE = {"en": re.compile(r"^~([1-9]\d*) min$"), "de": re.compile(r"^~([1-9]\d*) Min\.$")}
+LESSON_SWITCH = {"en": "*[Deutsch]({}.de.md)*", "de": "*[English]({}.md)*"}
+LESSON_ANSWER = {"en": "Answer", "de": "Antwort"}
+LESSON_ID_RE = re.compile(r"^L\d\d$")
+
+
+def control_ids():
+    try:
+        data = load_yaml(os.path.join(ROOT, "cis", "controls.yml"))
+        return {c["id"] for c in data["controls"] if isinstance(c, dict) and "id" in c}
+    except (OSError, yaml.YAMLError, KeyError, TypeError):
+        return set()  # reported by the controls check
+
+
+def lesson_list(where, label, cell, pattern, known, key):
+    """'-' or a comma-separated, sorted, unique list of known ids -> list (None on error)."""
+    if cell == "-":
+        return []
+    items = [x.strip() for x in cell.split(",")]
+    bad = [x for x in items if not pattern.match(x)]
+    if bad:
+        fail("lessons", f"{where}: {label}: malformed {bad} - use '-' or e.g. "
+                        f"{'3.01, 3.02' if pattern is ID_RE else '5.1, 5.2' if pattern is CIS_ID_RE else 'L00, L01'}")
+        return None
+    if items != sorted(set(items), key=key):
+        fail("lessons", f"{where}: {label}: must be sorted and unique: {cell}")
+    unknown = [x for x in items if x not in known]
+    if unknown:
+        fail("lessons", f"{where}: {label}: unknown {unknown}")
+    return items
+
+
+def lesson_sections(prose):
+    """{H2 title: [prose lines]} plus the ordered list of H2 titles."""
+    order, body, cur = [], {}, None
+    for line in prose:
+        m = re.match(r"^##\s+(.*?)\s*#*\s*$", line)
+        if m and not line.startswith("###"):
+            cur = m.group(1)
+            order.append(cur)
+            body[cur] = []
+        elif cur is not None:
+            body[cur].append(line)
+    return order, body
+
+
+def check_lesson(f, exs_known, controls, lessons):
+    """One lesson file; returns its header cells (or None) for the EN/DE comparison."""
+    lang = "de" if f.endswith(".de.md") else "en"
+    stem = os.path.basename(f)[:-6 if lang == "de" else -3]
+    template = stem == LESSON_TEMPLATE
+    m = LESSON_NAME_RE.match(stem)
+    if not (template or m):
+        fail("lessons", f"{f}: file name must be LNN-slug.md / LNN-slug.de.md (or {LESSON_TEMPLATE}.md)")
+        return None
+    num = "NN" if template else m.group(1)
+    prose, _ = md_scan(read(os.path.join(ROOT, f)))
+    lines = [l for l in prose if l.strip()]
+    if not lines or not re.match(rf"^# L{num} - \S", lines[0]):
+        fail("lessons", f"{f}: first line must be '# L{num} - <title>'")
+        return None
+    if len(lines) < 2 or lines[1].strip() != LESSON_SWITCH[lang].format(stem):
+        fail("lessons", f"{f}: second line must be {LESSON_SWITCH[lang].format(stem)}")
+        return None
+    head = table_rows("\n".join(lines[2:5]))
+    if not (len(lines) > 5 and len(head) == 2 and re.fullmatch(r"\|[\s:|-]+\|", lines[3].strip())
+            and not lines[5].lstrip().startswith("|")):
+        fail("lessons", f"{f}: the language switch must be followed by the header table "
+                        f"(header row, separator, exactly one data row)")
+        return None
+    if head[0] != LESSON_HEAD[lang]:
+        fail("lessons", f"{f}: header table columns must be {LESSON_HEAD[lang]}, not {head[0]}")
+        return None
+    cells = head[1]
+    if len(cells) != 4:
+        fail("lessons", f"{f}: header table data row needs 4 cells")
+        return None
+    order, body = lesson_sections(prose)
+    if order != LESSON_SECTIONS[lang]:
+        fail("lessons", f"{f}: '##' sections must be exactly {LESSON_SECTIONS[lang]}, found {order}")
+    # self-check: numbered questions, each with one folded answer
+    sc = body.get(LESSON_SECTIONS[lang][6], [])
+    questions = [l for l in sc if re.match(r"^\d+[.)]\s", l)]
+    opened = [l for l in sc if "<details>" in l]
+    closed = [l for l in sc if "</details>" in l]
+    summaries = re.findall(r"<summary>(.*?)</summary>", "\n".join(sc))
+    if not questions:
+        fail("lessons", f"{f}: {LESSON_SECTIONS[lang][6]}: no numbered questions")
+    if not (len(questions) == len(opened) == len(closed) == len(summaries)):
+        fail("lessons", f"{f}: {LESSON_SECTIONS[lang][6]}: {len(questions)} questions, "
+                        f"{len(opened)} <details>, {len(closed)} </details>, {len(summaries)} "
+                        f"<summary> - every question needs exactly one folded answer")
+    outside = [l for l in prose if re.search(r"</?details>", l) and l not in sc]
+    if outside:
+        fail("lessons", f"{f}: <details> outside {LESSON_SECTIONS[lang][6]} (also in comments): "
+                        f"'lab lesson' hides everything between <details> and </details>")
+    wrong = [s for s in summaries if s.strip() != LESSON_ANSWER[lang]]
+    if wrong:
+        fail("lessons", f"{f}: {LESSON_SECTIONS[lang][6]}: summary must be '{LESSON_ANSWER[lang]}', "
+                        f"not {wrong}")
+    if template:
+        return None  # placeholder values
+    where = f"{f}: header table"
+    ex = lesson_list(where, LESSON_HEAD[lang][0], cells[0], ID_RE, exs_known, id_key)
+    lesson_list(where, LESSON_HEAD[lang][1], cells[1], CIS_ID_RE, controls, id_key)
+    if not LESSON_TIME_RE[lang].match(cells[2]):
+        fail("lessons", f"{where}: {LESSON_HEAD[lang][2]} must look like "
+                        f"{'~20 min' if lang == 'en' else '~20 Min.'}, not '{cells[2]}'")
+    deps = lesson_list(where, LESSON_HEAD[lang][3], cells[3], LESSON_ID_RE, lessons, lambda x: x)
+    later = [d for d in deps or [] if d >= f"L{num}"]
+    if later:
+        fail("lessons", f"{where}: {LESSON_HEAD[lang][3]}: {later} - only earlier lessons")
+    # the exercises table lists exactly the header's exercises, in the same order
+    if ex is not None:
+        rows = table_rows("\n".join(body.get(LESSON_SECTIONS[lang][5], [])))
+        listed = []
+        for row in rows[1:]:
+            lm = re.match(r"^\[([^\]]+)\]\(", row[0])
+            listed.append(lm.group(1) if lm else row[0])
+        if listed != ex:
+            fail("lessons", f"{f}: {LESSON_SECTIONS[lang][5]}: table lists {listed}, header table "
+                            f"says {ex}")
+    return cells
+
+
+def check_lessons(files, exs):
+    paths = [f for f in files if f.startswith(LESSON_DIR + "/") and f.endswith(".md")]
+    nested = [f for f in paths if f.count("/") != LESSON_DIR.count("/") + 1]
+    for f in nested:
+        fail("lessons", f"{f}: lessons live directly in {LESSON_DIR}/")
+    paths = [f for f in paths if f not in nested]
+    lessons = {}
+    for f in paths:
+        m = LESSON_NAME_RE.match(os.path.basename(f).split(".")[0])
+        if m and not f.endswith(".de.md"):
+            lid = f"L{m.group(1)}"
+            if lid in lessons:
+                fail("lessons", f"{f}: lesson number {lid} also used by {lessons[lid]}")
+            lessons[lid] = f
+    if paths and f"{LESSON_DIR}/{LESSON_TEMPLATE}.md" not in paths:
+        fail("lessons", f"{LESSON_DIR}/{LESSON_TEMPLATE}.md missing")
+    known = {m.get("id") for _, m in exs}
+    controls = control_ids()
+    heads = {}
+    for f in sorted(paths):
+        heads[f] = check_lesson(f, known, controls, lessons)
+    for f, en in heads.items():
+        de = heads.get(f[:-3] + ".de.md") if not f.endswith(".de.md") else None
+        if en is None or de is None:
+            continue
+        tn, td = LESSON_TIME_RE["en"].match(en[2]), LESSON_TIME_RE["de"].match(de[2])
+        if (en[0], en[1], en[3]) != (de[0], de[1], de[3]) or (tn and td and tn.group(1) != td.group(1)):
+            fail("lessons", f"{f} vs {f[:-3]}.de.md: header table values differ: {en} vs {de}")
+
+
 # --------------------------------------------------------------------------- main
 
-CHECKS = ("meta", "parity", "links", "controls")
+CHECKS = ("meta", "parity", "links", "controls", "lessons")
 
 
 def main(argv):
@@ -574,13 +746,15 @@ def main(argv):
     files = tracked_files()
     if "meta" not in wanted:
         quiet.add("meta")
-    exs = check_meta() if "meta" in wanted or "controls" in wanted else []
+    exs = check_meta() if {"meta", "controls", "lessons"} & set(wanted) else []
     if "parity" in wanted:
         check_parity(files)
     if "links" in wanted:
         check_links(files)
     if "controls" in wanted:
         check_controls(exs)
+    if "lessons" in wanted:
+        check_lessons(files, exs)
     for c in wanted if len(wanted) > 1 else []:
         print(f"{'FAIL' if failures[c] else 'ok  '} {c}" + (f" ({failures[c]})" if failures[c] else ""))
     return 1 if any(failures[c] for c in wanted) else 0
