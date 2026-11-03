@@ -33,6 +33,22 @@ it may have only a few GB left; the same applies to qcow2 images, thin LVM pools
 thin disks and SAN LUNs. A preflight inside the host cannot see that - capacity of the
 backing storage belongs to the monitoring of the platform.
 
+### Reports across batches
+Under `serial`, `ansible_play_hosts` is **not** the current batch: it lists every host of the
+play that has not failed, including the batches still to come. `ansible_play_batch` is the
+current batch. A report task with `run_once` that reads `hostvars[h].cis_summary` for every
+`ansible_play_hosts` entry therefore crashes in batch 1 (`has no attribute 'cis_summary'`) -
+the 5.01 role did exactly that until the rollout ran for real. `ansible_play_batch` would not
+crash, but every batch would overwrite the report with only its own hosts.
+
+The 5.01 role reports every host that already has a summary. `hostvars` survive across plays
+of one run, so the canary hosts stay in, and the last batch writes the complete report:
+```yaml
+cis_report_hosts: "{{ groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname') | sort }}"
+```
+`--check` (and the 5.02 check) never reaches this point with real data, so only a real run
+shows the bug - test rollout playbooks against a staging fleet, not just in check mode.
+
 ### Dry runs
 `--check` still runs preflight (read-only commands with `check_mode: false`), so you
 can test the gate logic without touching hosts.

@@ -60,6 +60,12 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 5.01 role report under `serial` (5.02 rollout): the report iterated over
+  `ansible_play_hosts`, which in a batched play also lists the hosts of later batches - the
+  first batch aborted with `has no attribute 'cis_summary'`. The report now lists every host
+  that has a summary (canary and earlier batches included); the last batch writes the complete
+  report, 5.01 is unchanged. 5.01 hint corrected, 5.02 EXPLANATION explains
+  `ansible_play_hosts` vs. `ansible_play_batch`. Rebuild: *none*
 - 5.02 reference preflight: "Enough free space on /" failed on every target with "only 0.0 MB
   free" - `ansible_facts.mounts` skips mounts whose device does not start with `/`, so the
   container's `overlay` root has no entry and `default(0)` applied. Free space now comes from

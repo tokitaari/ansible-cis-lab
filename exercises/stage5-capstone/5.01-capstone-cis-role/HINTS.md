@@ -10,4 +10,4 @@ Start from your 4.03 role. Move each section's tasks into small files under `tas
 
 ## Hint 3
 
-Report: on `localhost` with `run_once` + `delegate_to: localhost`, `check_mode: false`; collect `ansible_play_hosts | map('extract', hostvars, 'cis_summary')`. The complete reference: `lab solution 5.01` - compare *after* you have your own version.
+Report: on `localhost` with `run_once` + `delegate_to: localhost`, `check_mode: false`; collect every host that has a `cis_summary`: `groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname')` - not `ansible_play_hosts`, which under `serial` (5.02) also lists hosts that have not run yet. The complete reference: `lab solution 5.01` - compare *after* you have your own version.

@@ -33,6 +33,24 @@ sie enthält, vielleicht nur noch wenige GB frei sind; dasselbe gilt für qcow2-
 Thin-LVM-Pools, VMware-Thin-Disks und SAN-LUNs. Eine Vorabprüfung im Host kann das nicht
 sehen - die Kapazität des darunterliegenden Speichers gehört ins Monitoring der Plattform.
 
+### Berichte über Wellen hinweg
+Unter `serial` ist `ansible_play_hosts` **nicht** die aktuelle Welle: Es enthält jeden nicht
+gescheiterten Host des Plays, auch die noch kommenden Wellen. `ansible_play_batch` ist die
+aktuelle Welle. Ein Berichts-Task mit `run_once`, der für jeden Eintrag in `ansible_play_hosts`
+`hostvars[h].cis_summary` liest, bricht deshalb in Welle 1 ab (`has no attribute
+'cis_summary'`) - die 5.01-Rolle tat genau das, bis der Rollout wirklich lief.
+`ansible_play_batch` würde nicht abbrechen, aber jede Welle würde den Bericht mit nur ihren
+eigenen Hosts überschreiben.
+
+Die 5.01-Rolle berichtet jeden Host, der schon eine Zusammenfassung hat. `hostvars` bleiben
+über die Plays eines Laufs erhalten, die Canary-Hosts bleiben also drin, und die letzte Welle
+schreibt den vollständigen Bericht:
+```yaml
+cis_report_hosts: "{{ groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname') | sort }}"
+```
+`--check` (und der 5.02-Check) erreicht diese Stelle nie mit echten Daten, nur ein echter Lauf
+zeigt den Fehler - Rollout-Playbooks gegen eine Staging-Flotte testen, nicht nur im Check-Modus.
+
 ### Trockenläufe
 `--check` führt die Vorabprüfung trotzdem aus (lesende Befehle mit `check_mode: false`) -
 du kannst die Sperrlogik also testen, ohne Hosts anzufassen.
