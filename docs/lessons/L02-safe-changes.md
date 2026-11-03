@@ -382,7 +382,7 @@ name per host. How to handle names as data is the topic of L04.
 | Exercise | What this lesson prepares |
 |---|---|
 | [1.01](../../exercises/stage1-beginner/1.01-remove-telnet/README.md) | what `--check --diff` shows for a package that may not exist; skipped versus failed |
-| [1.02](../../exercises/stage1-beginner/1.02-passwd-group-permissions/README.md) | reading a permission diff; quoted modes; why a missing file needs thought |
+| [1.02](../../exercises/stage1-beginner/1.02-passwd-group-permissions/README.md) | reading a permission diff in `--check --diff`; testing whether a file exists (`stat` and `when`); modes themselves follow in [L03](L03-base-hardening.md) |
 | [1.03](../../exercises/stage1-beginner/1.03-ssh-root-login/README.md) | `validate`, `notify` and handlers, the limits of `validate`, a change that can lock you out |
 | [1.04](../../exercises/stage1-beginner/1.04-disable-ftp-server/README.md) | `package_facts` with `when`, one task for systemd and OpenRC, skipped hosts |
 | [1.05](../../exercises/stage1-beginner/1.05-sudo-hardening/README.md) | `validate` as lock-out prevention, ordering a risky change |
