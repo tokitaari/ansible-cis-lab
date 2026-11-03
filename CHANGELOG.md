@@ -60,6 +60,11 @@ MINOR: new features or exercises, PATCH: fixes.
   unpinned names; the build argument `ANSIBLE_VERSION` is gone (edit the file instead).
 
 ### Fixed
+- 4.04 on Arch: shadow 4.20 removed the minimum password age (`chage -m/--mindays`,
+  `PASS_MIN_DAYS`, `sp_min`), so the reference solution failed in `ansible.builtin.user`
+  (`password_expire_min`). Solution and check now ask `chage --help` and set/require the minimum
+  age only where it still exists. 4.04 explains the feature detection, 3.02 and
+  `cis/controls.yml` (5.4.1) mention the removal. Rebuild: *none*
 - 4.03 / 5.01 checks also recognise a quoted level (`-e 'cis_level="2"'`,
   `-e '{"cis_level": "2"}'`); `lab help` no longer shows a fixed `/lab/work` for `lab start`;
   `tools/stage-solution.sh` prints its next commands shell-quoted. Rebuild: *none*

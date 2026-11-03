@@ -168,7 +168,7 @@ controls:
     level: 1
     container: full
     exercises: ["3.02", "4.03", "4.04", "5.01"]
-    platforms: never downgrade yescrypt; /usr/etc vendor split on openSUSE
+    platforms: never downgrade yescrypt; /usr/etc vendor split on openSUSE; shadow 4.20 (Arch) removed the minimum password age (PASS_MIN_DAYS, chage -m)
 
   - id: "5.4.2"
     section: 5 Access control / root and system accounts

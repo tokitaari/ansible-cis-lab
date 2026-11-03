@@ -15,6 +15,14 @@
   become: true
   gather_facts: false
   tasks:
+    # shadow >= 4.20 has no minimum password age any more (see EXPLANATION)
+    - name: Does chage still support a minimum password age?
+      ansible.builtin.command: chage --help
+      register: chage_help
+      changed_when: false
+      check_mode: false
+      failed_when: false
+
     - name: Read shadow and sudoers drop-in
       ansible.builtin.slurp:
         src: "{{ item }}"
@@ -27,13 +35,14 @@
         entry: "{{ (f.results[0].content | b64decode).splitlines() | select('match', '^cisadmin:') | first | default('') }}"
         fields: "{{ entry.split(':') }}"
         sudo: "{{ f.results[1].content | default('') | b64decode }}"
+        mindays: "{{ (chage_help.stdout ~ chage_help.stderr) is search('--mindays') }}"
       ansible.builtin.assert:
         that:
           - entry | length > 0
           - fields[1] is match('^\$(6|y)\$')
-          - fields[3] | int >= 1
+          - (fields[3] | int >= 1) or not mindays
           - fields[4] | int == 365
           - sudo is search('(?m)^\s*cisadmin\s+ALL\s*=\s*\(ALL(:ALL)?\)\s+ALL\s*$')
           - sudo is not search('NOPASSWD')
-        fail_msg: "cisadmin must exist with a SHA-512/yescrypt hash, min 1 / max 365 days, and a sudoers rule without NOPASSWD"
+        fail_msg: "cisadmin must exist with a SHA-512/yescrypt hash, max 365 days (min 1 where shadow still has it), and a sudoers rule without NOPASSWD"
         quiet: true

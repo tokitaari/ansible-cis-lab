@@ -30,7 +30,7 @@ Alterungsfelder unterstützen.
 ## Anforderungen
 
 - [ ] `/lab/work/4.04/vault.yml` ist mit `ansible-vault` verschlüsselt und definiert `vault_cisadmin_password`. Das Vault-Passwort liegt in `/lab/work/4.04/.vault-pass` (nur im Lab - niemals committen).
-- [ ] Benutzer `cisadmin`: Passwort aus dem Vault, gehasht mit SHA-512 und einem **pro Host stabilen Salt**, `password_expire_max: 365`, `password_expire_min: 1`.
+- [ ] Benutzer `cisadmin`: Passwort aus dem Vault, gehasht mit SHA-512 und einem **pro Host stabilen Salt**, `password_expire_max: 365`, `password_expire_min: 1` (nur wo `chage` es noch unterstützt - shadow 4.20 hat das Mindestalter entfernt, siehe Erklärung).
 - [ ] `/etc/sudoers.d/60-cisadmin`: `cisadmin ALL=(ALL) ALL` (Passwort erforderlich - kein `NOPASSWD`), `0440`, validiert.
 - [ ] Der user-Task nutzt `no_log: true`.
 - [ ] Zweiter Lauf: `changed=0`. Check mit Vault-Passwort ausführen: `lab check 4.04 --vault-password-file /lab/work/4.04/.vault-pass`.

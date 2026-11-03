@@ -29,7 +29,7 @@ support aging fields.
 ## Requirements
 
 - [ ] `/lab/work/4.04/vault.yml` is encrypted with `ansible-vault` and defines `vault_cisadmin_password`. Keep the vault password in `/lab/work/4.04/.vault-pass` (lab only - never commit it).
-- [ ] User `cisadmin`: password from the vault, hashed with SHA-512 and a **per-host stable salt**, `password_expire_max: 365`, `password_expire_min: 1`.
+- [ ] User `cisadmin`: password from the vault, hashed with SHA-512 and a **per-host stable salt**, `password_expire_max: 365`, `password_expire_min: 1` (only where `chage` still supports it - shadow 4.20 removed the minimum age, see the explanation).
 - [ ] `/etc/sudoers.d/60-cisadmin`: `cisadmin ALL=(ALL) ALL` (password required - no `NOPASSWD`), `0440`, validated.
 - [ ] The user task uses `no_log: true`.
 - [ ] Second run: `changed=0`. Run the check with the vault password: `lab check 4.04 --vault-password-file /lab/work/4.04/.vault-pass`.

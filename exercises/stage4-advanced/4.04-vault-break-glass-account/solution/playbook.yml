@@ -9,14 +9,26 @@
     # deterministic per host -> stable hash -> idempotent
     cis_salt: "{{ (inventory_hostname | hash('sha256'))[:16] }}"
   tasks:
+    # shadow 4.20 removed the minimum password age (chage -m, PASS_MIN_DAYS, sp_min) without
+    # replacement; chage then refuses --mindays. Ask the tool instead of hard-coding
+    # distributions (Arch first, the others follow with their next shadow update).
+    - name: Does chage still support a minimum password age?
+      ansible.builtin.command: chage --help
+      register: cis_chage_help
+      changed_when: false
+      check_mode: false
+      failed_when: false
+
     - name: Create cisadmin with an aging policy
+      vars:
+        cis_chage_mindays: "{{ (cis_chage_help.stdout ~ cis_chage_help.stderr) is search('--mindays') }}"
       ansible.builtin.user:
         name: cisadmin
         comment: Break-glass administrator
         shell: /bin/sh
         password: "{{ cisadmin_password | password_hash('sha512', cis_salt) }}"
         password_expire_max: 365
-        password_expire_min: 1
+        password_expire_min: "{{ 1 if cis_chage_mindays else omit }}"
       no_log: true
 
     - name: Allow cisadmin to use sudo with password

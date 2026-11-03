@@ -31,6 +31,12 @@ in `/usr` and only admin overrides in `/etc`. Hardening code that "creates the f
 if missing" can wipe all vendor defaults at once. Always check how a component reads
 its configuration before you write it.
 
+### shadow 4.20: no more minimum age
+shadow 4.20 (Arch first) removed `PASS_MIN_DAYS`, `chage -m` and the `sp_min` field as a
+vulnerability. The `PASS_MIN_DAYS` line this exercise writes is then simply ignored -
+`useradd` keeps working, and CIS benchmarks for such releases drop the item. Setting it per
+user with `chage -m` fails there; 4.04 shows how to detect it.
+
 ### Existing users (bonus)
 `login.defs` is read by `useradd` - existing accounts keep their aging fields.
 CIS audits both: the default and every user with a password. `chage --maxdays 365

@@ -10,4 +10,4 @@ Stable salt: `(inventory_hostname | hash('sha256'))[:16]` - deterministic per ho
 
 ## Hint 3
 
-`ansible.builtin.user` options: `password`, `password_expire_max`, `password_expire_min`, `shell`, `no_log: true` on the task. Reference: `lab solution 4.04` (its vault password is in `solution/.vault-pass`).
+`ansible.builtin.user` options: `password`, `password_expire_max`, `password_expire_min` (`omit` it where `chage --help` no longer lists `--mindays`), `shell`, `no_log: true` on the task. Reference: `lab solution 4.04` (its vault password is in `solution/.vault-pass`).
