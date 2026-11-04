@@ -74,6 +74,15 @@ MINOR: new features or exercises, PATCH: fixes.
   jobs, and the `ansible.builtin.cron` module (name marker, `cron_file`) - with tested examples,
   platform table, pitfalls and self-check questions. Prepares 2.05. Read it with
   `lab view docs/lessons/L06-job-schedulers.md`. Rebuild: *none*
+- Lesson L07 *Roles, tags and project structure: one baseline, many switches* in
+  `docs/lessons/` (EN and DE): the directory contract of a role (what Ansible loads on its own,
+  where it searches for a role, `roles:` against `import_role`/`include_role`), `defaults/` against
+  `vars/` with a measured precedence table and the role-prefix rule, `import_tasks` against
+  `include_tasks` (what `--list-tasks` and `--tags` do with each), tags with `always`/`never`, and
+  `ansible-lint` profiles from `min` to `production` with a worked violation list - with a
+  runnable demo role, platform table, pitfalls (tested error texts) and self-check questions.
+  Prepares 3.01. Read it with `lab view docs/lessons/L07-roles-tags-project-structure.md`.
+  Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
