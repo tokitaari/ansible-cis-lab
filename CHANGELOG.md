@@ -65,6 +65,15 @@ MINOR: new features or exercises, PATCH: fixes.
   examples, platform table, pitfalls and self-check questions. Prepares 2.03 and 2.04. Read it
   with `lab view docs/lessons/L05-kernel-modules-and-sysctl.md`.
   Rebuild: *none*
+- Lesson L06 *Job schedulers: who runs what, and who may schedule it* in `docs/lessons/` (EN
+  and DE): where cron reads jobs from and under whose authority they run (system crontab,
+  drop-ins, user spool, periodic directories), the file checks of Debian cron, cronie and
+  BusyBox crond (owner, mode, name, execute bit - measured, with the log line of a refusal),
+  how `cron.allow`/`cron.deny` and `at.allow`/`at.deny` work and what they leave untouched
+  (existing crontabs, drop-ins, BusyBox), `at`, systemd timers and anacron as other places for
+  jobs, and the `ansible.builtin.cron` module (name marker, `cron_file`) - with tested examples,
+  platform table, pitfalls and self-check questions. Prepares 2.05. Read it with
+  `lab view docs/lessons/L06-job-schedulers.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
