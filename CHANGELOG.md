@@ -56,6 +56,15 @@ MINOR: new features or exercises, PATCH: fixes.
   with tested examples, platform table, pitfalls and self-check questions. Prepares 2.01, 2.02
   and 2.06. Read it with `lab view docs/lessons/L04-platform-differences-as-data.md`.
   Rebuild: *none*
+- Lesson L05 *Kernel hardening: modules and sysctl* in `docs/lessons/` (EN and DE): namespaced
+  vs. global kernel parameters and why a privileged container makes the difference matter,
+  running value vs. `sysctl.d` file and the order in which files are read, the options of
+  `ansible.posix.sysctl` (`sysctl_set`, `reload`, `ignoreerrors`) and how they fail, what
+  `install` and `blacklist` in `modprobe.d` really do and what a rule does not cover (loaded
+  modules, `insmod`, the initramfs), and collections (FQCN, `requirements.yml`) - with tested
+  examples, platform table, pitfalls and self-check questions. Prepares 2.03 and 2.04. Read it
+  with `lab view docs/lessons/L05-kernel-modules-and-sysctl.md`.
+  Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
