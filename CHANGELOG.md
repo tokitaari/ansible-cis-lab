@@ -93,6 +93,16 @@ MINOR: new features or exercises, PATCH: fixes.
   profile script are invisible to an Ansible task - with tested examples, a platform table
   measured on all eight targets, pitfalls and self-check questions. Prepares 3.02, 3.03, 3.05
   and 4.06. Read it with `lab view docs/lessons/L08-accounts-and-pam.md`. Rebuild: *none*
+- Lesson L09 *Auditing and integrity: auditd, AIDE and long-running tasks* in `docs/lessons/`
+  (EN and DE): why the audit subsystem belongs to the host kernel, watch and syscall rules, keys
+  and `auid`/`unset`, the `rules.d` merge order and the last-`-e` rule (tested), `-e 2` and what it
+  means for automation, the `auditd.conf` actions for a full log, a low disk and a write error,
+  what an AIDE database holds, `database_in`/`database_out` and the promote step, the exit-code
+  bits, baseline review and where the database lives, timer and `Type=oneshot` service units,
+  and `async`/`poll`/`async_status` (failures stay invisible until collected, `poll: 0` with
+  `creates` is `changed` on every run) - with tested examples, a platform table measured on all
+  eight targets, pitfalls and self-check questions. Prepares 3.04 and 4.08. Read it with
+  `lab view docs/lessons/L09-auditing-and-integrity.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
