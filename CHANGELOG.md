@@ -83,6 +83,16 @@ MINOR: new features or exercises, PATCH: fixes.
   runnable demo role, platform table, pitfalls (tested error texts) and self-check questions.
   Prepares 3.01. Read it with `lab view docs/lessons/L07-roles-tags-project-structure.md`.
   Rebuild: *none*
+- Lesson L08 *Accounts and PAM: who may log in, how, and with what password* in
+  `docs/lessons/` (EN and DE): the `passwd`/`shadow` fields and what `*`, `!` and an empty field
+  mean, UID 0 against the name `root`, `getent` against the files, aging values and why a
+  `login.defs` default reaches new accounts only (tested), hash prefixes and the two places that
+  choose the algorithm, vendor-split configuration, the removed minimum age of `shadow` 4.20,
+  PAM types and controls with the generators of each family, `pam_pwquality` and `pam_faillock`
+  (drop-in order, `enforce_for_root`, tally, lock-out analysis), and why `umask` and `TMOUT` from a
+  profile script are invisible to an Ansible task - with tested examples, a platform table
+  measured on all eight targets, pitfalls and self-check questions. Prepares 3.02, 3.03, 3.05
+  and 4.06. Read it with `lab view docs/lessons/L08-accounts-and-pam.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
