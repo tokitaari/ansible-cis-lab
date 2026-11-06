@@ -123,6 +123,14 @@ MINOR: new features or exercises, PATCH: fixes.
   callback and `--check` - all tested - with a platform table measured on all eight targets,
   pitfalls and self-check questions. Prepares 4.02 and 4.03. Read it with
   `lab view docs/lessons/L11-profiles-exceptions-and-data-driven-roles.md`. Rebuild: *none*
+- Lesson L12 *Secrets with Ansible Vault* in `docs/lessons/` (EN and DE): what Vault protects
+  and where a secret still shows up, vault files, password sources (file, environment variable,
+  executable) and ids, a whole file or one value with the `vault_` naming convention, why a
+  random salt makes `password_hash` report `changed` on every run, the salt rules, the dependence
+  on the control node's hashing library and what `update_password: on_create` costs, and which
+  output shows a secret (`--diff`, registered results, command lines) with and without `no_log`;
+  with platform table, container notes, pitfalls and self-check questions. Prepares 4.04. Read it
+  with `lab view docs/lessons/L12-secrets-with-ansible-vault.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
