@@ -103,6 +103,16 @@ MINOR: new features or exercises, PATCH: fixes.
   `creates` is `changed` on every run) - with tested examples, a platform table measured on all
   eight targets, pitfalls and self-check questions. Prepares 3.04 and 4.08. Read it with
   `lab view docs/lessons/L09-auditing-and-integrity.md`. Rebuild: *none*
+- Lesson L10 *Compliance reporting: audit mode, enforce mode and custom facts* in
+  `docs/lessons/` (EN and DE): one code path for audit and enforce through check mode, how each
+  kind of task reports (and why a skipped `command` means "unknown"), a `check_mode` keyword
+  that does not override `--check`, what check mode does not stop (handlers, `async` with
+  `poll: 0`, the flag inside a keyword block, dynamic includes) - all tested - findings as data
+  with ok/deviation/not-applicable and a score, collecting `hostvars` into a deterministic JSON
+  and Markdown report with a "no data" list, and custom facts (`facts.d`, static and executable,
+  stale `ansible_local`, types, broken facts, privileges) - with a platform table measured on all
+  eight targets, pitfalls and self-check questions. Prepares 4.01, 4.05 and 5.01. Read it with
+  `lab view docs/lessons/L10-compliance-reporting.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
