@@ -140,6 +140,17 @@ MINOR: new features or exercises, PATCH: fixes.
   restart (file, service, live ruleset) - with platform table measured on all eight targets,
   pitfalls and self-check questions. Prepares 4.07. Read it with
   `lab view docs/lessons/L13-host-firewall-nftables.md`. Rebuild: *none*
+- Lesson L14 *Production rollout* in `docs/lessons/` (EN and DE): failure semantics of a play
+  (what one failed host does to the others, the later batches and the later plays with and
+  without `serial`, `max_fail_percentage` and `any_errors_fatal`, the strict threshold, the recap
+  that omits hosts that never started), `serial` lists and percentages, what limits parallelism
+  (`forks`, `serial`, `throttle`), a preflight gate that also runs under `--check`, what facts and
+  free space can and cannot tell (the missing mount entry of a container root, thin
+  provisioning), the host lists of a play and of a batch with `run_once` and `post_tasks`, and
+  community roles (Galaxy, Git, pins in `requirements.yml`, what a second install does, reading a
+  role without running it, adopt, fork or build) - with platform table measured on all eight
+  targets, a Galaxy example measured by the user, pitfalls and self-check questions. Prepares
+  5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
