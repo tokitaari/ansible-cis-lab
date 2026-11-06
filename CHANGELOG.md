@@ -165,6 +165,18 @@ MINOR: new features or exercises, PATCH: fixes.
   file(s)" is no longer shown - ansible-lint prints it for every directory argument and offers
   no setting to turn it off, while the gate lints the solution directories on purpose. Other
   messages and the exit code are unchanged. Rebuild: *none*
+- Exercises 4.04 and 4.07 (EN and DE): deeper `EXPLANATION.md` in a fixed order (what the check
+  verifies, how it works, per-family table, pitfalls with measured facts, real-world notes,
+  further reading with links to the lessons L12 and L13) and a third hint that shows the
+  skeleton of the play instead of only pointing to the solution. Corrected statements that
+  measurements did not support: in 4.04 that `-v` prints the password hash (the `user` module
+  masks it) and that Alpine's tools lack aging fields (the README now gives the real reason: no
+  Python before 0.02); in 4.07 that `wait_for_connection` would reuse the old connection without
+  `reset_connection`, and that `nohup` is needed for the rollback job. New: the hash of a stable
+  salt depends on the control node's backend (libxcrypt or passlib), the `wait_for_connection`
+  timeout must stay below the rollback delay, `default_ipv4` needs the network facts, the unit
+  texts of `nftables` per family, and bonus questions on `update_password` and running 4.04 on
+  Alpine. Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

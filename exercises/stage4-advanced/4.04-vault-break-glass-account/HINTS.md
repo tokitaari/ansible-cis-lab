@@ -10,4 +10,43 @@ Stable salt: `(inventory_hostname | hash('sha256'))[:16]` - deterministic per ho
 
 ## Hint 3
 
-`ansible.builtin.user` options: `password`, `password_expire_max`, `password_expire_min` (`omit` it where `chage --help` no longer lists `--mindays`), `shell`, `no_log: true` on the task. Reference: `lab solution 4.04` (its vault password is in `solution/.vault-pass`).
+The skeleton - fill in every `"..."`:
+
+```yaml
+- name: Break-glass admin account
+  hosts: targets:!alpine_family
+  become: true
+  vars_files:
+    - vault.yml
+  vars:
+    cis_salt: "..."                  # hint 2
+  tasks:
+    - name: Does chage still support a minimum password age?
+      ansible.builtin.command: chage --help
+      register: cis_chage_help
+      changed_when: false
+      check_mode: false
+      failed_when: false
+
+    - name: Create cisadmin with an aging policy
+      vars:
+        cis_chage_mindays: "..."     # does the help text list --mindays?
+      ansible.builtin.user:
+        name: cisadmin
+        shell: /bin/sh
+        password: "..."              # hint 2: vault password, sha512, stable salt
+        password_expire_max: "..."
+        password_expire_min: "..."   # omit it where there is no minimum age
+      no_log: true
+
+    - name: Allow cisadmin to use sudo with password
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/60-cisadmin
+        content: "..."
+        owner: root
+        group: root
+        mode: "..."
+        validate: "..."              # a syntax check that gets the file as %s
+```
+
+Reference: `lab solution 4.04` (its vault password is in `solution/.vault-pass`).
