@@ -113,6 +113,16 @@ MINOR: new features or exercises, PATCH: fixes.
   stale `ansible_local`, types, broken facts, privileges) - with a platform table measured on all
   eight targets, pitfalls and self-check questions. Prepares 4.01, 4.05 and 5.01. Read it with
   `lab view docs/lessons/L10-compliance-reporting.md`. Rebuild: *none*
+- Lesson L11 *Profiles, exceptions and data-driven roles* in `docs/lessons/` (EN and DE): a
+  profile as one validated value (`-e` gives a string, a block's `when` is evaluated per task,
+  a lower level undoes nothing), exceptions as records with a reason and an end date (YAML
+  dates, `to_datetime` and `now()`, midnight and the day an exception ends), validation before
+  the first change with `assert` and `meta/argument_specs.yml` (what it checks and what it does
+  not), capability flags instead of system conditions (one data file or layers, a conservative
+  fallback, the precedence of `include_vars`), and testing a role from the outside with the JSON
+  callback and `--check` - all tested - with a platform table measured on all eight targets,
+  pitfalls and self-check questions. Prepares 4.02 and 4.03. Read it with
+  `lab view docs/lessons/L11-profiles-exceptions-and-data-driven-roles.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
