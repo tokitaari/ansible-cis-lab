@@ -28,7 +28,7 @@ openSUSE is excluded (it uses firewalld - bonus).
 
 ## Requirements
 
-- [ ] Ruleset template `/etc/cis/nftables-cis.nft`, validated with `nft -c -f %s`: table `inet cis_filter`, input policy `drop`; accept `lo`, `established,related`, ICMP echo (rate-limited) and ICMPv6, SSH (tcp/22) only from the lab subnet (derive it from `ansible_facts.default_ipv4`); drop `invalid`; forward policy `drop`; output `accept`.
+- [ ] Ruleset template `/etc/cis/nftables-cis.nft`, validated with `nft -c -f %s`: table `inet cis_filter`, input policy `drop`; accept `lo`, `established,related`, ICMP echo (rate-limited) and ICMPv6, SSH (tcp/22) only from the lab subnet (derive it from `ansible_facts.default_ipv4`, which only exists with the network facts); drop `invalid`; forward policy `drop`; output `accept`.
 - [ ] The file must be loadable repeatedly: declare the table, delete it, define it (`table inet cis_filter` / `delete table inet cis_filter` / `table inet cis_filter { ... }`).
 - [ ] Load it only when the file changed **or** the table is missing (container restart!).
 - [ ] Dead-man switch: before loading, start a background job that deletes the table after 60 s. After loading, `meta: reset_connection` + `wait_for_connection`; then cancel the job.

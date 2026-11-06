@@ -23,8 +23,9 @@ Three classic mistakes this exercise avoids:
    every time (and every run changes the password hash!) → **stable salt**,
 3. secrets in task output → **`no_log: true`**.
 
-Alpine is excluded because the user module uses busybox tools there, which do not
-support aging fields.
+Alpine is left out because it has no Python before 0.02 and this exercise has no
+prerequisites. The account tools are not the reason: the lab image has shadow's `useradd`,
+`usermod` and `chage`, and the `user` module accepted `password_expire_max` there.
 
 ## Requirements
 
@@ -53,3 +54,5 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 - Rotate the password: `ansible-vault edit vault.yml`, re-run. Exactly one change per host?
 - Use `ansible-vault encrypt_string` for a single variable inside an otherwise plain file. When is which approach better?
 - In real environments the vault password comes from a script (`--vault-password-file` can be executable) that asks a secret store. Sketch one for Azure Key Vault or HashiCorp Vault.
+- Add `update_password: on_create` to the `user` task, rotate the password in the vault and re-run. What changes on the hosts, and when would you want that behaviour?
+- Run the play on Alpine too (finish 0.02 first and widen `hosts` in your copy). Does `password_expire_min` work there, and what does `chage --help` list?
