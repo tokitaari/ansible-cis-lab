@@ -131,6 +131,15 @@ MINOR: new features or exercises, PATCH: fixes.
   output shows a secret (`--diff`, registered results, command lines) with and without `no_log`;
   with platform table, container notes, pitfalls and self-check questions. Prepares 4.04. Read it
   with `lab view docs/lessons/L12-secrets-with-ansible-vault.md`. Rebuild: *none*
+- Lesson L13 *Host firewall with nftables* in `docs/lessons/` (EN and DE): tables, hooks and why
+  a firewall owns one table (several base chains on one hook, a drop is final, `flush ruleset`
+  in a throw-away namespace), loading rules (the check-only mode and what it cannot know, one file
+  is one transaction, what a second load and a delete of a missing table do), the dead-man switch
+  in four tested pieces (a job that outlives its task, `async` has no cancel, a reused against a
+  new SSH connection, `wait_for_connection` and the rule for its timeout), and what survives a
+  restart (file, service, live ruleset) - with platform table measured on all eight targets,
+  pitfalls and self-check questions. Prepares 4.07. Read it with
+  `lab view docs/lessons/L13-host-firewall-nftables.md`. Rebuild: *none*
 
 ### Changed
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
