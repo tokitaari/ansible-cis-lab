@@ -25,7 +25,7 @@ black box, so it needs a small **contract**:
 | Variables | `cis_level` (1 or 2, default 1), `cis_exceptions` (list of `{id, reason, expires}`, default `[]`) |
 | Control ids | `l1-telnet`, `l1-ssh-maxauthtries`, `l2-modules`, `l2-audit-identity` |
 | Task names | every task of a control **starts with its id** (case-insensitive; ansible-lint wants capitalised names), e.g. `L1-telnet \| Remove telnet` |
-| Validation | invalid input (unknown id, empty reason, missing or past `expires`) fails the run before any control runs |
+| Validation | invalid input (unknown id, empty reason, missing or past `expires`) fails the run before any control runs; `expires` is the first day the exception no longer applies, so today's date is already past |
 
 Control content (keep it small, the mechanism matters): remove telnet · `MaxAuthTries 4`
 drop-in (`/etc/ssh/sshd_config.d/01-cis-maxauthtries.conf`) · disable `squashfs` and `udf` ·

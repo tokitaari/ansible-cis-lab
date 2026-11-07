@@ -57,5 +57,5 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 ## Bonus (optional)
 
-- Add `vars/Ubuntu.yml` that only overrides one value (e.g. disables `cis_cron_allow_supported` for a test) and prove with `ansible-inventory`/`debug` that Debian still uses `Debian.yml`. Then delete it again.
+- Add `vars/Ubuntu.yml` that only sets one value (e.g. disables `cis_cron_allow_supported` for a test) and print `cis_audit_package` and `cis_pam_tool` with a `debug` task on `ubuntu` and `debian`. What does ubuntu lack now, and why? Change the loader so that `Ubuntu.yml` only overrides and every other value still comes from `Debian.yml`, and prove that debian is unchanged. Then delete the file again.
 - Add a ninth platform on paper: what would a `vars/Gentoo.yml` need? Which tasks would break anyway?

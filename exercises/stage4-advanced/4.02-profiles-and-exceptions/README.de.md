@@ -25,7 +25,7 @@ testet deine Umsetzung als Blackbox, daher braucht es einen kleinen **Vertrag**:
 | Variablen | `cis_level` (1 oder 2, Default 1), `cis_exceptions` (Liste von `{id, reason, expires}`, Default `[]`) |
 | Kontroll-IDs | `l1-telnet`, `l1-ssh-maxauthtries`, `l2-modules`, `l2-audit-identity` |
 | Task-Namen | jeder Task einer Kontrolle **beginnt mit ihrer ID** (Groß-/Kleinschreibung egal; ansible-lint will großgeschriebene Namen), z. B. `L1-telnet \| Remove telnet` |
-| Validierung | ungültige Eingaben (unbekannte ID, leere Begründung, fehlendes oder vergangenes `expires`) lassen den Lauf scheitern, bevor eine Kontrolle läuft |
+| Validierung | ungültige Eingaben (unbekannte ID, leere Begründung, fehlendes oder vergangenes `expires`) lassen den Lauf scheitern, bevor eine Kontrolle läuft; `expires` ist der erste Tag, an dem die Ausnahme nicht mehr gilt, das heutige Datum ist also schon vergangen |
 
 Inhalt der Kontrollen (klein halten, es geht um den Mechanismus): telnet entfernen ·
 Drop-in `MaxAuthTries 4` (`/etc/ssh/sshd_config.d/01-cis-maxauthtries.conf`) · `squashfs`
