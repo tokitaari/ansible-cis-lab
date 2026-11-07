@@ -10,15 +10,15 @@
 
 ## Goal
 
-`vsftpd` is installed and enabled on most targets. Make sure it is neither running nor started at boot.
+`vsftpd` is installed and enabled on all eight lab hosts. Make sure it is neither running nor started at boot.
 
 ## Background
 
 Every listening service is attack surface. CIS: services that are not needed must
 be removed or at least stopped and disabled/masked. `ansible.builtin.service`
 abstracts systemd *and* OpenRC - one task for all eight hosts. But: on a host
-where `vsftpd` is not installed, the service module fails ("Could not find the
-requested service"). That is your first real conditional.
+where `vsftpd` is not installed, the service module can fail ("Could not find the
+requested service" - measured on the Red Hat, SUSE and Arch hosts). That is your first real conditional.
 
 ## Requirements
 

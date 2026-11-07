@@ -16,8 +16,8 @@ Fix the group-writable `/etc/passwd` and `/etc/group` on every target.
 
 Someone set both files to `0664`. A group-writable `/etc/passwd` lets members of
 that group create a UID-0 account - game over. CIS requires `0644` (or stricter),
-owner `root`, group `root`. Check the current state first:
-`ansible targets -m ansible.builtin.stat -a path=/etc/passwd | grep '"mode"'`
+owner `root`, group `root`; the lab check wants exactly `0644`. Check the current state first:
+`ansible targets -m ansible.builtin.stat -a path=/etc/passwd | grep ' mode:'`
 
 ## Requirements
 
@@ -41,5 +41,5 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 ## Bonus (optional)
 
-- What happens if you write `mode: 644` (no quotes, no leading zero)? Try it on one host (`-l debian`), look at the result with `stat`, then fix it. Reset with `./lab.sh reset debian` if needed.
-- CIS also covers the backup files `/etc/passwd-` and `/etc/group-`. Include them - but they do not exist everywhere. How do you handle that?
+- What happens if you write `mode: 644` (no quotes, no leading zero) in a playbook? Try it on one host (`-l debian`), look at the result with `stat`, then fix it. Reset with `./lab.sh reset debian` if needed. (An ad-hoc `-a mode=644` is a string and does not show the effect.)
+- CIS also covers the backup files `/etc/passwd-` and `/etc/group-`. Include them - on the lab hosts they exist, but on a real host they may not. How do you handle that?

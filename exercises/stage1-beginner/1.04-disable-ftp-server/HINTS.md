@@ -11,12 +11,18 @@
 ## Hint 3
 
 ```yaml
-- name: Collect package facts
-  ansible.builtin.package_facts:
-- name: Stop and disable vsftpd
-  ansible.builtin.service:
-    name: vsftpd
-    state: stopped
-    enabled: false
-  when: "'vsftpd' in ansible_facts.packages"
+- name: Disable the FTP server
+  hosts: "..."                   # every target
+  become: "..."                  # stopping services needs root
+  tasks:
+    - name: Collect package facts
+      ansible.builtin.package_facts:
+    - name: Stop and disable vsftpd
+      ansible.builtin.service:
+        name: "..."              # the service
+        state: "..."             # not running
+        enabled: "..."           # not started at boot
+      when: "..."                # only if the package is installed
 ```
+
+Reference: `lab solution 1.04`.

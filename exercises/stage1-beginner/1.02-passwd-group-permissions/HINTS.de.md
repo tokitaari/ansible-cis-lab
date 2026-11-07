@@ -11,11 +11,17 @@ Ohne `state` nutzt `file` bei existierenden Dateien `state: file` - es ändert n
 ## Hinweis 3
 
 ```yaml
-- name: /etc/passwd permissions
-  ansible.builtin.file:
-    path: /etc/passwd
-    owner: root
-    group: root
-    mode: "0644"
+- name: Fix account file permissions
+  hosts: "..."                   # every target
+  become: "..."                  # changing owner needs root
+  tasks:
+    - name: /etc/passwd permissions
+      ansible.builtin.file:
+        path: "..."              # the file
+        owner: "..."
+        group: "..."
+        mode: "..."              # quoted, four digits
+    # same task again for /etc/group (or one task with a loop)
 ```
-(und dasselbe für `/etc/group`)
+
+Referenz: `lab solution 1.02`.

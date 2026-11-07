@@ -16,8 +16,8 @@ Korrigiere die gruppenbeschreibbaren Dateien `/etc/passwd` und `/etc/group` auf 
 
 Jemand hat beide Dateien auf `0664` gesetzt. Ein gruppenbeschreibbares `/etc/passwd`
 erlaubt Mitgliedern dieser Gruppe, ein UID-0-Konto anzulegen - Spiel vorbei. CIS
-verlangt `0644` (oder strenger), Eigentümer `root`, Gruppe `root`. Prüfe zuerst den
-Ist-Zustand: `ansible targets -m ansible.builtin.stat -a path=/etc/passwd | grep '"mode"'`
+verlangt `0644` (oder strenger), Eigentümer `root`, Gruppe `root`; der Lab-Check verlangt genau `0644`. Prüfe zuerst den
+Ist-Zustand: `ansible targets -m ansible.builtin.stat -a path=/etc/passwd | grep ' mode:'`
 
 ## Anforderungen
 
@@ -41,5 +41,5 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 ## Bonus (optional)
 
-- Was passiert bei `mode: 644` (ohne Anführungszeichen, ohne führende Null)? Probiere es auf einem Host (`-l debian`), sieh dir das Ergebnis mit `stat` an und korrigiere es. Notfalls `./lab.sh reset debian`.
-- CIS umfasst auch die Sicherungen `/etc/passwd-` und `/etc/group-`. Nimm sie dazu - sie existieren aber nicht überall. Wie gehst du damit um?
+- Was passiert bei `mode: 644` (ohne Anführungszeichen, ohne führende Null) in einem Playbook? Probiere es auf einem Host (`-l debian`), sieh dir das Ergebnis mit `stat` an und korrigiere es. Notfalls `./lab.sh reset debian`. (Ein Ad-hoc-`-a mode=644` ist ein String und zeigt den Effekt nicht.)
+- CIS umfasst auch die Sicherungen `/etc/passwd-` und `/etc/group-`. Nimm sie dazu - auf den Lab-Hosts existieren sie, auf echten Hosts evtl. nicht. Wie gehst du damit um?
