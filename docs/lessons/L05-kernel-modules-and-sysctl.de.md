@@ -305,9 +305,16 @@ Herstellers liegen*. Unter Ubuntu 24.04 legt das Paket `procps` Dateien wie
 eine Dateinummer wählst.
 
 Das `modprobe` auf alpine ist BusyBox 1.37: Es hat weder `-n` noch `-c` (im Lab geprüft), der
-Probelauf oben funktioniert dort also nicht, und wie es `install`-Zeilen behandelt, habe ich
-nicht geprüft. Eine für kmod geschriebene Regeldatei wird korrekt *abgelegt*, aber geh nicht
-davon aus, dass sie *durchgesetzt* wird. Minimale Images enthalten nicht immer `/etc/sysctl.d`:
+Probelauf oben funktioniert dort also nicht. Sein Konfigurationsparser kennt nur `alias`,
+`options`, `include` und `blacklist` (BusyBox-Quelltext; ein Test mit BusyBox 1.36.1 bestätigt
+es): Eine `install`-Zeile wird ignoriert, und `blacklist` greift für einen einfachen Namen nur mit
+`-b`. Eine für kmod geschriebene Regeldatei wird dort korrekt *abgelegt*, aber BusyBox *setzt*
+ihre `install`-Zeile nicht *durch*.
+openSUSE liefert für viele selten genutzte Dateisysteme eigene `install`-Zeilen mit
+(`/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf`). kmod liest die zusammengeführten Verzeichnisse
+in der Reihenfolge der Dateinamen und nimmt die erste `install`-Zeile für ein Modul, deine Regel in
+einer später sortierten Datei gilt dort also nicht - `modprobe -n -v` zeigt, welche gilt (gemessen
+auf opensuse). Minimale Images enthalten nicht immer `/etc/sysctl.d`:
 rocky und alma liefern es nicht mit, lege das Verzeichnis zuerst an, sonst scheitert das
 Schreiben mit `No such file or directory` (das Beispiel oben tut das). `/etc/modprobe.d` gibt
 es auf allen acht Targets.

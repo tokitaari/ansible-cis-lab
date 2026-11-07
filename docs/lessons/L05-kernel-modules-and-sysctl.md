@@ -289,8 +289,14 @@ On Ubuntu 24.04 the `procps` package puts files such as `10-kernel-hardening.con
 use `systemd-analyze cat-config`) before you pick a file number.
 
 The `modprobe` on alpine is BusyBox 1.37: it has neither `-n` nor `-c` (checked in the lab),
-so the dry run above cannot work there, and I did not verify how it treats `install` lines.
-A rule file written for kmod is *stored* correctly, but do not assume it is *enforced*.
+so the dry run above cannot work there. Its configuration parser knows only `alias`, `options`,
+`include` and `blacklist` (BusyBox source; a test with BusyBox 1.36.1 confirms it): an `install`
+line is ignored, and `blacklist` holds for a plain name only with `-b`. A rule file written for
+kmod is *stored* correctly there, but BusyBox does not *enforce* its `install` line.
+openSUSE ships its own `install` lines for many rarely used file systems
+(`/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf`). kmod reads the merged directories in the order
+of the file names and uses the first `install` line for a module, so your rule in a file that
+sorts later does not apply there - `modprobe -n -v` shows which one does (measured on opensuse).
 Minimal images do not always contain `/etc/sysctl.d`: rocky and alma ship without it, so
 create the directory first, or the write fails with `No such file or directory` (the example
 above does that). `/etc/modprobe.d` exists on all eight targets.

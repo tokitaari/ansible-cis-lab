@@ -19,9 +19,13 @@ präparierten USB-Stick oder einen exotischen Socket). CIS deaktiviert Module, d
 Server selten brauchen. Zwei Zeilen pro Modul:
 
 ```
-install <modul> /bin/false   # Laden scheitert
-blacklist <modul>            # kein automatisches Laden per Alias
+install <modul> /bin/false
+blacklist <modul>
 ```
+
+Die `install`-Zeile lässt jedes Laden des Moduls scheitern, die `blacklist`-Zeile verhindert
+automatisches Laden über die Aliase des Moduls. Schreib die Zeilen ohne Kommentar am Ende - der
+Check akzeptiert nach `/bin/false` nichts mehr.
 
 **Container-Hinweis:** Alle Container teilen sich den Kernel des HOSTS. Im Lab schreibst
 du nur die Konfiguration - du darfst **kein** `modprobe -r` ausführen (das würde Module
@@ -53,3 +57,4 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 - Ergänze eine Liste `cis_disabled_modules_l2` (`squashfs`, `udf`, `dccp`, `tipc`, `rds`, `sctp`) und eine Variable `cis_level` (Standard 1). Level-2-Module werden nur bei `cis_level >= 2` behandelt. Tipp: `cis_disabled_modules_l1 + (cis_disabled_modules_l2 if cis_level | int >= 2 else [])`.
 - Auf einer echten VM würdest du geladene Module auch entladen. Schreib diesen Task, schütze ihn aber mit `when: not lab_in_container` (Variable ist im Inventar bereits definiert).
 - Warum kann das Deaktivieren von `squashfs` Ubuntu-Systeme kaputt machen? (Denk an Snaps.)
+- Vergleiche nach deinem Lauf `modprobe -n -v cramfs` und `modprobe -n -v usb-storage` auf opensuse. Warum zeigt eines davon deine Regel nicht? (`ls /usr/lib/modprobe.d/`)

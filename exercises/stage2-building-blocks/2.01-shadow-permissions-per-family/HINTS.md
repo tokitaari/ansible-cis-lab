@@ -11,19 +11,30 @@ Task 1: `ansible.builtin.stat` with `loop: [/etc/shadow, /etc/gshadow]` and `reg
 ## Hint 3
 
 ```yaml
-vars:
-  shadow_perms:
-    Debian: {group: shadow, mode: "0640"}
-    Suse: {group: shadow, mode: "0640"}
-    Alpine: {group: shadow, mode: "0640"}
-    RedHat: {group: root, mode: "0000"}
-    Archlinux: {group: root, mode: "0600"}
-...
-- ansible.builtin.file:
-    path: "{{ item.item }}"
-    owner: root
-    group: "{{ shadow_perms[ansible_facts.os_family].group }}"
-    mode: "{{ shadow_perms[ansible_facts.os_family].mode }}"
-  loop: "{{ shadow_files.results }}"
-  when: item.stat.exists
+- name: Protect password hashes
+  hosts: "..."
+  become: "..."
+  vars:
+    shadow_perms:                # one entry per os_family value
+      Debian: {group: "...", mode: "..."}
+      Suse: {group: "...", mode: "..."}
+      Alpine: {group: "...", mode: "..."}
+      RedHat: {group: "...", mode: "..."}
+      Archlinux: {group: "...", mode: "..."}
+  tasks:
+    - name: Find which shadow files exist
+      ansible.builtin.stat:
+        path: "..."              # the loop item
+      loop: "..."                # the paths, backups too if you like
+      register: "..."
+    - name: Set owner, group and mode per OS family
+      ansible.builtin.file:
+        path: "..."              # the original item of the stat result
+        owner: root
+        group: "..."             # looked up by ansible_facts.os_family
+        mode: "..."
+      loop: "..."                # the registered results
+      when: "..."                # only files that exist
 ```
+
+Reference: `lab solution 2.01`.

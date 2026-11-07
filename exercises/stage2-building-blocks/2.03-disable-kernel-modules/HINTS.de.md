@@ -11,14 +11,22 @@
 ## Hinweis 3
 
 ```yaml
-- name: Disable kernel module
-  ansible.builtin.copy:
-    dest: "/etc/modprobe.d/cis-{{ item }}.conf"
-    content: |
-      install {{ item }} /bin/false
-      blacklist {{ item }}
-    owner: root
-    group: root
-    mode: "0644"
-  loop: "{{ cis_disabled_modules_l1 }}"
+- name: CIS - disable unneeded kernel modules
+  hosts: "..."
+  become: "..."
+  vars:
+    cis_disabled_modules_l1: ["..."]   # die sechs Namen aus der README
+  tasks:
+    - name: Disable kernel module
+      ansible.builtin.copy:
+        dest: "..."              # eine Datei pro Modul, benannt nach dem Schleifenelement
+        content: "..."           # die zwei Zeilen install und blacklist, z. B. als Blockskalar |
+        owner: root
+        group: root
+        mode: "..."
+      loop: "..."
 ```
+
+Kein `modprobe`-Task: In den Lab-Containern würde er auf den Host-Kernel wirken.
+
+Referenz: `lab solution 2.03`.
