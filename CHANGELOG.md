@@ -193,6 +193,20 @@ MINOR: new features or exercises, PATCH: fixes.
   `review.md`), and `check.sh` names the accepted answer formats correctly (`## 1.`, not
   `## 1`). L14: one sentence that 30 % is one host in the six-host batch play of 5.02.
   Rebuild: *none*
+- Exercises 4.02 and 4.03 (EN and DE): deeper `EXPLANATION.md` in the same fixed order (what the
+  check verifies and what not, how it works, pitfalls with measured facts, real-world notes,
+  further reading with links to the lesson L11; 4.03 also a per-family table) and a third hint
+  that shows the skeleton (the role's `tasks/main.yml` in both exercises) instead of only pointing
+  to the solution. 4.02: the README now says what `expires` means (the first day the exception no
+  longer applies, so today's date is already rejected), hint 1 trims the reason and checks that
+  `expires` exists; the EXPLANATION lists what `lab check 4.02` does not test (output of the
+  excepted controls, unknown id, missing `expires`, validation before the first control), that
+  `-e cis_level=2` is a string, and how a looped task shows up in the JSON callback. 4.03: hint 3
+  said ten earlier checks, it is fifteen (sixteen with `-e cis_level=2`); the EXPLANATION names the
+  limits of the check's `grep` on fact comparisons, corrects "Alpine has no PAM" (it has
+  `/etc/pam.d` and `faillock`, but no password stack and no pwquality), and measures that a partial
+  `vars/Ubuntu.yml` leaves the other flags undefined with the one-file loader. The Ubuntu bonus
+  of 4.03 now asks to find that out and to layer the loads. Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

@@ -57,5 +57,5 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 ## Bonus (optional)
 
-- Lege `vars/Ubuntu.yml` an, das nur einen Wert überschreibt (z. B. `cis_cron_allow_supported` testweise abschaltet), und beweise mit `debug`, dass Debian weiter `Debian.yml` nutzt. Danach wieder löschen.
+- Lege `vars/Ubuntu.yml` an, die nur einen Wert setzt (z. B. `cis_cron_allow_supported` testweise abschaltet), und gib `cis_audit_package` und `cis_pam_tool` mit einem `debug`-Task auf `ubuntu` und `debian` aus. Was fehlt ubuntu jetzt, und warum? Ändere den Loader so, dass `Ubuntu.yml` nur überschreibt und jeder andere Wert weiter aus `Debian.yml` kommt, und belege, dass debian unverändert ist. Danach die Datei wieder löschen.
 - Füge auf dem Papier eine neunte Plattform hinzu: was bräuchte ein `vars/Gentoo.yml`? Welche Tasks würden trotzdem brechen?
