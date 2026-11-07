@@ -10,9 +10,17 @@
 
 ## Hint 3
 
+The play as a skeleton - fill in every `"..."`.
+
 ```yaml
-- name: Remove telnet client
-  ansible.builtin.package:
-    name: telnet
-    state: absent
+- name: Remove insecure client packages
+  hosts: "..."                   # every target
+  become: "..."                  # removing packages needs root
+  tasks:
+    - name: Remove telnet client
+      ansible.builtin.package:
+        name: "..."              # the package name
+        state: "..."             # not installed
 ```
+
+Reference: `lab solution 1.01`.

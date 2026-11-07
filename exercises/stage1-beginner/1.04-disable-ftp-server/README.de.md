@@ -10,15 +10,15 @@
 
 ## Ziel
 
-`vsftpd` ist auf den meisten Targets installiert und aktiviert. Sorge dafür, dass er weder läuft noch beim Booten startet.
+`vsftpd` ist auf allen acht Lab-Hosts installiert und aktiviert. Sorge dafür, dass er weder läuft noch beim Booten startet.
 
 ## Hintergrund
 
 Jeder lauschende Dienst ist Angriffsfläche. CIS: nicht benötigte Dienste werden
 entfernt oder mindestens gestoppt und deaktiviert/maskiert. `ansible.builtin.service`
 abstrahiert systemd *und* OpenRC - ein Task für alle acht Hosts. Aber: auf einem Host
-ohne `vsftpd` schlägt das service-Modul fehl ("Could not find the requested service").
-Das ist deine erste echte Bedingung.
+ohne `vsftpd` kann das service-Modul fehlschlagen ("Could not find the requested service" -
+gemessen auf den Red-Hat-, SUSE- und Arch-Hosts). Das ist deine erste echte Bedingung.
 
 ## Anforderungen
 

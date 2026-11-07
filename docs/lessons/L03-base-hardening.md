@@ -304,7 +304,9 @@ overrides them. A tool that checks "the system's" configuration can complain abo
 do not own. On Ubuntu 26.04 the `sudo` command is a Rust reimplementation (sudo-rs) by default,
 with the original sudo available beside it; it reads the same sudoers files, but it does not
 implement every option and `sudo -V` does not list policy values. Look at `sudo --version`
-before you rely on a sudo feature.
+before you rely on a sudo feature. The lab's Ubuntu image is different: there `sudo` is the
+original sudo 1.9.17p2 (an alternatives link to `sudo.ws`), so the exercises behave as on the
+other hosts.
 
 ### In the lab containers
 

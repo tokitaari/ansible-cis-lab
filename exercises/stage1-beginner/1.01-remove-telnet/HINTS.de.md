@@ -10,9 +10,17 @@
 
 ## Hinweis 3
 
+Das Play als Gerüst - setze überall dort etwas ein, wo `"..."` steht.
+
 ```yaml
-- name: Remove telnet client
-  ansible.builtin.package:
-    name: telnet
-    state: absent
+- name: Remove insecure client packages
+  hosts: "..."                   # alle Targets
+  become: "..."                  # Pakete entfernen braucht root
+  tasks:
+    - name: Remove telnet client
+      ansible.builtin.package:
+        name: "..."              # der Paketname
+        state: "..."             # nicht installiert
 ```
+
+Referenz: `lab solution 1.01`.

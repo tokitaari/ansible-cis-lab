@@ -11,21 +11,26 @@ Add `notify: Reload sshd` to the copy task and a `handlers:` section with an `an
 ## Hint 3
 
 ```yaml
-tasks:
-  - name: Deploy sshd hardening drop-in
-    ansible.builtin.copy:
-      dest: /etc/ssh/sshd_config.d/00-cis-hardening.conf
-      content: |
-        PermitRootLogin no
-        PermitEmptyPasswords no
-      owner: root
-      group: root
-      mode: "0600"
-      validate: /usr/sbin/sshd -t -f %s
-    notify: Reload sshd
-handlers:
-  - name: Reload sshd
-    ansible.builtin.service:
-      name: "{{ 'ssh' if ansible_facts.os_family == 'Debian' else 'sshd' }}"
-      state: reloaded
+- name: Harden sshd authentication
+  hosts: "..."                   # every target
+  become: "..."                  # writing to /etc/ssh needs root
+  tasks:
+    - name: Deploy sshd hardening drop-in
+      ansible.builtin.copy:
+        dest: "..."              # the drop-in file; a low number wins
+        content: |
+          PermitRootLogin ...
+          PermitEmptyPasswords ...
+        owner: "..."
+        group: "..."
+        mode: "..."              # quoted, private to root
+        validate: "..."          # sshd -t -f %s
+      notify: "..."              # the handler's name
+  handlers:
+    - name: "..."                # exactly the name used in notify
+      ansible.builtin.service:
+        name: "..."              # ssh on Debian, sshd elsewhere
+        state: "..."             # reload, do not restart
 ```
+
+Reference: `lab solution 1.03`.
