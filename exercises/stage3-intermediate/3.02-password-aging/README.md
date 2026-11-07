@@ -25,7 +25,9 @@ CIS 5.4.1 (values used here):
 | inactive lock | `45` days (≤ 45) | `useradd -D -f 45` → `/etc/default/useradd` |
 
 Two traps:
-1. **Do not downgrade.** Debian 13, Fedora and Arch already default to `YESCRYPT`.
+1. **Do not downgrade.** Debian 13, Ubuntu 26.04, Fedora, Rocky/Alma 10 and Arch already default to
+   `YESCRYPT` (openSUSE: `SHA512` in `/usr/etc/login.defs`; Alpine's `login.defs` has no
+   `ENCRYPT_METHOD` line).
    Overwriting it with `SHA512` would be *weaker*. Only change it when the current
    method is neither.
 2. **Vendor config split.** Some distributions (openSUSE in particular) are moving

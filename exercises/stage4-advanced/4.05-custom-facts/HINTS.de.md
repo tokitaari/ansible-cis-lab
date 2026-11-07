@@ -10,4 +10,60 @@ Skript für den ausführbaren Fact: `uid0=$(awk -F: '$3 == 0' /etc/passwd | wc -
 
 ## Hinweis 3
 
-Auffrischen: `ansible.builtin.setup: filter: ansible_local`. Bericht: über `groups['targets']` iterieren, `hostvars[h].ansible_local.cis.version` usw. lesen. Referenz: `lab solution 4.05`.
+Das Playbook als Gerüst - füll jedes `"..."` aus. Lies im Bericht-Template `hostvars[h].ansible_local` mit einem `default`, damit ein Host ohne Facts `-` zeigt, statt zu scheitern.
+
+```yaml
+- name: Deploy hardening facts
+  hosts: targets
+  become: true                        # Facts als root sammeln - sshd -T braucht das
+  vars:
+    cis_fact: "..."                   # baseline, version, level, managed_by
+  tasks:
+    - name: Facts directory
+      ansible.builtin.file:
+        path: "..."
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Static fact - what was applied
+      ansible.builtin.copy:
+        dest: "..."                   # cis.fact
+        content: "..."                # das Dict als JSON, kein Zeitstempel
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Executable fact - what is true now
+      ansible.builtin.copy:
+        src: "..."                    # dein POSIX-sh-Skript aus files/
+        dest: "..."                   # cis_live.fact
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Re-read local facts
+      ansible.builtin.setup:
+        filter: "..."
+
+- name: Hardening inventory on the control node
+  hosts: localhost
+  gather_facts: false
+  vars:
+    report_dir: "..."                 # LAB_WORK_DIR aus der Umgebung, Default /lab/work, plus /4.05
+  tasks:
+    - name: Ensure the work directory exists
+      ansible.builtin.file:
+        path: "{{ report_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Write inventory.md
+      ansible.builtin.template:
+        src: "..."                    # eine Zeile je Host aus groups['targets'], Werte aus hostvars
+        dest: "{{ report_dir }}/inventory.md"
+        mode: "0644"
+```
+
+Referenz: `lab solution 4.05`.

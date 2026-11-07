@@ -25,14 +25,14 @@ actually be in the password stack, and every family manages PAM differently:
 |---|---|---|
 | Debian | `libpam-pwquality` | `pam-auth-update` (profiles in `/usr/share/pam-configs`) |
 | RedHat | `libpwquality` | `authselect` (never edit `/etc/pam.d/system-auth` by hand) |
-| Suse / Arch / Alpine | various / none | `pam-config` / manual / Alpine has no PAM by default |
+| Suse / Arch / Alpine | none ships `pam_pwquality` at the start | `pam-config` / manual / Alpine: PAM only for the shadow tools, no password stack |
 
 Scope of this exercise: `debian_family:redhat_family`. The others are a bonus.
 
 ## Requirements
 
-- [ ] Install the right package per family (dict lookup). Debian/Ubuntu: refresh the apt package index first (`ansible.builtin.apt` with `update_cache: true` and `cache_valid_time`) - the lab images ship without one.
-- [ ] Write `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) with the CIS values, generated from a dict variable.
+- [ ] Install the right package per family (dict lookup). Debian/Ubuntu: refresh the apt package index first (`ansible.builtin.apt` with `update_cache: true`; do not rely on `cache_valid_time`) - the lab images ship an empty index, and its directory looks fresh to `cache_valid_time`.
+- [ ] Write `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) with the CIS values, generated from a dict variable. Create the directory first: Debian and Ubuntu ship without it.
 - [ ] Debian family: `pam_pwquality` appears in `/etc/pam.d/common-password` (installing the package normally enables it - verify, and enable the profile with `pam-auth-update --enable pwquality` only if missing).
 - [ ] Red Hat family: `pam_pwquality` appears in `/etc/pam.d/system-auth`; check `authselect current` and do not edit PAM files directly.
 - [ ] Second run: `changed=0`. Add the tasks to your role as `section5_pam.yml` (tag `pam`).
@@ -54,5 +54,5 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 ## Bonus (optional)
 
 - openSUSE: `pam-config --add --pwquality`. Arch: which PAM file would you change, and why is that riskier?
-- Alpine: no PAM - which mechanism enforces password quality there? (Is it a CIS gap you would document as an exception?)
-- Test it: `sudo -u ansible passwd` is pointless (no password). Create a test user and try `echo 'test:abc' | chpasswd` - does pwquality apply to `chpasswd`? Why not?
+- Alpine: PAM is there, but only for the shadow tools - no password stack, no `pam_pwquality`. Which mechanism enforces password quality there? (Is it a CIS gap you would document as an exception?)
+- Test it: `sudo -u ansible passwd` is pointless (no password). Create a test user and try `echo 'test:abc' | chpasswd` as root - does pwquality apply to `chpasswd`? Compare a Debian and a Red Hat host, and `chpasswd -e` with a ready-made hash.

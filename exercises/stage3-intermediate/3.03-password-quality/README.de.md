@@ -25,14 +25,14 @@ wirklich im Password-Stack stehen, und jede Familie verwaltet PAM anders:
 |---|---|---|
 | Debian | `libpam-pwquality` | `pam-auth-update` (Profile in `/usr/share/pam-configs`) |
 | RedHat | `libpwquality` | `authselect` (`/etc/pam.d/system-auth` nie von Hand bearbeiten) |
-| Suse / Arch / Alpine | verschieden / keins | `pam-config` / manuell / Alpine hat standardmäßig kein PAM |
+| Suse / Arch / Alpine | keins bringt zu Beginn `pam_pwquality` mit | `pam-config` / manuell / Alpine: PAM nur für die shadow-Werkzeuge, kein Passwort-Stack |
 
 Umfang dieser Aufgabe: `debian_family:redhat_family`. Die anderen sind Bonus.
 
 ## Anforderungen
 
-- [ ] Das richtige Paket pro Familie installieren (Dict-Lookup). Debian/Ubuntu: vorher den apt-Paketindex aktualisieren (`ansible.builtin.apt` mit `update_cache: true` und `cache_valid_time`) - die Lab-Images enthalten keinen.
-- [ ] `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) mit den CIS-Werten schreiben, erzeugt aus einer Dict-Variable.
+- [ ] Das richtige Paket pro Familie installieren (Dict-Lookup). Debian/Ubuntu: vorher den apt-Paketindex aktualisieren (`ansible.builtin.apt` mit `update_cache: true`; verlass dich nicht auf `cache_valid_time`) - die Lab-Images enthalten einen leeren Index, und sein Verzeichnis wirkt auf `cache_valid_time` frisch.
+- [ ] `/etc/security/pwquality.conf.d/50-cis.conf` (`root:root`, `0644`) mit den CIS-Werten schreiben, erzeugt aus einer Dict-Variable. Leg vorher das Verzeichnis an: Debian und Ubuntu bringen es nicht mit.
 - [ ] Debian-Familie: `pam_pwquality` steht in `/etc/pam.d/common-password` (die Paketinstallation aktiviert es normalerweise - prüfen und das Profil nur bei Fehlen mit `pam-auth-update --enable pwquality` aktivieren).
 - [ ] Red-Hat-Familie: `pam_pwquality` steht in `/etc/pam.d/system-auth`; `authselect current` prüfen und PAM-Dateien nicht direkt bearbeiten.
 - [ ] Zweiter Lauf: `changed=0`. Die Tasks als `section5_pam.yml` (Tag `pam`) in deine Rolle aufnehmen.
@@ -54,5 +54,5 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 ## Bonus (optional)
 
 - openSUSE: `pam-config --add --pwquality`. Arch: welche PAM-Datei würdest du ändern, und warum ist das riskanter?
-- Alpine: kein PAM - welcher Mechanismus erzwingt dort Passwortqualität? (Ist das eine CIS-Lücke, die du als Ausnahme dokumentieren würdest?)
-- Teste es: `sudo -u ansible passwd` ist sinnlos (kein Passwort). Leg einen Testbenutzer an und probiere `echo 'test:abc' | chpasswd` - greift pwquality bei `chpasswd`? Warum nicht?
+- Alpine: PAM ist da, aber nur für die shadow-Werkzeuge - kein Passwort-Stack, kein `pam_pwquality`. Welcher Mechanismus erzwingt dort Passwortqualität? (Ist das eine CIS-Lücke, die du als Ausnahme dokumentieren würdest?)
+- Teste es: `sudo -u ansible passwd` ist sinnlos (kein Passwort). Leg einen Testbenutzer an und probiere `echo 'test:abc' | chpasswd` als root - greift pwquality bei `chpasswd`? Vergleiche einen Debian- und einen Red-Hat-Host, und `chpasswd -e` mit einem fertigen Hash.

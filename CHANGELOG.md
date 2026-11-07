@@ -222,6 +222,39 @@ MINOR: new features or exercises, PATCH: fixes.
   bonus 2 (Debian drop-in directory vs. RedHat without an include line); new measured facts on
   init times, database paths, the exit code of the unit right after the init, and the timer.
   Rebuild: *none*
+- Exercises 2.04, 2.05 and 2.06 (EN and DE): deeper `EXPLANATION.md` in the same fixed order
+  (what the check verifies and what it does not test, how it works, per-family table, pitfalls
+  with measured facts, real-world notes, further reading with links to the lessons L04, L05 and
+  L06) and a third hint that shows the skeleton of the play instead of only pointing to the
+  solution. 2.04: the README and hint 2 say that rocky and alma have no `/etc/sysctl.d` (the
+  module fails instead of creating it); hint 1 no longer suggests strings (the module takes the
+  value as text); the EXPLANATION drops the claim that OpenRC skips its `sysctl` service inside
+  containers (the lab image does not enable it) and explains, from the module source, when
+  `reload` runs `sysctl -p` on the whole file, that a misspelled key is persisted without an
+  error, and which targets read `/etc/sysctl.d` at start. 2.05: what the allow and deny lists
+  control, which files the daemons skip silently, the shipped `cron.deny` per family (measured
+  for L06). 2.06: what the check does not catch (`\S`, `\l`, `\n`), who shows `issue`,
+  `issue.net` and `motd` on each target (sshd `Banner none` everywhere), the generated message of
+  the day on Debian and Ubuntu, and fedora's symlinked `issue` files. Rebuild: *none*
+- Exercises 3.03, 4.05 and 4.06 (EN and DE): deeper `EXPLANATION.md` in the same fixed order
+  (what the check verifies and what it does not test, how it works, per-family table, pitfalls
+  with measured facts, real-world notes, further reading with links to the lessons L08 and L10)
+  and a third hint that shows the skeleton of the play instead of only pointing to the solution.
+  4.06: the claim that `pam_faillock` denies a locked account in the PAM account phase is
+  corrected - it never denies there, a key login of a locked account succeeds, and on the lab's
+  Red Hat hosts it even cleared the failure records (newer Linux-PAM builds keep them); measured
+  that a second `authselect enable-feature` prints nothing and changes nothing. 3.03: README no
+  longer says Alpine has no PAM (it has PAM for the shadow tools, but no password stack), the apt
+  requirement says not to rely on `cache_valid_time`, the drop-in requirement says to create
+  `pwquality.conf.d` (absent on Debian and Ubuntu), and the `chpasswd` bonus is reworded: as root
+  `chpasswd` goes through `common-password` on Debian/Ubuntu (warning only without
+  `enforce_for_root`, refused with it), not at all on the Red Hat hosts, and a ready-made hash
+  bypasses pwquality everywhere; the EXPLANATION says that the check's PAM assertion is already
+  true on fresh Red Hat hosts. 4.05: when facts are read, that `sshd -T` without root yields
+  `unknown` (accepted by the check), and that `gather_timeout` does not limit executable facts
+  (answer to bonus 2); the AWX/AAP paragraph no longer shows untested filter syntax. 3.02: the
+  README lists the hosts that already default to `YESCRYPT` correctly (also Ubuntu 26.04 and
+  Rocky/Alma 10; openSUSE uses `SHA512`, Alpine has no `ENCRYPT_METHOD` line). Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

@@ -27,6 +27,7 @@ Maschine). Diese Unterscheidung zählt auch in Produktion (Kubernetes, LXC).
 ## Anforderungen
 
 - [ ] Nutze das Modul `ansible.posix.sysctl` (ein Collection-Modul - FQCN!).
+- [ ] Stell vorher sicher, dass `/etc/sysctl.d` existiert: rocky und alma haben es nicht, und das Modul legt es nicht an.
 - [ ] Setze und persistiere diese in `/etc/sysctl.d/60-cis-network.conf` (live angewendet):
   `net.ipv4.ip_forward=0`, `net.ipv4.conf.all.send_redirects=0`, `net.ipv4.conf.default.send_redirects=0`, `net.ipv4.conf.all.accept_redirects=0`, `net.ipv4.conf.default.accept_redirects=0`, `net.ipv4.conf.all.secure_redirects=0`, `net.ipv4.conf.default.secure_redirects=0`, `net.ipv4.conf.all.accept_source_route=0`, `net.ipv4.conf.default.accept_source_route=0`, `net.ipv4.conf.all.log_martians=1`, `net.ipv4.conf.default.log_martians=1`, `net.ipv4.icmp_echo_ignore_broadcasts=1`, `net.ipv4.icmp_ignore_bogus_error_responses=1`, `net.ipv4.conf.all.rp_filter=1`, `net.ipv4.conf.default.rp_filter=1`, `net.ipv4.tcp_syncookies=1`
 - [ ] Nur **persistieren** (nicht anwenden!) in `/etc/sysctl.d/60-cis-kernel.conf`:
