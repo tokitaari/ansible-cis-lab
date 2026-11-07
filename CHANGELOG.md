@@ -177,6 +177,22 @@ MINOR: new features or exercises, PATCH: fixes.
   timeout must stay below the rollback delay, `default_ipv4` needs the network facts, the unit
   texts of `nftables` per family, and bonus questions on `update_password` and running 4.04 on
   Alpine. Rebuild: *none*
+- Exercises 5.02 and 5.03 (EN and DE): deeper `EXPLANATION.md` in the same fixed order (what the
+  check verifies, how it works, per-family table, pitfalls with measured facts, real-world
+  notes, further reading with links to the lessons) and a third hint that shows the skeleton
+  (the three plays of 5.02, the six answers of `review.md` in 5.03) instead of only pointing to
+  the solution. Corrected in 5.02: a percentage in `serial` is a share of the hosts of the play,
+  not of the remaining ones (in the lab the third play has six hosts, so `[1, "30%", "100%"]`
+  gives batches of 1, 1 and 4), `max_fail_percentage: 0` matters only inside a batch with
+  several hosts (strict threshold, share of the batch), and which mounts `ansible_facts.mounts`
+  keeps (devices starting with `/` or `\`, or containing `:/`). New: what `lab check 5.02` and
+  `5.03` verify and what not, what runs per batch, the per-family tool paths and `sshd -T`
+  spelling, a measured example of two ansible-lockdown roles at pinned tags (switches,
+  disruption flag, profiles by tag, audit tooling) and which lab platforms have a matching
+  community role. 5.03: the README no longer asks for a playbook (the exercise writes
+  `review.md`), and `check.sh` names the accepted answer formats correctly (`## 1.`, not
+  `## 1`). L14: one sentence that 30 % is one host in the six-host batch play of 5.02.
+  Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

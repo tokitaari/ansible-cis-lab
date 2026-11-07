@@ -435,8 +435,9 @@ system of `/` as `overlay` with the same capacity.
 
 The eight targets are containers on one Docker host. A broken rollout can only break one container
 at a time, and `./lab.sh reset <host>` restores it. Three things differ from a real fleet. With
-eight hosts, percentages are coarse (10 % is one host, 30 % is two) and `forks` is never the
-limit. `ansible_facts.mounts` has no entry for `/`, and free space is the capacity of the virtual
+eight hosts, percentages are coarse (10 % is one host, 30 % is two; in the six-host batch play of
+[5.02](../../exercises/stage5-capstone/5.02-rollout-strategy/README.md) 30 % is one) and `forks` is
+never the limit. `ansible_facts.mounts` has no entry for `/`, and free space is the capacity of the virtual
 disk of Docker Desktop (see [container limits](../CONTAINER_LIMITS.md)). And a connection check
 only proves the network path of the Docker bridge, not that of a production network.
 

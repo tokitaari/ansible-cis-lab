@@ -38,10 +38,12 @@ against a freshly reset host - never in enforce mode without reading what it doe
 ```bash
 lab start 5.03            # creates /lab/work/5.03/
 cd /lab/work/5.03
-# write playbook.yml, then run it:
-ansible-playbook playbook.yml
-lab check 5.03            # verifies the state
+git clone <role-url>      # the role you picked; read it, do not run it unreviewed
+# write review.md with your six answers, then:
+lab check 5.03            # checks that all six questions are answered
 ```
+
+`lab check` only counts: each answer must start a line with its number (`1.`, `1)`, `1:`, `## 1.` or `Q1:`), and the review needs at least 300 words. Whether it is a good review is for you and someone from your team to judge.
 
 Stuck? `lab hint 5.03 1` (gentle) ... `lab hint 5.03 3` (almost the answer).  
 Passed? Read `lab explain 5.03` - it covers pitfalls and real-world notes.
