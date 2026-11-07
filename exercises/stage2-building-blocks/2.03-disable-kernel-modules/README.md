@@ -19,9 +19,13 @@ crafted USB stick or opening an exotic socket). CIS disables modules that server
 rarely need. Two lines per module:
 
 ```
-install <module> /bin/false   # loading fails
-blacklist <module>            # no automatic loading by alias
+install <module> /bin/false
+blacklist <module>
 ```
+
+The `install` line makes every load of the module fail, the `blacklist` line stops automatic
+loading through the module's aliases. Write the lines without trailing comments - the check
+accepts nothing after `/bin/false`.
 
 **Container note:** all containers share the HOST kernel. In this lab you only
 write the configuration - you must **not** `modprobe -r` anything (that would unload
@@ -53,3 +57,4 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 - Add a list `cis_disabled_modules_l2` (`squashfs`, `udf`, `dccp`, `tipc`, `rds`, `sctp`) and a variable `cis_level` (default 1). Level-2 modules are only handled when `cis_level >= 2`. Hint: `cis_disabled_modules_l1 + (cis_disabled_modules_l2 if cis_level | int >= 2 else [])`.
 - On a real VM you would also unload loaded modules. Write that task, but guard it with `when: not lab_in_container` (variable already defined in the inventory).
 - Why can disabling `squashfs` break Ubuntu systems? (Think: snaps.)
+- After your run, compare `modprobe -n -v cramfs` and `modprobe -n -v usb-storage` on opensuse. Why does one of them not print your rule? (`ls /usr/lib/modprobe.d/`)
