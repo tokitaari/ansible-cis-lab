@@ -25,7 +25,9 @@ CIS 5.4.1 (hier verwendete Werte):
 | Inaktiv-Sperre | `45` Tage (≤ 45) | `useradd -D -f 45` → `/etc/default/useradd` |
 
 Zwei Fallen:
-1. **Nicht abschwächen.** Debian 13, Fedora und Arch nutzen bereits `YESCRYPT`. Das mit
+1. **Nicht abschwächen.** Debian 13, Ubuntu 26.04, Fedora, Rocky/Alma 10 und Arch nutzen bereits
+   `YESCRYPT` (openSUSE: `SHA512` in `/usr/etc/login.defs`; Alpines `login.defs` hat keine
+   `ENCRYPT_METHOD`-Zeile). Das mit
    `SHA512` zu überschreiben wäre *schwächer*. Nur ändern, wenn das aktuelle Verfahren
    keins von beiden ist.
 2. **Vendor-Konfiguration getrennt.** Manche Distributionen (besonders openSUSE)

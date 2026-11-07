@@ -236,6 +236,25 @@ MINOR: new features or exercises, PATCH: fixes.
   for L06). 2.06: what the check does not catch (`\S`, `\l`, `\n`), who shows `issue`,
   `issue.net` and `motd` on each target (sshd `Banner none` everywhere), the generated message of
   the day on Debian and Ubuntu, and fedora's symlinked `issue` files. Rebuild: *none*
+- Exercises 3.03, 4.05 and 4.06 (EN and DE): deeper `EXPLANATION.md` in the same fixed order
+  (what the check verifies and what it does not test, how it works, per-family table, pitfalls
+  with measured facts, real-world notes, further reading with links to the lessons L08 and L10)
+  and a third hint that shows the skeleton of the play instead of only pointing to the solution.
+  4.06: the claim that `pam_faillock` denies a locked account in the PAM account phase is
+  corrected - it never denies there, a key login of a locked account succeeds, and on the lab's
+  Red Hat hosts it even cleared the failure records (newer Linux-PAM builds keep them); measured
+  that a second `authselect enable-feature` prints nothing and changes nothing. 3.03: README no
+  longer says Alpine has no PAM (it has PAM for the shadow tools, but no password stack), the apt
+  requirement says not to rely on `cache_valid_time`, the drop-in requirement says to create
+  `pwquality.conf.d` (absent on Debian and Ubuntu), and the `chpasswd` bonus is reworded: as root
+  `chpasswd` goes through `common-password` on Debian/Ubuntu (warning only without
+  `enforce_for_root`, refused with it), not at all on the Red Hat hosts, and a ready-made hash
+  bypasses pwquality everywhere; the EXPLANATION says that the check's PAM assertion is already
+  true on fresh Red Hat hosts. 4.05: when facts are read, that `sshd -T` without root yields
+  `unknown` (accepted by the check), and that `gather_timeout` does not limit executable facts
+  (answer to bonus 2); the AWX/AAP paragraph no longer shows untested filter syntax. 3.02: the
+  README lists the hosts that already default to `YESCRYPT` correctly (also Ubuntu 26.04 and
+  Rocky/Alma 10; openSUSE uses `SHA512`, Alpine has no `ENCRYPT_METHOD` line). Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 
