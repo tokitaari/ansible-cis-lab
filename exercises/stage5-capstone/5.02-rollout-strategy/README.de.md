@@ -30,7 +30,7 @@ Rollout-Strategie begrenzt den Schadensradius:
 ## Anforderungen
 
 - [ ] Playbook `/lab/work/5.02/rollout.yml`.
-- [ ] Play 1 (alle Targets, `any_errors_fatal: true`): erreichbar, Python vorhanden, `sshd -t` OK, `visudo -c` OK, mindestens 200 MB frei auf `/`, und `cis_rollout_confirm` ist `true` (per `-e` übergeben).
+- [ ] Play 1 (alle Targets, `any_errors_fatal: true`): erreichbar und Python vorhanden (das Fact-Gathering deckt beides ab), `sshd -t` OK, `visudo -c` OK, mindestens 200 MB frei auf `/`, und `cis_rollout_confirm` ist `true` (per `-e` übergeben).
 - [ ] Play 2: Canary-Hosts `debian` und `rocky` (konfigurierbar über `cis_canary`) bekommen die Rolle im Enforce-Modus, danach eine Nachprüfung.
 - [ ] Play 3: alle übrigen Targets, `serial: [1, "30%", "100%"]`, `max_fail_percentage: 0`, Rolle + Nachprüfung pro Welle.
 - [ ] Nachprüfung: eine **neue** SSH-Verbindung funktioniert (`meta: reset_connection` + `wait_for_connection`) und `sshd -T` meldet weiterhin `permitrootlogin no`.
@@ -55,3 +55,4 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 - Ergänze eine Wartungsfenster-Sperre: Abbruch, wenn die aktuelle Stunde (`now().hour`) außerhalb eines konfigurierten Fensters liegt.
 - Benachrichtige pro Welle einen Chat-Kanal (`community.general.slack`/`mattermost`/Teams?). Welche Daten gehören in die Nachricht?
 - Wie sähe das in AWX/AAP aus (Workflow-Template mit Genehmigungsknoten)?
+- Lass einen Host des dritten Plays absichtlich scheitern (eine Variable, die für diesen Host einen Task der Rolle fehlschlagen lässt) und lies das Recap: welche Hosts haben die Nachprüfung trotzdem noch ausgeführt? Wiederhole mit `max_fail_percentage: 100`.

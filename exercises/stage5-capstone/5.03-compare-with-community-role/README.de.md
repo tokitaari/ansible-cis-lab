@@ -39,10 +39,12 @@ lesen, was sie tut.
 ```bash
 lab start 5.03            # legt /lab/work/5.03/ an
 cd /lab/work/5.03
-# playbook.yml schreiben, dann ausführen:
-ansible-playbook playbook.yml
-lab check 5.03            # prüft den Zustand
+git clone <role-url>      # die gewählte Rolle; lies sie, führe sie nicht ungeprüft aus
+# review.md mit deinen sechs Antworten schreiben, dann:
+lab check 5.03            # prüft, dass alle sechs Fragen beantwortet sind
 ```
+
+`lab check` zählt nur: jede Antwort muss eine Zeile mit ihrer Nummer beginnen (`1.`, `1)`, `1:`, `## 1.` oder `Q1:`), und die Review braucht mindestens 300 Wörter. Ob sie gut ist, beurteilst du mit jemandem aus deinem Team.
 
 Festgefahren? `lab hint 5.03 1` (sanft) ... `lab hint 5.03 3` (fast die Lösung).  
 Bestanden? Lies `lab explain 5.03` - dort stehen Stolperfallen und Praxis-Hinweise.

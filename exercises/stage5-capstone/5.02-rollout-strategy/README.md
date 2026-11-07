@@ -30,7 +30,7 @@ blast radius:
 ## Requirements
 
 - [ ] Playbook `/lab/work/5.02/rollout.yml`.
-- [ ] Play 1 (all targets, `any_errors_fatal: true`): reachable, Python present, `sshd -t` OK, `visudo -c` OK, at least 200 MB free on `/`, and `cis_rollout_confirm` is `true` (passed with `-e`).
+- [ ] Play 1 (all targets, `any_errors_fatal: true`): reachable and Python present (fact gathering covers both), `sshd -t` OK, `visudo -c` OK, at least 200 MB free on `/`, and `cis_rollout_confirm` is `true` (passed with `-e`).
 - [ ] Play 2: canary hosts `debian` and `rocky` (configurable `cis_canary`) get the role in enforce mode, then a post-check.
 - [ ] Play 3: all remaining targets, `serial: [1, "30%", "100%"]`, `max_fail_percentage: 0`, role + post-check per batch.
 - [ ] Post-check: a **new** SSH connection works (`meta: reset_connection` + `wait_for_connection`) and `sshd -T` still says `permitrootlogin no`.
@@ -55,3 +55,4 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 - Add a maintenance-window guard: abort if the current hour (`now().hour`) is outside a configured window.
 - Notify a chat channel per batch (`community.general.slack`/`mattermost`/`teams`?). Which data belongs into the message?
 - How would this look in AWX/AAP (workflow template with approval node)?
+- Make one host of the third play fail on purpose (a variable that fails one task of the role for that host) and read the recap: which hosts still ran the post-check? Repeat with `max_fail_percentage: 100`.

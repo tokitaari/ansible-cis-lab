@@ -446,7 +446,9 @@ Kapazität.
 Die acht Targets sind Container auf einem Docker-Host. Ein misslungener Rollout kann immer nur einen
 Container kaputt machen, und `./lab.sh reset <host>` stellt ihn wieder her. Drei Dinge unterscheiden
 sich von einer echten Flotte. Bei acht Hosts sind Prozentwerte grob (10 % ist ein Host, 30 % sind
-zwei) und `forks` ist nie die Grenze. `ansible_facts.mounts` hat keinen Eintrag für `/`, und der
+zwei; im Wellen-Play mit sechs Hosts von
+[5.02](../../exercises/stage5-capstone/5.02-rollout-strategy/README.de.md) ist 30 % ein Host) und
+`forks` ist nie die Grenze. `ansible_facts.mounts` hat keinen Eintrag für `/`, und der
 freie Platz ist die Kapazität der virtuellen Platte von Docker Desktop (siehe
 [Container-Grenzen](../CONTAINER_LIMITS.de.md)). Und ein Verbindungstest beweist nur den Netzweg der
 Docker-Bridge, nicht den eines Produktionsnetzes.
