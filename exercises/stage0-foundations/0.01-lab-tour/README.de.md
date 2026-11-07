@@ -24,7 +24,7 @@ macht. Jedes Härtungsprojekt beginnt mit dieser Frage: *Was verwalte ich, und e
 - [ ] Zeige das Inventar als Baum an (`ansible-inventory --graph`).
 - [ ] Zeige alle Variablen, die Ansible für den Host `debian` kennt (`ansible-inventory --host debian`).
 - [ ] Führe das Modul `ansible.builtin.ping` per Ad-hoc-Kommando gegen alle Targets aus.
-- [ ] Genau ein Host schlägt fehl. Finde heraus welcher und *warum* (Fehlermeldung lesen!). Noch nicht beheben - das ist 0.02.
+- [ ] Genau ein Host schlägt fehl. Finde heraus welcher und *warum* (Fehlermeldung lesen!). Noch nicht beheben - das ist 0.02. (Das gilt auf einem frischen Lab; hast du 0.02 schon gemacht, stellt `./lab.sh reset alpine` auf dem Host den Fehler wieder her.)
 - [ ] Halte deine Erkenntnisse in `/lab/work/0.01/notes.md` fest (wird nicht geprüft).
 
 ## Vorgehen

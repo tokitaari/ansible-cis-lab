@@ -10,4 +10,20 @@ Mach den Befehl in der Shell idempotent: `test -e /usr/bin/python3 || apk add --
 
 ## Hinweis 3
 
-`ansible.builtin.raw: test -e /usr/bin/python3 || { apk add --no-cache python3 && echo INSTALLED; }` + `register: bootstrap` + `changed_when: "'INSTALLED' in bootstrap.stdout"`.
+Das Play als Gerüst - fülle jedes `"..."` aus. Die Markierung darf erst ausgegeben werden, wenn die Installation gelungen ist.
+
+```yaml
+- name: Bootstrap Python on Alpine
+  hosts: alpine_family
+  gather_facts: "..."               # Facts brauchen Python
+  become: "..."                     # apk braucht Root
+  tasks:
+    - name: Install python3 if missing
+      ansible.builtin.raw: "..."    # Guard || { Installation && echo MARKIERUNG; }
+      register: bootstrap
+      changed_when: "..."           # nur wahr, wenn die Markierung in der Ausgabe steht
+    - name: Verify that modules can run now
+      ansible.builtin.ping:
+```
+
+Referenz: `lab solution 0.02`.

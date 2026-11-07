@@ -34,7 +34,7 @@ lab start 0.02            # legt /lab/work/0.02/ an
 cd /lab/work/0.02
 # playbook.yml schreiben, dann ausführen:
 ansible-playbook playbook.yml
-lab check 0.02            # prüft den Zustand und dass ein zweiter Lauf nichts ändert
+lab check 0.02            # prüft den Zustand - führe das Playbook selbst zweimal aus, sein --check-Lauf überspringt raw
 ```
 
 Festgefahren? `lab hint 0.02 1` (sanft) ... `lab hint 0.02 3` (fast die Lösung).  

@@ -10,4 +10,13 @@ Der fehlerhafte Host beschwert sich über den Python-Interpreter. Schau, welche 
 
 ## Hinweis 3
 
-`ansible all -m ansible.builtin.ping` scheitert an `alpine`: es gibt kein `/usr/bin/python3`. `ansible alpine -m ansible.builtin.raw -a 'cat /etc/os-release'` funktioniert, weil `raw` nur einen Befehl per SSH schickt.
+Die Befehle in der Reihenfolge - ersetze jedes `...`. Der `ping`-Fehler nennt den fehlenden Interpreter; `raw` braucht auf dem Ziel kein Python.
+
+```
+ansible-inventory --graph
+ansible-inventory --host ...
+ansible ... -m ansible.builtin.ping
+ansible ... -m ansible.builtin.raw -a '...'
+```
+
+Referenz: `lab solution 0.01`.

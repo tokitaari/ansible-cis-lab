@@ -225,7 +225,9 @@ with the requested one and report:
 
 Run it twice. The first run shows `changed=1` per host, the second `changed=0`: the directory
 already exists with the right owner and mode. That second run is the test every playbook in
-this lab must pass, and `lab check` performs it for you.
+this lab must pass, and `lab check` performs it for you as a `--check` run - which skips tasks
+that cannot predict their effect, such as the `raw` bootstrap of 0.02, so run that playbook
+twice yourself.
 
 Two tools let you look before you leap:
 

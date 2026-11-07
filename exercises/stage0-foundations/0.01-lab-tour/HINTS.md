@@ -10,4 +10,13 @@ The failing host complains about the Python interpreter. Look at which distribut
 
 ## Hint 3
 
-`ansible all -m ansible.builtin.ping` fails on `alpine`: there is no `/usr/bin/python3`. `ansible alpine -m ansible.builtin.raw -a 'cat /etc/os-release'` works because `raw` just sends a command over SSH.
+The commands in order - replace every `...`. The `ping` error names the interpreter that is missing; `raw` needs no Python on the target.
+
+```
+ansible-inventory --graph
+ansible-inventory --host ...
+ansible ... -m ansible.builtin.ping
+ansible ... -m ansible.builtin.raw -a '...'
+```
+
+Reference: `lab solution 0.01`.

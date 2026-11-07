@@ -10,4 +10,38 @@ In Play 2 über `groups['targets']` iterieren und `hostvars[host]['ansible_facts
 
 ## Hinweis 3
 
-Template-Zeile: `{{ h }},{{ f.distribution }},{{ f.distribution_version }},{{ f.os_family }},{{ f.pkg_mgr }},{{ f.service_mgr }},{{ f.python_version }}` innerhalb von `{% for h in groups['targets'] %}{% set f = hostvars[h]['ansible_facts'] %}`.
+Die zwei Plays als Gerüst - fülle jedes `"..."` aus.
+
+```yaml
+- name: Gather facts from all targets
+  hosts: "..."                      # die Hosts, von denen du Facts willst
+  gather_facts: "..."
+  tasks: []
+
+- name: Write the platform report on the control node
+  hosts: "..."                      # der Control-Node
+  gather_facts: false
+  tasks:
+    - name: Ensure the work directory exists
+      ansible.builtin.file:
+        path: "..."                 # das Übungsverzeichnis unter dem Work-Verzeichnis
+        state: directory
+        mode: "0755"
+
+    - name: Render facts.csv
+      ansible.builtin.template:
+        src: "..."                  # templates/facts.csv.j2
+        dest: "..."                 # facts.csv in diesem Verzeichnis
+        mode: "0644"
+```
+
+`templates/facts.csv.j2` ist die Kopfzeile gefolgt von dieser Schleife; jedes `...` ist ein Fact-Schlüssel, das zweite Argument von `get` ist der Platzhalter für einen Host ohne Facts:
+
+```jinja
+{% for h in groups['targets'] | sort %}
+{% set f = hostvars[h]['ansible_facts'] | default({}) %}
+{{ h }},{{ f.get('...', '-') }},{{ f.get('...', '-') }},{{ f.get('...', '-') }},{{ f.get('...', '-') }},{{ f.get('...', '-') }},{{ f.get('...', '-') }}
+{% endfor %}
+```
+
+Referenz: `lab solution 0.03`.
