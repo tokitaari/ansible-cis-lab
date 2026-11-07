@@ -24,7 +24,7 @@ hardening project starts with exactly this question: *what do I manage, and can 
 - [ ] Display the inventory as a tree (`ansible-inventory --graph`).
 - [ ] Show all variables Ansible knows for host `debian` (`ansible-inventory --host debian`).
 - [ ] Run the `ansible.builtin.ping` module against all targets with an ad-hoc command.
-- [ ] Exactly one host fails. Find out which one and *why* (read the error message!). Don't fix it yet - that is 0.02.
+- [ ] Exactly one host fails. Find out which one and *why* (read the error message!). Don't fix it yet - that is 0.02. (This holds on a fresh lab; if you already did 0.02, `./lab.sh reset alpine` on the host restores the failure.)
 - [ ] Write your findings into `/lab/work/0.01/notes.md` (not checked - for you).
 
 ## How to work

@@ -10,13 +10,20 @@ Set `owner`, `group` and `mode`. Write the mode as a *quoted* string: `mode: "06
 
 ## Hint 3
 
+The play as a skeleton - fill in every `"..."`.
+
 ```yaml
-- name: Set SSH warning banner
-  ansible.builtin.copy:
-    dest: /etc/issue.net
-    content: |
-      Authorized access only. Activity on this system is monitored and logged.
-    owner: root
-    group: root
-    mode: "0644"
+- name: Set a neutral SSH warning banner
+  hosts: "..."                      # all targets
+  become: "..."                     # /etc is root's
+  tasks:
+    - name: Write /etc/issue.net without OS information
+      ansible.builtin.copy:
+        dest: "..."
+        content: "..."              # a warning with 'authorized', no escapes, no distribution name
+        owner: "..."
+        group: "..."
+        mode: "..."                 # quoted, four digits
 ```
+
+Reference: `lab solution 0.04`.

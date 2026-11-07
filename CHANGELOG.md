@@ -255,6 +255,22 @@ MINOR: new features or exercises, PATCH: fixes.
   (answer to bonus 2); the AWX/AAP paragraph no longer shows untested filter syntax. 3.02: the
   README lists the hosts that already default to `YESCRYPT` correctly (also Ubuntu 26.04 and
   Rocky/Alma 10; openSUSE uses `SHA512`, Alpine has no `ENCRYPT_METHOD` line). Rebuild: *none*
+- Exercises 0.01, 0.02, 0.03 and 0.04 (EN and DE): deeper `EXPLANATION.md` in the same fixed
+  order (what the check verifies and what it does not test, how it works, per-family table,
+  pitfalls with measured facts, real-world notes, further reading with links to the lesson L00
+  and the documentation) and a third hint that shows the skeleton (the commands of 0.01, the
+  plays of 0.02-0.04, the template loop of 0.03) instead of only giving the answer. 0.02: the
+  idempotency part of `lab check 0.02` runs `--check`, where `raw` is skipped, so it cannot see
+  a missing guard or `changed_when` - the README comment and L00 (EN and DE) now say so and ask
+  for two real runs; measured: what `raw` returns (`\r\n`, no stderr noise), how `become` wraps
+  the command, what the missing index and Python cost on Alpine (14 packages, about 40 MB, not
+  50 MB). 0.01: no longer says that Ansible copies a file to the target (pipelining feeds the
+  module through the SSH session); the README says the failing host appears on a fresh lab only.
+  0.03: a host without facts (failed or unreachable) has an empty `ansible_facts`; the
+  `run_once` variant, a measured facts table, and that a hand-typed file passes the check.
+  0.04: `mode: 644` ends up as `1204`, `copy` replaces fedora's symlinked `issue.net`, sshd
+  sends the banner verbatim, and what the check misses (other escapes, version numbers, another
+  distribution's name, and the shipped "Arch Linux" text). Rebuild: *none*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The

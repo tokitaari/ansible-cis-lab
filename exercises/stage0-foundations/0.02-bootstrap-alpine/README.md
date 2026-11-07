@@ -34,7 +34,7 @@ lab start 0.02            # creates /lab/work/0.02/
 cd /lab/work/0.02
 # write playbook.yml, then run it:
 ansible-playbook playbook.yml
-lab check 0.02            # verifies the state and that a second run changes nothing
+lab check 0.02            # verifies the state - run the playbook twice yourself, its --check run skips raw
 ```
 
 Stuck? `lab hint 0.02 1` (gentle) ... `lab hint 0.02 3` (almost the answer).  

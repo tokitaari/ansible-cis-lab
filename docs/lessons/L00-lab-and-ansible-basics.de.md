@@ -234,7 +234,9 @@ aktuellen mit dem gewünschten Zustand und melden:
 
 Führe es zweimal aus. Der erste Lauf zeigt `changed=1` pro Host, der zweite `changed=0`: Das
 Verzeichnis existiert bereits mit dem richtigen Besitzer und Modus. Dieser zweite Lauf ist der
-Test, den jedes Playbook in diesem Lab bestehen muss, und `lab check` führt ihn für dich aus.
+Test, den jedes Playbook in diesem Lab bestehen muss, und `lab check` führt ihn für dich aus,
+nämlich als `--check`-Lauf - der überspringt Tasks, die ihre Wirkung nicht vorhersagen können,
+etwa den `raw`-Bootstrap aus 0.02; führe dieses Playbook also selbst zweimal aus.
 
 Zwei Werkzeuge lassen dich schauen, bevor du springst:
 
