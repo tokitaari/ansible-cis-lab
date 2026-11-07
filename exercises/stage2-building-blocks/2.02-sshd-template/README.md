@@ -21,10 +21,12 @@ the same code. The target values used in this lab:
 | Setting | Value | Why |
 |---|---|---|
 | `LogLevel` | `VERBOSE` | logs key fingerprints on login |
+| `PermitRootLogin` / `PermitEmptyPasswords` | `no` / `no` | from 1.03 - this file replaces the one of 1.03 |
+| `X11Forwarding` | `no` | `sshd -T` shows it on its own, also with `DisableForwarding yes` |
 | `MaxAuthTries` | `4` | limits brute force per connection |
 | `MaxSessions` / `MaxStartups` | `10` / `10:30:60` | limits resource exhaustion |
 | `LoginGraceTime` | `60` | unauthenticated connections are dropped |
-| `ClientAliveInterval` / `CountMax` | `15` / `3` | idle sessions die after ~45 s of no response |
+| `ClientAliveInterval` / `CountMax` | `15` / `3` | a client that stops answering is dropped after ~45 s |
 | `DisableForwarding` | `yes` | no TCP/agent/X11 forwarding |
 | `IgnoreRhosts` / `HostbasedAuthentication` | `yes` / `no` | no trust relationships |
 | `PermitUserEnvironment` | `no` | users cannot inject `LD_PRELOAD` etc. |
@@ -59,4 +61,4 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 - Before running: which of these settings could lock *you* out? Why is the lab user safe?
 - Use `--diff` to see how the template differs from the 1.03 file.
-- Red Hat systems also have *crypto-policies*. Why do your `Ciphers` still win? (Hint: `cat /etc/ssh/sshd_config.d/50-redhat.conf`)
+- Red Hat systems also have *crypto-policies*. Why do your `Ciphers` still win? (Hint: `ls /etc/ssh/sshd_config.d/`)

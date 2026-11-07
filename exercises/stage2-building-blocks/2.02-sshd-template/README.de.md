@@ -21,6 +21,8 @@ denselben Code zu nutzen. Die Zielwerte in diesem Lab:
 | Einstellung | Wert | Warum |
 |---|---|---|
 | `LogLevel` | `VERBOSE` | protokolliert Schlüssel-Fingerabdrücke beim Login |
+| `PermitRootLogin` / `PermitEmptyPasswords` | `no` / `no` | aus 1.03 - diese Datei ersetzt die aus 1.03 |
+| `X11Forwarding` | `no` | `sshd -T` zeigt es einzeln, auch mit `DisableForwarding yes` |
 | `MaxAuthTries` | `4` | begrenzt Brute Force pro Verbindung |
 | `MaxSessions` / `MaxStartups` | `10` / `10:30:60` | begrenzt Ressourcenerschöpfung |
 | `LoginGraceTime` | `60` | nicht authentifizierte Verbindungen fliegen raus |
@@ -59,4 +61,4 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 - Vor dem Ausführen: Welche dieser Einstellungen könnten *dich* aussperren? Warum ist der Lab-Benutzer sicher?
 - Mit `--diff` ansehen, wie sich das Template von der 1.03-Datei unterscheidet.
-- Red-Hat-Systeme haben zusätzlich *crypto-policies*. Warum gewinnen deine `Ciphers` trotzdem? (Tipp: `cat /etc/ssh/sshd_config.d/50-redhat.conf`)
+- Red-Hat-Systeme haben zusätzlich *crypto-policies*. Warum gewinnen deine `Ciphers` trotzdem? (Tipp: `ls /etc/ssh/sshd_config.d/`)

@@ -24,10 +24,11 @@ sich über den *richtigen* Wert uneinig:
 | RedHat | `root:root` | `0000` |
 | Archlinux | `root:root` | `0600` |
 
-Die Gruppe `shadow` existiert, damit Helfer wie `unix_chkpwd` Passwörter ohne root
-prüfen können. Gruppe `root` auf Debian macht Bildschirmsperren kaputt. CIS akzeptiert
-"Eigentümer root, Gruppe root **oder shadow**, Modus 0640 oder strenger" - die richtige
-Antwort ist also: Konvention der Familie beibehalten.
+Die Gruppe `shadow` existiert, damit Helfer Passwörter ohne root prüfen können: Auf
+Debian, Ubuntu und Alpine ist `unix_chkpwd` setgid `shadow`, Gruppe `root` macht dort also
+Passwortprüfungen von Programmen kaputt, die nicht als root laufen, etwa Bildschirmsperren.
+CIS akzeptiert "Eigentümer root, Gruppe root **oder shadow**, Modus 0640 oder strenger" -
+die richtige Antwort ist also: Konvention der Familie beibehalten.
 
 ## Anforderungen
 
@@ -53,5 +54,5 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 ## Bonus (optional)
 
-- Nimm die Sicherungen `/etc/shadow-` und `/etc/gshadow-` in die Liste auf. Wie viel Code hat das gekostet?
+- Nimm die Sicherungen `/etc/shadow-` und `/etc/gshadow-` in die Liste auf (auf debian, ubuntu, rocky und fedora sind sie zu Beginn für alle lesbar, und der Check sieht sie nicht an). Wie viel Code hat das gekostet?
 - Das Dict nach `/lab/work/2.01/group_vars/...` verschieben? Vorsicht - group_vars neben einem *Playbook* wirken nur für Gruppen. Welche Gruppennamen bräuchtest du?

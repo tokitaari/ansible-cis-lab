@@ -24,8 +24,9 @@ crack them offline. The fix looks trivial, but distributions disagree on the
 | RedHat | `root:root` | `0000` |
 | Archlinux | `root:root` | `0600` |
 
-The `shadow` group exists so that helpers like `unix_chkpwd` can verify passwords
-without root. Setting group `root` on Debian breaks screen lockers. CIS accepts
+The `shadow` group exists so that helpers can verify passwords without root: on Debian,
+Ubuntu and Alpine `unix_chkpwd` is setgid `shadow`, so group `root` there breaks password
+checks by programs that do not run as root, such as screen lockers. CIS accepts
 "owner root, group root **or shadow**, mode 0640 or more restrictive" - so the
 right answer is: keep each family's convention.
 
@@ -53,5 +54,5 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 ## Bonus (optional)
 
-- Add the backup files `/etc/shadow-` and `/etc/gshadow-` to the list. How much code did that cost?
+- Add the backup files `/etc/shadow-` and `/etc/gshadow-` to the list (on debian, ubuntu, rocky and fedora they start world-readable, and the check does not look at them). How much code did that cost?
 - Move the dict into `/lab/work/2.01/group_vars/...`? Careful - group_vars next to a *playbook* only work for groups. Which group names would you need?

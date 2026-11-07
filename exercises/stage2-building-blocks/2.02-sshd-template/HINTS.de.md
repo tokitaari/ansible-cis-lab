@@ -10,4 +10,33 @@ Die Gesamtprüfung ist ein `command: /usr/sbin/sshd -t`-Task mit `changed_when: 
 
 ## Hinweis 3
 
-Funktionierende Reihenfolge: template (Fragment validieren, notify) → `command: sshd -t` (Gesamtkonfiguration) → Handler lädt am Ende neu. Scheitert die Gesamtprüfung, stoppt das Play *vor* dem Reload, und der laufende sshd behält die alte Konfiguration.
+```yaml
+- name: CIS 5.1 - SSH server hardening
+  hosts: "..."
+  become: "..."
+  vars:
+    sshd_max_auth_tries: "..."   # eine Variable pro Wert der README-Tabelle
+    sshd_ciphers: ["..."]        # Listen, im Template verbunden
+  tasks:
+    - name: Deploy sshd hardening drop-in
+      ansible.builtin.template:
+        src: "..."               # die .j2-Datei in templates/
+        dest: "..."
+        owner: root
+        group: root
+        mode: "..."
+        validate: "..."          # sshd prüft das Fragment allein (%s)
+      notify: "..."
+    - name: Validate the complete sshd configuration
+      ansible.builtin.command: "..."   # sshd -t, ohne -f
+      changed_when: "..."
+  handlers:
+    - name: Reload sshd
+      ansible.builtin.service:
+        name: "..."              # ssh auf Debian, sonst sshd
+        state: "..."
+```
+
+Das Template setzt jeden Schlüssel, den der Check prüft - auch `PermitRootLogin`, `PermitEmptyPasswords` und `X11Forwarding`, sonst liefert das Legacy-Drop-in sie. Die Gesamtprüfung läuft vor dem Handler, der am Ende des Plays neu lädt.
+
+Referenz: `lab solution 2.02`.

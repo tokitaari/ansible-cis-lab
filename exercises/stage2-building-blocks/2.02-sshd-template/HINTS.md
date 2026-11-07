@@ -10,4 +10,33 @@ The full-config check is a `command: /usr/sbin/sshd -t` task with `changed_when:
 
 ## Hint 3
 
-Order that works: template (validate fragment, notify) → `command: sshd -t` (whole config) → handler reloads at the end. If the full check fails, the play stops *before* the reload, so the running sshd keeps the old config.
+```yaml
+- name: CIS 5.1 - SSH server hardening
+  hosts: "..."
+  become: "..."
+  vars:
+    sshd_max_auth_tries: "..."   # one variable per value of the README table
+    sshd_ciphers: ["..."]        # lists, joined in the template
+  tasks:
+    - name: Deploy sshd hardening drop-in
+      ansible.builtin.template:
+        src: "..."               # the .j2 file in templates/
+        dest: "..."
+        owner: root
+        group: root
+        mode: "..."
+        validate: "..."          # sshd tests the fragment alone (%s)
+      notify: "..."
+    - name: Validate the complete sshd configuration
+      ansible.builtin.command: "..."   # sshd -t, without -f
+      changed_when: "..."
+  handlers:
+    - name: Reload sshd
+      ansible.builtin.service:
+        name: "..."              # ssh on Debian, sshd elsewhere
+        state: "..."
+```
+
+The template sets every key the check asserts - also `PermitRootLogin`, `PermitEmptyPasswords` and `X11Forwarding`, or the legacy drop-in supplies them. The full check runs before the handler, which reloads at the end of the play.
+
+Reference: `lab solution 2.02`.

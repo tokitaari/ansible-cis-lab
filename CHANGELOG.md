@@ -153,6 +153,14 @@ MINOR: new features or exercises, PATCH: fixes.
   5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
 
 ### Changed
+- Exercises 2.01 and 2.02 (EN and DE): deeper `EXPLANATION.md` with measured facts (check
+  scope, per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."`. 2.01: who needs
+  the group `shadow` (`unix_chkpwd` per family), the backups that start world-readable on four
+  hosts (README bonus 1 says so), no `default` for the lookup. 2.02: the README table now lists
+  `PermitRootLogin`, `PermitEmptyPasswords` and `X11Forwarding` (the check asserts them and the
+  legacy drop-in sets them otherwise), the ClientAlive row and the crypto-policies hint of bonus 3
+  are corrected, and the EXPLANATION says that a failed full `sshd -t` leaves the new file on
+  disk. Rebuild: *none*
 - Exercises 1.01 to 1.05 (EN and DE): deeper `EXPLANATION.md` with measured facts
   (check scope, per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."` instead of
   the full solution. 1.02 README: the `stat` command greps ` mode:`, the lab check wants exactly
