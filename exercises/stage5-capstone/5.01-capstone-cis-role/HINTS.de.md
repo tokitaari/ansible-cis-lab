@@ -6,7 +6,7 @@ Starte von deiner 4.03-Rolle. Verschiebe die Tasks jedes Abschnitts in kleine Da
 
 ## Hinweis 2
 
-`include_tasks` + `apply: {check_mode: "{{ cis_mode == 'audit' }}"}` führt eine ganze Datei im Check-Modus aus. Lesende Tasks behalten `check_mode: false` - Task-Keywords schlagen geerbte. Ein Befund ist ein registriertes Ergebnis mit `changed: true` oder (bei `command`) `msg` 'Command would have run if not in check mode'. Handler brauchen `when: cis_mode == 'enforce'`.
+`include_tasks` + `apply: {check_mode: "{{ ansible_check_mode or cis_mode == 'audit' }}"}` führt eine ganze Datei im Check-Modus aus. Das `or` zählt: `"{{ cis_mode == 'audit' }}"` allein ist beim Enforce `false`, und `false` überschreibt `--check` - der Trockenlauf würde die Ziele ändern (siehe L10). Ein Trockenlauf im Enforce-Modus meldet eine Abweichung als `fail`, nicht als `fixed`. Lesende Tasks behalten `check_mode: false` - Task-Keywords schlagen geerbte. Ein Befund ist ein registriertes Ergebnis mit `changed: true` oder (bei `command`) `msg` 'Command would have run if not in check mode'. Handler brauchen `when: cis_mode == 'enforce'`.
 
 ## Hinweis 3
 

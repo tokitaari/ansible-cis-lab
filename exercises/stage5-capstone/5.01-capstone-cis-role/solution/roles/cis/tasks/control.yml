@@ -15,7 +15,9 @@
   ansible.builtin.include_tasks:
     file: "controls/{{ cis_control.file }}"
     apply:
-      check_mode: "{{ cis_mode == 'audit' }}"
+      # dry run when auditing, and whenever --check is given: a plain
+      # "{{ cis_mode == 'audit' }}" is false when enforcing and overrides --check
+      check_mode: "{{ ansible_check_mode or cis_mode == 'audit' }}"
   when: cis_control_state == 'active'
 
 - name: "Record the result | {{ cis_control.id }}"
@@ -32,7 +34,7 @@
       {{ ns.found }}
     cis_status: >-
       {{ cis_control_state if cis_control_state != 'active'
-         else ('fail' if cis_mode == 'audit' else 'fixed') if cis_noncompliant | bool
+         else ('fail' if ansible_check_mode or cis_mode == 'audit' else 'fixed') if cis_noncompliant | bool
          else 'pass' }}
     cis_reason: >-
       {{ (cis_exceptions | selectattr('id', 'equalto', cis_control.id) | map(attribute='reason') | first)

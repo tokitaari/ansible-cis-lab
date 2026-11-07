@@ -256,6 +256,14 @@ MINOR: new features or exercises, PATCH: fixes.
   README lists the hosts that already default to `YESCRYPT` correctly (also Ubuntu 26.04 and
   Rocky/Alma 10; openSUSE uses `SHA512`, Alpine has no `ENCRYPT_METHOD` line). Rebuild: *none*
 
+### Fixed
+- 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The
+  reference role ran its controls with `apply: {check_mode: "{{ cis_mode == 'audit' }}"}`,
+  which is `false` when enforcing and overrides `--check` - so the idempotency run of
+  `lab check 5.01` was a real enforce run, not a dry run. The keyword is now
+  `ansible_check_mode or cis_mode == 'audit'` (as in L10), and a dry run in enforce mode
+  reports a deviation as `fail` instead of `fixed`. Hint 2 corrected. Rebuild: *none*
+
 ## [1.4.0] - 2026-11-03
 
 ### Added

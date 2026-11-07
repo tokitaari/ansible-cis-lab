@@ -6,7 +6,7 @@ Start from your 4.03 role. Move each section's tasks into small files under `tas
 
 ## Hint 2
 
-`include_tasks` + `apply: {check_mode: "{{ cis_mode == 'audit' }}"}` runs a whole file in check mode. Read-only tasks keep `check_mode: false` - task keywords beat inherited ones. A finding is a registered result with `changed: true` or (for `command`) `msg` 'Command would have run if not in check mode'. Handlers need `when: cis_mode == 'enforce'`.
+`include_tasks` + `apply: {check_mode: "{{ ansible_check_mode or cis_mode == 'audit' }}"}` runs a whole file in check mode. The `or` matters: `"{{ cis_mode == 'audit' }}"` alone is `false` when enforcing, and `false` overrides `--check` - the dry run would change the targets (see L10). A dry run in enforce mode reports a deviation as `fail`, not `fixed`. Read-only tasks keep `check_mode: false` - task keywords beat inherited ones. A finding is a registered result with `changed: true` or (for `command`) `msg` 'Command would have run if not in check mode'. Handlers need `when: cis_mode == 'enforce'`.
 
 ## Hint 3
 
