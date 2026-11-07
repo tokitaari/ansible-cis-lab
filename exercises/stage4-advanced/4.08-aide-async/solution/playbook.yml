@@ -46,7 +46,8 @@
 
     # With poll: 0 the task result only says "job started" - always changed. The module and
     # its creates: run later in the background, too late for the task status. So decide
-    # before starting the job; creates: stays as a guard inside the job.
+    # before starting the job; creates: stays as a last guard inside the job (it does not stop
+    # a second run that starts while the first job is still scanning).
     - name: Look for an existing database
       ansible.builtin.stat:
         path: "{{ cis_aide.db }}"

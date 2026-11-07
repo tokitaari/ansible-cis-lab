@@ -207,6 +207,21 @@ MINOR: new features or exercises, PATCH: fixes.
   `/etc/pam.d` and `faillock`, but no password stack and no pwquality), and measures that a partial
   `vars/Ubuntu.yml` leaves the other flags undefined with the one-file loader. The Ubuntu bonus
   of 4.03 now asks to find that out and to layer the loads. Rebuild: *none*
+- Exercises 3.04 and 4.08 (EN and DE): deeper `EXPLANATION.md` in the same fixed order (what the
+  check verifies and what it does not test, how it works, per-family table, pitfalls with
+  measured facts, real-world notes, further reading with links to the lesson L09) and a third
+  hint that shows the skeleton of the play (tasks list with `"..."`) instead of only pointing to
+  the solution. 3.04: hint 1 corrected (a literal `\n` in a template stays two characters; the
+  check does not notice, `augenrules` does), hint 2 names the case-sensitive check; README: the
+  service sentence (the package install may already enable `auditd` on the RedHat family), the
+  apt requirement (`update_cache: true`, do not rely on `cache_valid_time`) and bonus 1
+  (`augenrules --check`: what it compares, its exit code). 4.08: the claim that `creates:`
+  covers overlapping runs is corrected (it only covers the moment between check and start; a
+  second run during a long scan starts a second scan) in the EXPLANATION, in L09 (EN and DE) and
+  in the comment of `solution/playbook.yml`; `poll` wording based on the L09 measurements;
+  bonus 2 (Debian drop-in directory vs. RedHat without an include line); new measured facts on
+  init times, database paths, the exit code of the unit right after the init, and the timer.
+  Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 
