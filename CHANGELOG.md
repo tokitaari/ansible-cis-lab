@@ -153,11 +153,13 @@ MINOR: new features or exercises, PATCH: fixes.
   5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
 
 ### Changed
-- Exercises 1.01, 1.02 and 1.04 (EN and DE): deeper `EXPLANATION.md` with measured facts
+- Exercises 1.01 to 1.05 (EN and DE): deeper `EXPLANATION.md` with measured facts
   (check scope, per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."` instead of
   the full solution. 1.02 README: the `stat` command greps ` mode:`, the lab check wants exactly
   `0644`; 1.04 README: `vsftpd` is on all eight hosts, a missing service fails only on some
-  hosts. Rebuild: *none*
+  hosts. 1.03 and 1.05 explain what the checks leave
+  untested. L03 (EN and DE): the sudo-rs sentence now says that the lab's Ubuntu image uses the
+  original sudo. Rebuild: *none*
 - Lesson template (`docs/lessons/TEMPLATE(.de).md`), lessons learned from L00: the header lists
   the CIS sections of the lesson's exercises (other ids may appear in the text), examples must
   run unchanged in the lab, exercises link to their README (the template's INDEX link is only a

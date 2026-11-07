@@ -313,7 +313,9 @@ Auf openSUSE liegen die Vendor-Defaults mehrerer Programme unter `/usr/etc`, und
 Datei beschweren, die dir nicht gehört. Auf Ubuntu 26.04 ist der Befehl `sudo` standardmäßig eine
 Rust-Neuimplementierung (sudo-rs), das ursprüngliche sudo ist daneben verfügbar; sie liest dieselben
 sudoers-Dateien, setzt aber nicht jede Option um, und `sudo -V` listet keine Richtlinienwerte auf.
-Schau auf `sudo --version`, bevor du dich auf ein sudo-Feature verlässt.
+Schau auf `sudo --version`, bevor du dich auf ein sudo-Feature verlässt. Das Ubuntu-Image des Labs
+ist anders: Dort ist `sudo` das ursprüngliche sudo 1.9.17p2 (ein Alternatives-Link auf `sudo.ws`),
+die Übungen verhalten sich also wie auf den anderen Hosts.
 
 ### In den Lab-Containern
 

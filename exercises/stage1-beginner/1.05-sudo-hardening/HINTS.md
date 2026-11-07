@@ -11,14 +11,20 @@ Same pattern as 1.03: `copy` + `content` + `validate`. No handler needed - sudo 
 ## Hint 3
 
 ```yaml
-- name: Harden sudo defaults
-  ansible.builtin.copy:
-    dest: /etc/sudoers.d/50-cis
-    content: |
-      Defaults use_pty
-      Defaults logfile="/var/log/sudo.log"
-    owner: root
-    group: root
-    mode: "0440"
-    validate: /usr/sbin/visudo -cf %s
+- name: Harden sudo
+  hosts: "..."                   # every target
+  become: "..."                  # writing to /etc/sudoers.d needs root
+  tasks:
+    - name: Deploy sudo defaults
+      ansible.builtin.copy:
+        dest: "..."              # a file name without a dot
+        content: |
+          Defaults ...
+          Defaults logfile="..."
+        owner: "..."
+        group: "..."
+        mode: "..."              # quoted; sudoers files are read-only
+        validate: "..."          # visudo -cf %s
 ```
+
+Reference: `lab solution 1.05`.
