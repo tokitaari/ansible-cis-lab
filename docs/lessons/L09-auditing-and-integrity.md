@@ -425,7 +425,9 @@ was not created in a test on a fresh host). The play is not idempotent, and a ch
 a second time will say so. The cause tells the way out: the decision "do we need this job at
 all?" has to be made **before** the job starts, by a task that runs in the foreground and has an
 honest `changed` of its own. What that task is, is the part of 4.08 that is yours to build.
-`creates:` stays useful as a guard *inside* the job, for the case that two runs overlap.
+`creates:` stays as a guard *inside* the job, but it only covers the moment between the check
+and the start of the job: while a long job runs, the file does not exist yet, so a second run
+that starts then starts a second job (in a test with a stand-in job, both jobs ran).
 
 Remove the marker and the job file with `rm -f /tmp/lesson09-marker /tmp/lesson09-job.txt`.
 

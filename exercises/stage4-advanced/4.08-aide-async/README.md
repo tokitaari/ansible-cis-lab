@@ -49,5 +49,5 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 ## Bonus (optional)
 
 - Debian ships its own `dailyaidecheck.timer`. Would you use it instead? What would you have to verify?
-- Exclude volatile paths (`/var/log`, `/var/cache`) with a drop-in instead of editing the main config.
+- Exclude volatile paths (`/var/log`, `/var/cache`). Debian's `aide.conf` reads drop-ins from `/etc/aide/aide.conf.d`, while `/etc/aide.conf` of the RedHat family has no include line. What do you do there, and which file names does the Debian directory accept?
 - What happens to the AIDE baseline after every patch run? How do you integrate `aide --update` into your patching playbook?

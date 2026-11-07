@@ -21,9 +21,10 @@ because it teaches a very important lesson about containers.
 
 The kernel audit subsystem is **not namespaced**. Loading rules (`augenrules --load`,
 `auditctl`) or starting `auditd` in a privileged container affects your *host* and
-all other containers. So in this lab you only *configure*; the service stays off
-(guard: `lab_in_container`). On a VM or bare metal the same role would also enable
-and start the service.
+all other containers. So in this lab you only *configure*; the exercise never enables or
+starts the service (guard: `lab_in_container`). Whether the package install already does
+depends on the distribution (on the RedHat family it enabled `auditd` and tried to start it,
+see lesson L09). On a VM or bare metal the same role would also enable and start the service.
 
 Rules (one file per topic in `/etc/audit/rules.d/50-cis-<topic>.rules`):
 scope (sudoers), user_emulation (sudo/su as other user), sudo_log, time_change,
@@ -32,7 +33,7 @@ identity (account files, PAM, nsswitch), logins - plus `99-cis-finalize.rules` w
 
 ## Requirements
 
-- [ ] Package per family: Debian `auditd`, all others `audit`. Debian/Ubuntu: refresh the apt package index first (`ansible.builtin.apt` with `update_cache: true` and `cache_valid_time`) - the lab images ship without one.
+- [ ] Package per family: Debian `auditd`, all others `audit`. Debian/Ubuntu: refresh the apt package index first (`ansible.builtin.apt` with `update_cache: true`; do not rely on `cache_valid_time`) - the lab images ship an empty index, and its directory looks fresh to `cache_valid_time`.
 - [ ] The rules come from **one** dict variable (topic → list of rule lines); one templated task with a loop writes `50-cis-<topic>.rules` (`root:root`, `0640`). Copy the rule list from `lab solution 3.04` if you do not want to type it - the exercise is about the structure.
 - [ ] `99-cis-finalize.rules` contains exactly `-e 2`.
 - [ ] `/etc/audit/auditd.conf`: `max_log_file_action = keep_logs`, `space_left_action = email`, `action_mail_acct = root`, `admin_space_left_action = single`.
@@ -55,6 +56,6 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 ## Bonus (optional)
 
-- `augenrules --check` compares rules.d with the loaded rules. Why is it pointless here?
+- Run `augenrules --check` after the exercise. What does it compare, what does it print, what is its exit code - and why does it report a change although nothing is wrong?
 - Add the `perm_mod` rules (chmod/chown/setxattr family with `-F auid>=1000`). Why `auid` and not `uid`?
 - On aarch64 hosts (Apple Silicon), is `-F arch=b64` still correct? What about `b32`?

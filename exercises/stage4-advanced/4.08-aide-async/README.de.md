@@ -49,5 +49,5 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 ## Bonus (optional)
 
 - Debian liefert einen eigenen `dailyaidecheck.timer`. Würdest du ihn stattdessen nutzen? Was müsstest du prüfen?
-- Flüchtige Pfade (`/var/log`, `/var/cache`) per Drop-in ausschließen statt die Hauptkonfiguration zu bearbeiten.
+- Schließe flüchtige Pfade (`/var/log`, `/var/cache`) aus. Die `aide.conf` von Debian liest Drop-ins aus `/etc/aide/aide.conf.d`, die `/etc/aide.conf` der RedHat-Familie hat keine Include-Zeile. Was tust du dort, und welche Dateinamen akzeptiert das Debian-Verzeichnis?
 - Was passiert mit der AIDE-Baseline nach jedem Patchlauf? Wie baust du `aide --update` in dein Patch-Playbook ein?

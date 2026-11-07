@@ -22,8 +22,10 @@ eine sehr wichtige Lektion über Container lehrt.
 Das Audit-Subsystem des Kernels ist **nicht namespaced**. Regeln laden
 (`augenrules --load`, `auditctl`) oder `auditd` in einem privilegierten Container zu
 starten, betrifft deinen *Host* und alle anderen Container. Im Lab *konfigurierst* du
-daher nur; der Dienst bleibt aus (Schutz: `lab_in_container`). Auf einer VM oder
-Hardware würde dieselbe Rolle den Dienst auch aktivieren und starten.
+daher nur; die Übung aktiviert oder startet den Dienst nie (Schutz: `lab_in_container`). Ob
+die Paketinstallation das schon tut, hängt von der Distribution ab (auf der RedHat-Familie hat sie
+`auditd` aktiviert und einen Start versucht, siehe Lektion L09). Auf einer VM oder Hardware würde
+dieselbe Rolle den Dienst auch aktivieren und starten.
 
 Regeln (eine Datei pro Thema in `/etc/audit/rules.d/50-cis-<thema>.rules`):
 scope (sudoers), user_emulation (sudo/su als anderer Benutzer), sudo_log, time_change,
@@ -32,7 +34,7 @@ identity (Kontodateien, PAM, nsswitch), logins - plus `99-cis-finalize.rules` mi
 
 ## Anforderungen
 
-- [ ] Paket je Familie: Debian `auditd`, alle anderen `audit`. Debian/Ubuntu: vorher den apt-Paketindex aktualisieren (`ansible.builtin.apt` mit `update_cache: true` und `cache_valid_time`) - die Lab-Images enthalten keinen.
+- [ ] Paket je Familie: Debian `auditd`, alle anderen `audit`. Debian/Ubuntu: vorher den apt-Paketindex aktualisieren (`ansible.builtin.apt` mit `update_cache: true`; verlass dich nicht auf `cache_valid_time`) - die Lab-Images enthalten einen leeren Index, und sein Verzeichnis wirkt auf `cache_valid_time` frisch.
 - [ ] Die Regeln stammen aus **einer** Dict-Variable (Thema → Liste von Regelzeilen); ein templatebasierter Task mit Schleife schreibt `50-cis-<thema>.rules` (`root:root`, `0640`). Kopiere die Regelliste aus `lab solution 3.04`, wenn du sie nicht abtippen willst - es geht um die Struktur.
 - [ ] `99-cis-finalize.rules` enthält genau `-e 2`.
 - [ ] `/etc/audit/auditd.conf`: `max_log_file_action = keep_logs`, `space_left_action = email`, `action_mail_acct = root`, `admin_space_left_action = single`.
@@ -55,6 +57,6 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 ## Bonus (optional)
 
-- `augenrules --check` vergleicht rules.d mit den geladenen Regeln. Warum ist das hier sinnlos?
+- Führe `augenrules --check` nach der Übung aus. Was vergleicht es, was gibt es aus, was ist sein Exit-Code - und warum meldet es eine Änderung, obwohl nichts falsch ist?
 - Ergänze die `perm_mod`-Regeln (chmod/chown/setxattr-Familie mit `-F auid>=1000`). Warum `auid` und nicht `uid`?
 - Ist `-F arch=b64` auf aarch64-Hosts (Apple Silicon) noch richtig? Und `b32`?

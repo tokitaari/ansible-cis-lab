@@ -445,7 +445,9 @@ Das Play ist nicht idempotent, und ein Prüfer, der ein zweites Mal läuft, wird
 Ursache zeigt den Ausweg: Die Entscheidung „brauchen wir diesen Job überhaupt?" muss **vor** dem
 Start des Jobs fallen, von einer Task, die im Vordergrund läuft und ein ehrliches eigenes
 `changed` hat. Was diese Task ist, ist der Teil von 4.08, den du selbst baust. `creates:` bleibt
-nützlich als Wächter *im* Job, falls zwei Läufe sich überschneiden.
+als Wächter *im* Job, deckt aber nur den Moment zwischen Prüfung und Start des Jobs ab: solange
+ein langer Job läuft, existiert die Datei noch nicht, ein zweiter Lauf, der dann startet, startet
+also einen zweiten Job (in einem Test mit einem Stellvertreter-Job liefen beide).
 
 Entferne den Marker und die Job-Datei mit `rm -f /tmp/lesson09-marker /tmp/lesson09-job.txt`.
 
