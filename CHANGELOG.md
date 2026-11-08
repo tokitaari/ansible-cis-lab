@@ -325,6 +325,15 @@ MINOR: new features or exercises, PATCH: fixes.
   0.04: `mode: 644` ends up as `1204`, `copy` replaces fedora's symlinked `issue.net`, sshd
   sends the banner verbatim, and what the check misses (other escapes, version numbers, another
   distribution's name, and the shipped "Arch Linux" text). Rebuild: *none*
+- 2.03, 3.01, 4.02, 4.03 and 5.01: the reference solutions write the module rules to
+  `/etc/modprobe.d/00-cis-<module>.conf` instead of `cis-<module>.conf`, and the 2.03 check (also
+  run by the checks of 3.01, 4.03 and 5.01) expects that name - **rename the `dest` of your own
+  playbooks and roles**. The check also asks kmod which rule applies (`modprobe --show-depends
+  <module>` on every target but alpine, whose BusyBox ignores `install`) and, with
+  `-e cis_level=2`, checks the six Level 2 modules too. Old `cis-<module>.conf` files on the
+  targets are harmless (`00-cis-` sorts first); `./lab.sh reset all` removes them. 2.03 README
+  (requirement, bonus questions), hint 3 and EXPLANATION, the 3.01 EXPLANATION and the 4.02 hint
+  are updated. Rebuild: *none*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The
@@ -346,6 +355,22 @@ MINOR: new features or exercises, PATCH: fixes.
   `include_vars` of the role is tagged `always`: any `--tags` selection failed at the apt index
   task (`cis_apt_cache_refresh` undefined) and is now a harmless no-op - select controls with
   `cis_controls_only`. EXPLANATION updated. Rebuild: *none*
+- openSUSE: the module rules of 2.03, 3.01, 4.02, 4.03 and 5.01 did not apply to `cramfs`,
+  `freevxfs`, `hfs`, `hfsplus` and `jffs2`. The vendor files
+  `/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf` sort before `cis-...`, and their `install`
+  line (`unblacklist`, which does nothing without a terminal, then `modprobe --ignore-install`)
+  loads the module; the check read only the files and passed. With the `00-cis-` names (see
+  *Changed*) `install /bin/false` applies on all seven kmod targets, and the check fails when
+  another file wins. Rebuild: *none*
+- Lesson L05 (EN and DE): self-check question 5 assumed that `modprobe -n -v` prints
+  `install /bin/false` for a module that `lsmod` lists. kmod's dry run prints nothing for a
+  module the kernel has loaded already (measured on the seven kmod targets with a module of the
+  host kernel), so the question now starts from that output and the answer points to
+  `modprobe --show-depends`. A pitfall row says the same, the openSUSE paragraph names the
+  `00-...` file name and `--show-depends`, and `modprobe -c` is described as the merged
+  configuration in reading order, not the effective one (it lists every `install` line). The
+  catalogue note of control 1.1.1 in `cis/controls.yml` mentions the openSUSE vendor rules.
+  Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

@@ -19,7 +19,7 @@
   tasks:
     - name: Disable kernel module
       ansible.builtin.copy:
-        dest: "..."              # eine Datei pro Modul, benannt nach dem Schleifenelement
+        dest: "..."              # /etc/modprobe.d/00-cis-<modul>.conf, eine pro Schleifenelement
         content: "..."           # die zwei Zeilen install und blacklist, z. B. als Blockskalar |
         owner: root
         group: root

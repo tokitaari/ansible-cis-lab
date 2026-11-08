@@ -177,7 +177,9 @@ Schlüsselwörter zählen hier:
   lädt es **trotzdem**.
 
 Du siehst das, ohne etwas zu laden: `modprobe -n -v` macht einen Probelauf, `modprobe -c` gibt
-die wirksame Konfiguration aus. Bei einem vorhandenen Modul lauten die drei Fälle:
+die zusammengeführte Konfiguration in der Reihenfolge aus, in der kmod sie liest (von mehreren
+`install`-Zeilen für einen Namen gilt die erste). Bei einem vorhandenen, nicht geladenen Modul
+lauten die drei Fälle:
 
 | Konfiguration | `modprobe -n -v <Modul>` gibt aus |
 |---|---|
@@ -311,10 +313,13 @@ es): Eine `install`-Zeile wird ignoriert, und `blacklist` greift für einen einf
 `-b`. Eine für kmod geschriebene Regeldatei wird dort korrekt *abgelegt*, aber BusyBox *setzt*
 ihre `install`-Zeile nicht *durch*.
 openSUSE liefert für viele selten genutzte Dateisysteme eigene `install`-Zeilen mit
-(`/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf`). kmod liest die zusammengeführten Verzeichnisse
-in der Reihenfolge der Dateinamen und nimmt die erste `install`-Zeile für ein Modul, deine Regel in
-einer später sortierten Datei gilt dort also nicht - `modprobe -n -v` zeigt, welche gilt (gemessen
-auf opensuse). Minimale Images enthalten nicht immer `/etc/sysctl.d`:
+(`/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf`), und die laden das Modul, wenn der Kernel danach
+fragt. kmod liest die zusammengeführten Verzeichnisse in der Byte-Reihenfolge der Dateinamen und
+nimmt die erste `install`-Zeile für ein Modul, deine Regel in einer später sortierten Datei gilt
+dort also nicht, ein Name wie `00-...` sortiert dagegen zuerst (gemessen auf opensuse).
+`modprobe --show-depends <modul>` zeigt die geltende Zeile - auch für ein Modul, das der Kernel
+schon geladen hat und für das `modprobe -n -v` nichts ausgibt (gemessen auf den sieben
+kmod-Targets). Minimale Images enthalten nicht immer `/etc/sysctl.d`:
 rocky und alma liefern es nicht mit, lege das Verzeichnis zuerst an, sonst scheitert das
 Schreiben mit `No such file or directory` (das Beispiel oben tut das). `/etc/modprobe.d` gibt
 es auf allen acht Targets.
@@ -339,6 +344,7 @@ es auf allen acht Targets.
 | Ein Modul mit nur einer `blacklist`-Zeile wird trotzdem geladen | `blacklist` wirkt nur mit `modprobe -b`; ein einfaches `modprobe <Name>` ignoriert es | `install <Modul> /bin/false` ergänzen; mit `modprobe -n -v` prüfen |
 | `Error running install command '/bin/false'` | die Regel funktioniert; du hast ein echtes `modprobe` ausgeführt | mit `modprobe -n -v` oder `-c` prüfen, nicht zum Testen laden |
 | `modprobe -n -v <Modul>` meldet, das Modul sei nicht gefunden | kein Modulverzeichnis im Container und noch keine Regel | erwartet; sobald die Regel existiert, lautet die Ausgabe `install ...` |
+| `modprobe -n -v <Modul>` gibt nichts aus und endet mit 0 | der (Host-)Kernel hat das Modul schon geladen, der Probelauf bricht also ab, bevor er `install` liest | `modprobe --show-depends <Modul>` zeigt die Regel trotzdem |
 | `lsmod` listet das Modul trotz Regel | es war vorher geladen, ist fest eingebaut oder kam aus dem initramfs | eine Regel stoppt *neue* Ladevorgänge; auf einem echten Host entladen, initramfs neu bauen |
 | Andere Schlüssel der Datei haben sich auch geändert | `reload` ist standardmäßig `true` und führt `sysctl -p <Datei>` für die ganze Datei aus | `reload: false`, oder jede Zeile der Datei kennen |
 | `cannot stat /proc/sys/kernel/yama/ptrace_scope` | `sysctl_set: true` bei einem Schlüssel, den der laufende Kernel nicht hat (hier: kein Yama) | nur die Datei schreiben oder `ignoreerrors: true`; pro Schlüssel entscheiden |
@@ -401,15 +407,17 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
    </details>
 
-5. `modprobe -n -v foo` gibt `install /bin/false` aus, und `lsmod` listet `foo` trotzdem. Ist die
+5. `modprobe -n -v foo` gibt nichts aus und endet mit 0, und `lsmod` listet `foo`. Ist die
    Regel kaputt?
 
    <details><summary>Antwort</summary>
 
-   Nein. Der Probelauf zeigt, was *künftige* Ladevorgänge tun. Ein bereits geladenes Modul bleibt
-   geladen, bis es entladen wird, und es kann aus dem initramfs stammen, dessen Kopie der
-   Konfiguration sich nur mit einem Neubau ändert. Auf einem echten Host entlädst du es
-   (`community.general.modprobe`, `state: absent`); im Lab tust du das nie.
+   Nicht nach dieser Ausgabe. Bei einem Modul, das der Kernel schon geladen hat, bricht der
+   Probelauf ab, bevor er `install` liest; `modprobe --show-depends foo` zeigt die Regel, auf die
+   künftige Ladevorgänge treffen. Ein geladenes Modul bleibt geladen, bis es entladen wird, und es
+   kann aus dem initramfs stammen, dessen Kopie der Konfiguration sich nur mit einem Neubau
+   ändert. Auf einem echten Host entlädst du es (`community.general.modprobe`, `state: absent`);
+   im Lab tust du das nie.
 
    </details>
 

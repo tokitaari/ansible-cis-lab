@@ -19,7 +19,8 @@ earlier playbooks pass even if the role does little. The README's "one run on fr
 is the real test - run `./lab.sh reset all` and 0.02 first. Measured with the reference role on
 freshly reset hosts: all twelve checks `ok` after one run, the second run `changed=0`,
 `lab check 3.01` passed. The limits of each single check stay (see the EXPLANATIONs of 0.04-2.06);
-the role writes `cis-<module>.conf` like 2.03, so the openSUSE vendor rules win here too.
+the role writes `00-cis-<module>.conf` like 2.03, and the 2.03 check also asks kmod which rule
+applies, with `-e cis_level=2` for the Level 2 modules too.
 
 ### How it works
 

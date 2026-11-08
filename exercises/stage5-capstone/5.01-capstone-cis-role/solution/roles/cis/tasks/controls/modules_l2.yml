@@ -10,7 +10,7 @@
 
 - name: 1.1.1-L2 | Disable Level 2 kernel modules
   ansible.builtin.copy:
-    dest: "/etc/modprobe.d/cis-{{ item }}.conf"
+    dest: "/etc/modprobe.d/00-cis-{{ item }}.conf"
     content: |
       install {{ item }} /bin/false
       blacklist {{ item }}

@@ -25,7 +25,8 @@ blacklist <module>
 
 The `install` line makes every load of the module fail, the `blacklist` line stops automatic
 loading through the module's aliases. Write the lines without trailing comments - the check
-accepts nothing after `/bin/false`.
+accepts nothing after `/bin/false`. On the hosts with kmod (all but alpine) it also asks
+`modprobe --show-depends <module>` whether your `install` line is the one that applies.
 
 **Container note:** all containers share the HOST kernel. In this lab you only
 write the configuration - you must **not** `modprobe -r` anything (that would unload
@@ -34,7 +35,7 @@ modules from your host). Read `docs/CONTAINER_LIMITS.md`.
 ## Requirements
 
 - [ ] Variable `cis_disabled_modules_l1`: `cramfs`, `freevxfs`, `hfs`, `hfsplus`, `jffs2`, `usb-storage`.
-- [ ] One file per module: `/etc/modprobe.d/cis-<module>.conf`, content exactly the two lines above, `root:root`, `0644`.
+- [ ] One file per module: `/etc/modprobe.d/00-cis-<module>.conf`, content exactly the two lines above, `root:root`, `0644`. The `00-` makes the file sort before the vendor rule files, so your `install` line is the one that applies.
 - [ ] Use a single task with `loop`.
 - [ ] No `modprobe -r`, no `rmmod`.
 
@@ -54,7 +55,7 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 
 ## Bonus (optional)
 
-- Add a list `cis_disabled_modules_l2` (`squashfs`, `udf`, `dccp`, `tipc`, `rds`, `sctp`) and a variable `cis_level` (default 1). Level-2 modules are only handled when `cis_level >= 2`. Hint: `cis_disabled_modules_l1 + (cis_disabled_modules_l2 if cis_level | int >= 2 else [])`.
+- Add a list `cis_disabled_modules_l2` (`squashfs`, `udf`, `dccp`, `tipc`, `rds`, `sctp`) and a variable `cis_level` (default 1). Level-2 modules are only handled when `cis_level >= 2`. Hint: `cis_disabled_modules_l1 + (cis_disabled_modules_l2 if cis_level | int >= 2 else [])`. `lab check 2.03 -e cis_level=2` then checks the Level 2 files too.
 - On a real VM you would also unload loaded modules. Write that task, but guard it with `when: not lab_in_container` (variable already defined in the inventory).
 - Why can disabling `squashfs` break Ubuntu systems? (Think: snaps.)
-- After your run, compare `modprobe -n -v cramfs` and `modprobe -n -v usb-storage` on opensuse. Why does one of them not print your rule? (`ls /usr/lib/modprobe.d/`)
+- Why does the file name start with `00-`? On opensuse, rename `00-cis-cramfs.conf` to `cis-cramfs.conf` and compare `modprobe -n -v cramfs` before and after (`ls /usr/lib/modprobe.d/`). Run your playbook again afterwards.

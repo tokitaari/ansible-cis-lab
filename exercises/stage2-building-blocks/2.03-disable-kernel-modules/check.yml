@@ -4,11 +4,13 @@
   become: true
   gather_facts: false
   vars:
-    modules: [cramfs, freevxfs, hfs, hfsplus, jffs2, usb-storage]
+    modules_l1: [cramfs, freevxfs, hfs, hfsplus, jffs2, usb-storage]
+    modules_l2: [squashfs, udf, dccp, tipc, rds, sctp]
+    modules: "{{ modules_l1 + (modules_l2 if cis_level | default(1) | int >= 2 else []) }}"
   tasks:
     - name: Read modprobe.d files
       ansible.builtin.slurp:
-        src: "/etc/modprobe.d/cis-{{ item }}.conf"
+        src: "/etc/modprobe.d/00-cis-{{ item }}.conf"
       loop: "{{ modules }}"
       register: files
       failed_when: false
@@ -20,8 +22,36 @@
         that:
           - text is search('(?m)^install\s+' ~ item.item ~ '\s+/(usr/)?bin/false\s*$')
           - text is search('(?m)^blacklist\s+' ~ item.item ~ '\s*$')
-        fail_msg: "/etc/modprobe.d/cis-{{ item.item }}.conf missing or incomplete"
+        fail_msg: "/etc/modprobe.d/00-cis-{{ item.item }}.conf missing or incomplete"
         quiet: true
       loop: "{{ files.results }}"
       loop_control:
         label: "{{ item.item }}"
+
+    - name: Which modprobe runs here (kmod applies install lines, BusyBox ignores them)
+      ansible.builtin.command: modprobe -V
+      register: modprobe_version
+      changed_when: false
+      failed_when: false
+
+    - name: The rule in effect (kmod only)
+      when: modprobe_version.stdout is search('^kmod')
+      block:
+        - name: Ask kmod which install line applies (--show-depends also answers for loaded modules)
+          ansible.builtin.command: "modprobe --show-depends {{ item }}"
+          loop: "{{ modules }}"
+          register: effective
+          changed_when: false
+          failed_when: false
+
+        - name: Your install line is the one kmod uses
+          vars:
+            first: "{{ (item.stdout_lines + item.stderr_lines) | first | default('nothing') }}"
+          ansible.builtin.assert:
+            that:
+              - first is match('install\s+/(usr/)?bin/false\s*$')
+            fail_msg: "kmod uses '{{ first }}' for {{ item.item }}: an earlier-sorted file in /etc, /run or /usr/lib/modprobe.d wins"
+            quiet: true
+          loop: "{{ effective.results }}"
+          loop_control:
+            label: "{{ item.item }}"
