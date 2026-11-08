@@ -107,6 +107,7 @@ leaves the pam-config work to the 3.03 bonus).
 | a version file for arch is never used twice | rolling release, the "major version" is the image date | use the distribution or family file |
 | the check is green although a task compares `os_family \| lower == ...` | the `grep` stops at a pipe | use a flag; the check only supports your review |
 | `interpreter /usr/bin/python3 not found` on alpine | no Python before the bootstrap | the pre-play of `site.yml`, or `lab solve 0.02 -y` |
+| `--check -e cis_level=2` on a fresh host fails in 6.3: `Destination /etc/audit/auditd.conf does not exist` (7 of 8, not arch) | `lineinfile` edits a file that only the package install creates, and a dry run installs nothing | apply once, then `--check`; the 5.01 role guards this case |
 
 ### Real-world notes
 - Where a capability can be probed on the host (a command exists or not), probing beats a

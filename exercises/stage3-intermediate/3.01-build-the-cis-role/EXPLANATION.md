@@ -67,12 +67,15 @@ Without the tag, `--tags ssh` writes the drop-in (`changed`), then the handler f
 tag `always` (ansible-core source), so on debian the drop-in changed (`changed=1`), no handler ran
 and nothing failed (measured).
 
-Tags skip helper tasks too. In the reference role `Ensure /etc/sysctl.d exists` carries only
-`section3`; `ansible-playbook site.yml --tags sysctl` on freshly reset rocky and alma, which have no
-`/etc/sysctl.d`, ends with `failed=1` (measured): `ansible.posix.sysctl` does not create the
-directory (`No such file or directory`, session test). Give helper tasks the topic tag too, or
-`always`. `Ensure /etc/modprobe.d exists` (`section1` only) does no harm in the lab: the directory
-exists on all eight hosts (2.03).
+Tags skip helper tasks too: `--tags sysctl` runs only tasks that carry the tag, and
+`ansible.posix.sysctl` does not create its directory (`No such file or directory`, session test).
+The reference role therefore tags both directory helpers with their topic (`Ensure /etc/sysctl.d
+exists` with `sysctl`, `Ensure /etc/modprobe.d exists` with `modules`). `--tags sysctl` on freshly
+reset rocky and alma, which have no `/etc/sysctl.d`, creates it and ends with `failed=0`
+(measured; with the helper untagged it ended with `failed=1`). `always` would be wrong for such
+helpers: they would create the directory under every `--tags` selection. `/etc/modprobe.d`
+exists on all eight hosts (2.03); the `modules` tag matters for hosts without it (a `--tags
+modules` run failed there in a session test).
 
 #### What `ansible-lint --profile moderate` catches
 Measured by changing one thing at a time in the reference role (ansible-lint 26.10.1):
@@ -94,7 +97,7 @@ it again (`changed=0`). Molecule automates the same loop.
 | os_family | Platform file (sshd / cron service, `cron.allow`, shadow) | Run 1 on fresh hosts | Note |
 |---|---|---|---|
 | Debian | `ssh` / `cron`, yes, `shadow` `0640` | `changed=13` | - |
-| RedHat | `sshd` / `crond`, yes, `root` `0000` | `changed=15` (rocky, alma), `14` (fedora) | rocky, alma: `--tags sysctl` fails on fresh hosts |
+| RedHat | `sshd` / `crond`, yes, `root` `0000` | `changed=15` (rocky, alma), `14` (fedora) | rocky, alma: no `/etc/sysctl.d` at start, `--tags sysctl` creates it |
 | Suse | `sshd` / `cron`, yes, `shadow` `0640` | `changed=14` | vendor modprobe rules win (2.03) |
 | Alpine | `sshd` / `crond`, no (the spool `/etc/crontabs` instead), `shadow` `0640` | `changed=11`, `skipped=3` | needs 0.02 first |
 | Archlinux | `sshd` / `cronie`, yes, `root` `0600` | `changed=13` | - |
@@ -106,7 +109,7 @@ Second run: `changed=0` on all eight (measured).
 |---|---|---|
 | `'cis_sshd_service' is undefined` in the handler under `--tags ssh` | `include_vars` task not tagged `always` | tag it `always` |
 | Drop-in changed, no handler ran, no error | `--skip-tags always` also skips the implicit handler flush | do not skip `always` |
-| `--tags sysctl` fails on rocky/alma: `No such file or directory` | the directory task has no `sysctl` tag | topic tag (or `always`) on helper tasks |
+| `--tags sysctl` fails on a host without `/etc/sysctl.d`: `No such file or directory` | the directory helper task has no `sysctl` tag (your own role) | topic tag on the helper task, not `always` |
 | A play variable or inventory value has no effect | the value comes from `include_vars` or `vars/` | knobs belong in `defaults/` |
 | A later play sees `cis_*` values | `include_vars` sets host variables for the rest of the run | prefix everything |
 | Lint passes, but `production` reports `fqcn` | `moderate` does not include it | lint with `production` before sharing |

@@ -56,11 +56,16 @@ und alpine `not-applicable` (kein Feature `pwquality`).
 #### Probeläufe in fehlenden Zustand
 Auf einem frischen Host prüft ein Audit Tasks, deren Eingabe ein früherer Task erst anlegen würde.
 Gemessen im Check-Modus: `copy` und `template` in ein fehlendes Verzeichnis melden `changed` ohne
-Fehler; `lineinfile` ohne `create` auf eine fehlende Datei scheitert auch im Check-Modus. Darum
-bricht das `lineinfile` von 6.3 auf `/etc/audit/auditd.conf` ein **Level-2-Audit auf frischen
-Hosts**: Es scheiterte auf sieben Hosts (arch bringt `auditd.conf` von Anfang an mit), und der
-Bericht enthielt nur arch. Führe zuerst enforce aus, oder schütze den Task wie die vier Tasks mit
-`when: not (cis_mode == 'audit' and cis_r_0 is changed)` in den Modul- und sysctl-Kontrollen.
+Fehler; `lineinfile` ohne `create` auf eine fehlende Datei scheitert auch im Check-Modus. Das
+`lineinfile` von 6.3 auf `/etc/audit/auditd.conf` ist so ein Task: Die Datei gibt es erst nach der
+Installation des Pakets `auditd`, darum trägt er `when: not ((ansible_check_mode or cis_mode ==
+'audit') and cis_r_1 is changed)`. Im Dry-Run ist die anstehende Paketinstallation schon der
+Befund und die Änderung wird übersprungen; wo die Datei existiert (arch bringt sie mit) oder nach
+einer echten Installation, vergleicht der Task die Werte. Gemessen: Ein **Level-2-Audit auf
+frischen Hosts** endet auf allen acht mit `failed=0` und 6.3 ist überall `fail`; nach dem
+enforce-Lauf ist es `fixed`, danach `pass`. Ohne den Guard scheiterten sieben Hosts und der Bericht
+enthielt nur arch. Die vier `cis_r_0`-Tasks in den Modul- und sysctl-Kontrollen schützen fehlende
+Verzeichnisse auf dieselbe Weise.
 
 #### Handler
 `Reload sshd` hat `when: cis_mode == 'enforce'`: Ein Handler erbt das Schlüsselwort nicht, und L10
@@ -76,9 +81,11 @@ scheitern alle Hosts (eine abgelaufene Ausnahme lässt die Vorabprüfung überal
 nichts geschrieben, und der vorige Bericht bleibt stehen.
 
 #### Tags und Teilmengen
-Die Kontrollen tragen keine Tags. Gemessen: `--tags sysctl` - wie jede andere `--tags`-Auswahl -
-scheitert auf allen acht Hosts am apt-Index-Task, weil das ungetaggte `include_vars` übersprungen
-wird und `cis_apt_cache_refresh` undefiniert ist. Kontrollen wählst du mit
+Die Kontrollen tragen keine Tags; nur `include_vars` und der apt-Index-Task haben `always`.
+Gemessen: `--tags sysctl` - wie jede andere `--tags`-Auswahl - endet auf allen acht Hosts mit
+`failed=0` und `changed=0` und schreibt keinen Bericht, weil nur die `always`-Tasks laufen (mit
+ungetaggtem `include_vars` scheiterte es am apt-Index-Task: `cis_apt_cache_refresh` undefiniert).
+Kontrollen wählst du mit
 `-e '{"cis_controls_only": ["5.2"]}'`; der Bericht listet dann nur diese. Übergib Booleans als
 JSON: `-e cis_apt_cache_refresh=false` ist der String `"false"`, und das `when` lehnt ihn ab
 (gemessen).
@@ -109,8 +116,8 @@ mit leerem Passwort, daher scheitern ubuntu und fedora (`guest`, 3.05) hier eben
 |---|---|---|
 | `--check` im Enforce-Modus hat die Targets geändert | `check_mode: "{{ cis_mode == 'audit' }}"` ist `false` und schlägt `--check` | `ansible_check_mode or cis_mode == 'audit'` |
 | Das Audit-Recap zeigt `changed=14`-`19` | Der Check-Modus meldet eine mögliche Änderung als `changed` | Auf frischen Hosts erwartet; den Bericht lesen |
-| Level-2-Audit auf frischen Hosts scheitert bei 6.3 | `lineinfile` auf die fehlende `auditd.conf` scheitert im Check-Modus | Zuerst enforce, oder den Task schützen |
-| `--tags ...` scheitert auf jedem Host | `include_vars` hat kein Tag | `cis_controls_only` |
+| Level-2-Audit auf frischen Hosts scheitert bei 6.3: `Destination /etc/audit/auditd.conf does not exist` (eigene Rolle) | `lineinfile` ohne `create` auf eine Datei, die erst die Paketinstallation anlegt, scheitert im Check-Modus | `when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is changed)` |
+| `--tags ...` wählt nichts aus | die Kontrollen tragen keine Tags, nur die `always`-Tasks laufen | `cis_controls_only` |
 | Der Bericht zeigt alte Daten | Ein gescheiterter Lauf schreibt keinen Bericht | Recap und Dateizeit prüfen |
 | Nach `lab check 5.01` sagt der Bericht `enforce` | Der Lauf mit `--check` schreibt ihn neu | Für den Nachweis das Audit erneut ausführen |
 

@@ -10,6 +10,7 @@
         - default.yml
       paths:
         - "{{ role_path }}/vars"
+  tags: [always]
 
 # Debian/Ubuntu container images ship without a package index; without it every package
 # install fails. cache_valid_time alone does not help: apt judges the age by the mtime of

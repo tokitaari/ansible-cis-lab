@@ -52,11 +52,15 @@ Measured: 5.3.3 is `not-applicable` on opensuse, arch and alpine (no `pwquality`
 #### Dry runs into missing state
 On a fresh host an audit checks tasks whose input an earlier task would create. Measured in check
 mode: `copy` and `template` into a missing directory report `changed` without error; `lineinfile`
-without `create` on a missing file fails in check mode as well. So 6.3's `lineinfile` on
-`/etc/audit/auditd.conf` breaks a **Level 2 audit on fresh hosts**: it failed on seven hosts (arch
-ships `auditd.conf` at the start), and the report held arch only. Run enforce first, or guard the
-task like the four `when: not (cis_mode == 'audit' and cis_r_0 is changed)` tasks in the module and
-sysctl controls.
+without `create` on a missing file fails in check mode as well. 6.3's `lineinfile` on
+`/etc/audit/auditd.conf` is such a task: the file exists only once the `auditd` package is
+installed, so it carries `when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is
+changed)`. In a dry run the pending install is already the finding, so the edit is skipped;
+where the file exists (arch) or after a real install, the task compares the values. Measured: a
+**Level 2 audit on fresh hosts** ends with `failed=0` on all eight and 6.3 is `fail` everywhere;
+after the enforce run it is `fixed`, then `pass`. Without the guard seven hosts failed and the
+report held arch only. The four `cis_r_0` tasks in the module and sysctl controls guard missing
+directories the same way.
 
 #### Handlers
 `Reload sshd` has `when: cis_mode == 'enforce'`: a handler does not inherit the keyword, and L10
@@ -71,9 +75,10 @@ report; when every host fails (an expired exception fails the preflight everywhe
 written and the previous report stays.
 
 #### Tags and subsets
-The controls carry no tags. Measured: `--tags sysctl` - like any other `--tags` selection - fails
-on all eight hosts at the apt index task, because the untagged `include_vars` is skipped and
-`cis_apt_cache_refresh` is undefined. Select controls with `-e '{"cis_controls_only": ["5.2"]}'`;
+The controls carry no tags; only `include_vars` and the apt index task are tagged `always`.
+Measured: `--tags sysctl` - like any other `--tags` selection - ends with `failed=0` and `changed=0`
+on all eight hosts and writes no report, because only the `always` tasks run (with `include_vars`
+untagged it failed at the apt index task: `cis_apt_cache_refresh` undefined). Select controls with `-e '{"cis_controls_only": ["5.2"]}'`;
 the report then lists only those. Give booleans as JSON: `-e cis_apt_cache_refresh=false` is the
 string `"false"`, and the `when` refuses it (measured).
 
@@ -103,8 +108,8 @@ ubuntu and fedora (`guest`, 3.05) fail it too.
 |---|---|---|
 | `--check` in enforce mode changed the targets | `check_mode: "{{ cis_mode == 'audit' }}"` is `false` and beats `--check` | `ansible_check_mode or cis_mode == 'audit'` |
 | The audit recap shows `changed=14`-`19` | Check mode reports a would-be change as `changed` | Expected on fresh hosts; read the report |
-| Level 2 audit on fresh hosts fails at 6.3 | `lineinfile` on the missing `auditd.conf` fails in check mode | Enforce first, or guard the task |
-| `--tags ...` fails on every host | `include_vars` has no tag | `cis_controls_only` |
+| Level 2 audit on fresh hosts fails at 6.3: `Destination /etc/audit/auditd.conf does not exist` (own role) | `lineinfile` without `create` on a file that only the package install creates fails in check mode | `when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is changed)` |
+| `--tags ...` selects nothing | the controls carry no tags, only the `always` tasks run | `cis_controls_only` |
 | The report shows old data | A failed run writes no report | Check the recap and the file time |
 | After `lab check 5.01` the report says `enforce` | The `--check` run rewrites it | Run the audit again for evidence |
 

@@ -41,6 +41,9 @@
     regexp: '^\s*{{ item.key }}\s*='
     line: "{{ item.key }} = {{ item.value }}"
   loop: "{{ cis_auditd_conf | dict2items }}"
+  # a dry run cannot edit a file that only the package install would create: the missing
+  # package is already the finding
+  when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is changed)
   register: cis_r_5
 
 - name: 6.3 | Enable and start auditd (real hosts only)

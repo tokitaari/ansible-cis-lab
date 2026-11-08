@@ -68,12 +68,16 @@ Konfiguration (Test in der Session). `--skip-tags always` ist schlimmer: Auch An
 Handler-Flush trägt das Tag `always` (Quelltext von ansible-core), auf debian änderte sich also das
 Drop-in (`changed=1`), kein Handler lief und nichts scheiterte (gemessen).
 
-Tags überspringen auch Hilfs-Tasks. In der Referenzrolle trägt `Ensure /etc/sysctl.d exists` nur
-`section3`; `ansible-playbook site.yml --tags sysctl` endet auf frisch zurückgesetzten rocky und
-alma, die kein `/etc/sysctl.d` haben, mit `failed=1` (gemessen): `ansible.posix.sysctl` legt das
-Verzeichnis nicht an (`No such file or directory`, Test in der Session). Gib Hilfs-Tasks auch das
-Themen-Tag, oder `always`. `Ensure /etc/modprobe.d exists` (nur `section1`) schadet im Lab nicht:
-Das Verzeichnis gibt es auf allen acht Hosts (2.03).
+Tags überspringen auch Hilfs-Tasks: `--tags sysctl` führt nur Tasks mit dem Tag aus, und
+`ansible.posix.sysctl` legt sein Verzeichnis nicht an (`No such file or directory`, Test in der
+Session). Die Referenzrolle gibt deshalb beiden Verzeichnis-Helfern ihr Themen-Tag (`Ensure
+/etc/sysctl.d exists` mit `sysctl`, `Ensure /etc/modprobe.d exists` mit `modules`). `--tags
+sysctl` legt auf frisch zurückgesetzten rocky und alma, die kein `/etc/sysctl.d` haben, das
+Verzeichnis an und endet mit `failed=0` (gemessen; mit ungetaggtem Helfer endete es mit
+`failed=1`). `always` wäre für solche Helfer falsch: Sie würden das Verzeichnis unter jeder
+`--tags`-Auswahl anlegen. `/etc/modprobe.d` gibt es auf allen acht Hosts (2.03); das Tag
+`modules` zählt auf Hosts ohne das Verzeichnis (dort scheiterte ein `--tags modules`-Lauf im
+Test in der Session).
 
 #### Was `ansible-lint --profile moderate` findet
 Gemessen, indem jeweils eine Sache in der Referenzrolle geändert wurde (ansible-lint 26.10.1):
@@ -96,7 +100,7 @@ Schleife.
 | os_family | Plattformdatei (sshd- / cron-Dienst, `cron.allow`, shadow) | Lauf 1 auf frischen Hosts | Hinweis |
 |---|---|---|---|
 | Debian | `ssh` / `cron`, ja, `shadow` `0640` | `changed=13` | - |
-| RedHat | `sshd` / `crond`, ja, `root` `0000` | `changed=15` (rocky, alma), `14` (fedora) | rocky, alma: `--tags sysctl` scheitert auf frischen Hosts |
+| RedHat | `sshd` / `crond`, ja, `root` `0000` | `changed=15` (rocky, alma), `14` (fedora) | rocky, alma: anfangs kein `/etc/sysctl.d`, `--tags sysctl` legt es an |
 | Suse | `sshd` / `cron`, ja, `shadow` `0640` | `changed=14` | Vendor-Regeln für modprobe gewinnen (2.03) |
 | Alpine | `sshd` / `crond`, nein (stattdessen das Spool `/etc/crontabs`), `shadow` `0640` | `changed=11`, `skipped=3` | braucht vorher 0.02 |
 | Archlinux | `sshd` / `cronie`, ja, `root` `0600` | `changed=13` | - |
@@ -108,7 +112,7 @@ Zweiter Lauf: `changed=0` auf allen acht (gemessen).
 |---|---|---|
 | `'cis_sshd_service' is undefined` im Handler unter `--tags ssh` | `include_vars`-Task nicht mit `always` getaggt | mit `always` taggen |
 | Drop-in geändert, kein Handler lief, kein Fehler | `--skip-tags always` überspringt auch den impliziten Handler-Flush | `always` nicht überspringen |
-| `--tags sysctl` scheitert auf rocky/alma: `No such file or directory` | der Verzeichnis-Task hat kein Tag `sysctl` | Themen-Tag (oder `always`) an Hilfs-Tasks |
+| `--tags sysctl` scheitert auf einem Host ohne `/etc/sysctl.d`: `No such file or directory` | der Verzeichnis-Helfer hat kein Tag `sysctl` (deine eigene Rolle) | Themen-Tag am Helfer, nicht `always` |
 | Eine Play-Variable oder ein Inventory-Wert wirkt nicht | der Wert kommt aus `include_vars` oder `vars/` | Regler gehören in `defaults/` |
 | Ein späteres Play sieht `cis_*`-Werte | `include_vars` setzt Host-Variablen für den Rest des Laufs | alles mit Präfix |
 | Lint besteht, aber `production` meldet `fqcn` | `moderate` enthält die Regel nicht | vor dem Teilen mit `production` linten |

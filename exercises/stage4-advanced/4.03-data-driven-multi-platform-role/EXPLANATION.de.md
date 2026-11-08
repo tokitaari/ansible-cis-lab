@@ -109,6 +109,7 @@ als dokumentierte Lücken: Die Rolle installiert und konfiguriert dort kein pwqu
 | eine Versionsdatei für arch wird nie ein zweites Mal verwendet | rollierende Distribution, die "Hauptversion" ist das Image-Datum | die Distributions- oder Familiendatei nehmen |
 | der Check ist grün, obwohl ein Task `os_family \| lower == ...` vergleicht | das `grep` endet an einer Pipe | ein Flag verwenden; der Check unterstützt nur deine Durchsicht |
 | `interpreter /usr/bin/python3 not found` auf alpine | kein Python vor dem Bootstrap | das Pre-Play von `site.yml` oder `lab solve 0.02 -y` |
+| `--check -e cis_level=2` auf einem frischen Host scheitert in 6.3: `Destination /etc/audit/auditd.conf does not exist` (7 von 8, nicht arch) | `lineinfile` bearbeitet eine Datei, die erst die Paketinstallation anlegt, und ein Dry-Run installiert nichts | einmal anwenden, danach `--check`; die 5.01-Rolle fängt den Fall ab |
 
 ### Praxis-Hinweise
 - Wo sich eine Fähigkeit auf dem Host prüfen lässt (ein Befehl existiert oder nicht), schlägt
