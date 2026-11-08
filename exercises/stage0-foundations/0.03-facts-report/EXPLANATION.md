@@ -84,8 +84,8 @@ complete should say which hosts are missing instead of leaving them out.
 - Lesson [L00 - Lab architecture and Ansible basics](../../../docs/lessons/L00-lab-and-ansible-basics.md): facts, `hostvars` and when the facts of other hosts exist.
 - Exercise [0.02 - Bootstrap Python on Alpine with raw](../0.02-bootstrap-alpine/README.md): without it Alpine has no facts.
 - Exercise [4.01 - Audit-only compliance report](../../stage4-advanced/4.01-audit-only-report/README.md): per-host results collected into one report on the control node.
-- [Discovering variables: facts and magic variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html) and [Controlling where tasks run: delegation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_delegation.html)
-- [`ansible.builtin.template` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html)
+- [Discovering variables: facts and magic variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html) and [Controlling where tasks run: delegation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_delegation.html)
+- [`ansible.builtin.template` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/template_module.html)
 
 ## Reference solution
 

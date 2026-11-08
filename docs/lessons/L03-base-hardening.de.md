@@ -460,10 +460,10 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [Modul `ansible.builtin.package`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html) und [Modul `ansible.builtin.service`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html)
-- [Modul `ansible.builtin.systemd_service`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_service_module.html) - `masked` und `daemon_reload`
-- [Modul `ansible.builtin.service_facts`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_facts_module.html) und [Modul `ansible.builtin.stat`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html)
-- [Modul `ansible.builtin.file`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html) - `mode`, `owner`, `group`
+- [Modul `ansible.builtin.package`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/package_module.html) und [Modul `ansible.builtin.service`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/service_module.html)
+- [Modul `ansible.builtin.systemd_service`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/systemd_service_module.html) - `masked` und `daemon_reload`
+- [Modul `ansible.builtin.service_facts`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/service_facts_module.html) und [Modul `ansible.builtin.stat`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/stat_module.html)
+- [Modul `ansible.builtin.file`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/file_module.html) - `mode`, `owner`, `group`
 - [`sshd_config(5)`](https://man.openbsd.org/sshd_config) - `Include`, `Match`, die Regel "erster Wert gewinnt"; [`sshd(8)`](https://man.openbsd.org/sshd) - `-T` und `-C`
 - [`sudoers(5)`](https://www.sudo.ws/docs/man/sudoers.man/) - Include-Anweisungen, `Defaults`, Regeln für Dateinamen
 - [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: attack surface, drop-in,

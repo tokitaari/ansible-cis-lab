@@ -86,8 +86,8 @@ vollständig sein muss, sollte sagen, welche Hosts fehlen, statt sie wegzulassen
 - Lektion [L00 - Lab-Aufbau und Ansible-Grundlagen](../../../docs/lessons/L00-lab-and-ansible-basics.de.md): Facts, `hostvars` und wann die Facts anderer Hosts existieren.
 - Übung [0.02 - Python auf Alpine per raw nachrüsten](../0.02-bootstrap-alpine/README.de.md): ohne sie hat Alpine keine Facts.
 - Übung [4.01 - Reiner Audit-Lauf mit Compliance-Bericht](../../stage4-advanced/4.01-audit-only-report/README.de.md): Ergebnisse je Host, gesammelt in einem Bericht auf dem Control-Node.
-- [Discovering variables: facts and magic variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html) und [Controlling where tasks run: delegation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_delegation.html)
-- [Modul `ansible.builtin.template`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html)
+- [Discovering variables: facts and magic variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html) und [Controlling where tasks run: delegation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_delegation.html)
+- [Modul `ansible.builtin.template`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/template_module.html)
 
 ## Musterlösung
 

@@ -99,9 +99,9 @@ existieren oder nicht öffentlich sein).
   Check-Modus plus unabhängiges Audit, dann ein Canary.
 
 ### Weiterführend
-- Lektion [L14 - Production rollout](../../../docs/lessons/L14-production-rollout.de.md): woher Community-Rollen kommen, Pinning, eine Rolle lesen ohne sie auszuführen, übernehmen, forken oder bauen.
+- Lektion [L14 - Rollout in Produktion](../../../docs/lessons/L14-production-rollout.de.md): woher Community-Rollen kommen, Pinning, eine Rolle lesen ohne sie auszuführen, übernehmen, forken oder bauen.
 - Lektion [L01 - CIS Benchmarks](../../../docs/lessons/L01-cis-benchmarks.de.md): Level, Profile und warum sich Empfehlungsnummern verschieben.
-- Lektion [L11 - Profiles, exceptions and data-driven roles](../../../docs/lessons/L11-profiles-exceptions-and-data-driven-roles.de.md): das Ausnahme-Design, mit dem du vergleichst.
+- Lektion [L11 - Profile, Ausnahmen und datengetriebene Rollen](../../../docs/lessons/L11-profiles-exceptions-and-data-driven-roles.de.md): das Ausnahme-Design, mit dem du vergleichst.
 
 ## Musterlösung
 

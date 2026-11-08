@@ -274,7 +274,7 @@ angesehen.
 ### In den Lab-Containern
 
 - Cron läuft in allen acht Targets wirklich, als Teil des Containers; ein dort gestarteter Job
-  tut deinem Host nichts (siehe [die Container-Grenzen](../CONTAINER_LIMITS.md)).
+  tut deinem Host nichts (siehe [die Container-Grenzen](../CONTAINER_LIMITS.de.md)).
 - Die systemd-Targets loggen ins Journal (`journalctl -u <Dienst>`); es gibt kein
   `/var/log/cron*`.
 - Die Beispiele brauchen Python auf dem Target, also braucht alpine zuerst 0.02 - die zwei
@@ -376,7 +376,7 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [`ansible.builtin.cron`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html) und [`ansible.posix.at`](https://docs.ansible.com/ansible/latest/collections/ansible/posix/at_module.html) - alle Optionen
+- [`ansible.builtin.cron`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/cron_module.html) und [`ansible.posix.at`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/posix/at_module.html) - alle Optionen
 - [`crontab(1)`](https://man.archlinux.org/man/crontab.1) und [`crontab(5)`](https://man.archlinux.org/man/crontab.5) - die Allow- und Deny-Dateien, das Systemformat mit seinem Benutzer-Feld
 - [`at(1)`](https://man.archlinux.org/man/at.1) - `at.allow`, `at.deny` und die Warteschlange
 - [`systemd.timer(5)`](https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html) - Timer als der andere Scheduler auf systemd-Hosts

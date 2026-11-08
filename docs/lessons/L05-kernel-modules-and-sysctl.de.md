@@ -435,8 +435,8 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [`ansible.posix.sysctl`](https://docs.ansible.com/ansible/latest/collections/ansible/posix/sysctl_module.html) und [`community.general.modprobe`](https://docs.ansible.com/ansible/latest/collections/community/general/modprobe_module.html) - alle Optionen
-- [Ansible-Collections verwenden](https://docs.ansible.com/ansible/latest/collections_guide/index.html) - installieren, `requirements.yml`, FQCN
+- [`ansible.posix.sysctl`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/posix/sysctl_module.html) und [`community.general.modprobe`](https://docs.ansible.com/projects/ansible/latest/collections/community/general/modprobe_module.html) - alle Optionen
+- [Ansible-Collections verwenden](https://docs.ansible.com/projects/ansible/latest/collections_guide/index.html) - installieren, `requirements.yml`, FQCN
 - [`sysctl.d(5)`](https://www.freedesktop.org/software/systemd/man/latest/sysctl.d.html) - die Verzeichnisse und die Reihenfolge, in der Dateien gelesen werden
 - [Dokumentation zu `/proc/sys`](https://docs.kernel.org/admin-guide/sysctl/index.html) - was jeder Parameter bewirkt
 - [`modprobe.d(5)`](https://man.archlinux.org/man/modprobe.d.5) - `install`, `blacklist` und die anderen Schlüsselwörter

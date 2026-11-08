@@ -637,8 +637,8 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` gibt ihre README aus.
 
 ## Weiterführendes
 
-- [`ansible.builtin.async_status`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/async_status_module.html) und [Asynchronous actions and polling](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_async.html) - der Mechanismus und seine Grenzen
-- [`ansible.builtin.command`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html) - `creates` und `removes`
+- [`ansible.builtin.async_status`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/async_status_module.html) und [Asynchronous actions and polling](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_async.html) - der Mechanismus und seine Grenzen
+- [`ansible.builtin.command`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/command_module.html) - `creates` und `removes`
 - [`audit.rules(7)`](https://man.archlinux.org/man/audit.rules.7) und [`auditctl(8)`](https://man.archlinux.org/man/auditctl.8) - Regelsyntax, Felder, das Enabled-Flag
 - [`augenrules(8)`](https://man.archlinux.org/man/augenrules.8) und [`auditd.conf(5)`](https://man.archlinux.org/man/auditd.conf.5) - Zusammenfügen der Regeldateien und Einstellungen des Daemons
 - [`pam_loginuid(8)`](https://man.archlinux.org/man/pam_loginuid.8) - woher die Login-ID kommt

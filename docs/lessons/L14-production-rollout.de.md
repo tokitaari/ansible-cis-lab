@@ -569,13 +569,13 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [Controlling playbook execution](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_strategies.html) - `serial`, `throttle`, `run_once`, Strategien
-- [Error handling in playbooks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_error_handling.html) - `any_errors_fatal`, `max_fail_percentage`, `ignore_errors`
-- [Patterns: targeting hosts and groups](https://docs.ansible.com/ansible/latest/inventory_guide/intro_patterns.html) - eine Gruppe abziehen, `--limit`
-- [Special variables](https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html) - `ansible_play_batch`, `ansible_play_hosts`
-- [Galaxy user guide](https://docs.ansible.com/ansible/latest/galaxy/user_guide.html) - Rollen und Collections installieren, `requirements.yml`
-- [`ansible-galaxy`](https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html) - `role install`, `role list`, `collection install`, `--force`
-- [Validating tasks: check mode and diff mode](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_checkmode.html) - `check_mode: false` an lesenden Tasks
+- [Controlling playbook execution](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_strategies.html) - `serial`, `throttle`, `run_once`, Strategien
+- [Error handling in playbooks](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_error_handling.html) - `any_errors_fatal`, `max_fail_percentage`, `ignore_errors`
+- [Patterns: targeting hosts and groups](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_patterns.html) - eine Gruppe abziehen, `--limit`
+- [Special variables](https://docs.ansible.com/projects/ansible/latest/reference_appendices/special_variables.html) - `ansible_play_batch`, `ansible_play_hosts`
+- [Galaxy user guide](https://docs.ansible.com/projects/ansible/latest/galaxy/user_guide.html) - Rollen und Collections installieren, `requirements.yml`
+- [`ansible-galaxy`](https://docs.ansible.com/projects/ansible/latest/cli/ansible-galaxy.html) - `role install`, `role list`, `collection install`, `--force`
+- [Validating tasks: check mode and diff mode](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_checkmode.html) - `check_mode: false` an lesenden Tasks
 - [stat(1)](https://manpages.debian.org/unstable/coreutils/stat.1.en.html) - `-f` für das Dateisystem, `%a`, `%f`, `%S`
 - [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `any_errors_fatal`, batch, canary,
   `delegate_to` / `run_once`, Galaxy, gate, `max_fail_percentage`, preflight, `serial`

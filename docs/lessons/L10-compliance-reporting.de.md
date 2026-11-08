@@ -550,11 +550,11 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` gibt ihre README aus.
 
 ## Weiterführendes
 
-- [Validating tasks: check mode and diff mode](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_checkmode.html) - das Keyword, das Flag und `check_mode: false`
-- [Blocks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html) und [Handlers](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html) - was die Keywords eines Blocks erreichen und wann ein Handler läuft
-- [Discovering variables: facts and magic variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html) - lokale Facts und `hostvars`
-- [`ansible.builtin.setup`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/setup_module.html) - `fact_path`, `gather_subset` und `filter`
-- [Special variables](https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html) - `hostvars`, `groups` und `ansible_check_mode`
-- [Using filters to manipulate data](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html) - `to_nice_json`, `selectattr`, `difference`
+- [Validating tasks: check mode and diff mode](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_checkmode.html) - das Keyword, das Flag und `check_mode: false`
+- [Blocks](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_blocks.html) und [Handlers](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_handlers.html) - was die Keywords eines Blocks erreichen und wann ein Handler läuft
+- [Discovering variables: facts and magic variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html) - lokale Facts und `hostvars`
+- [`ansible.builtin.setup`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/setup_module.html) - `fact_path`, `gather_subset` und `filter`
+- [Special variables](https://docs.ansible.com/projects/ansible/latest/reference_appendices/special_variables.html) - `hostvars`, `groups` und `ansible_check_mode`
+- [Using filters to manipulate data](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_filters.html) - `to_nice_json`, `selectattr`, `difference`
 - [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: audit mode, compliance report,
   custom facts, `delegate_to` / `run_once`, enforce mode, finding

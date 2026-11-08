@@ -12,7 +12,8 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
   parity    every EN Markdown file has a DE twin (*.de.md) with the same structure;
             bash/yaml/... code blocks hold the same code (comments may be translated); a link to
             a heading is compared by the heading's position, so its anchor may be translated
-  links     relative Markdown links (and #anchors) resolve
+  links     relative Markdown links (and #anchors) resolve; a DE page links German twins, an
+            EN page no German page (the language switch line excepted)
   controls  cis/controls.yml schema and cross-references to the exercises
   lessons   docs/lessons/LNN-slug(.de).md: title, language switch, header table (exercises,
             CIS ids, reading time, earlier lessons - all known, sorted), the eight fixed
@@ -504,10 +505,15 @@ def anchors(path):
     return set(anchor_order(path))
 
 
+SWITCH_LINE_RE = re.compile(r"^\*\[(Deutsch|English)\]\([^)]*\)\*\s*$")
+
+
 def check_links(files):
     for f in (f for f in files if f.endswith(".md")):
         src = os.path.join(ROOT, f)
-        for target in md_links(read(src)):
+        text = read(src)
+        check_twin_links(f, src, text)
+        for target in md_links(text):
             if re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I):
                 continue  # http(s), mailto, ...
             path, _, frag = target.partition("#")
@@ -520,6 +526,26 @@ def check_links(files):
                 fail("links", f"{f}: broken link '{target}'")
             elif frag and dest.endswith(".md") and frag not in anchors(dest):
                 fail("links", f"{f}: anchor '#{frag}' not found in {rel(dest)}")
+
+
+def check_twin_links(f, src, text):
+    """A DE file links the DE twin of a page where one exists, an EN file the EN page; only the
+    language switch line links the other language."""
+    de = f.endswith(".de.md")
+    prose, _ = md_scan(text)
+    for line in prose:
+        if SWITCH_LINE_RE.match(line.strip()):
+            continue
+        for target in md_links(line):
+            path = target.partition("#")[0].split("?")[0]
+            if not path.endswith(".md") or re.match(r"^[a-z][a-z0-9+.-]*:", path, re.I):
+                continue
+            dest = os.path.normpath(os.path.join(os.path.dirname(src), path))
+            if de and not path.endswith(".de.md") and os.path.isfile(dest[:-3] + ".de.md"):
+                fail("links", f"{f}: '{target}' links the English page - use its German twin "
+                              f"{os.path.basename(path)[:-3]}.de.md")
+            elif not de and path.endswith(".de.md"):
+                fail("links", f"{f}: '{target}' links a German page from an English one")
 
 
 # --------------------------------------------------------------------------- controls

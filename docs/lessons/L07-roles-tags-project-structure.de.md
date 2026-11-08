@@ -609,11 +609,11 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [Rollen](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - Aufbau, Suchpfade, `roles:` gegen `import_role` und `include_role`, Abhängigkeiten
-- [Dateien und Rollen wiederverwenden](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse.html) - statische Importe gegen dynamische Includes
-- [Tags](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html) - `always`, `never`, Vererbung, `--tags` und `--skip-tags`
-- [Variablen verwenden](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - die vollständige Rangfolge
-- [`ansible.builtin.first_found`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - das Lookup der Demo-Rolle
+- [Rollen](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - Aufbau, Suchpfade, `roles:` gegen `import_role` und `include_role`, Abhängigkeiten
+- [Dateien und Rollen wiederverwenden](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse.html) - statische Importe gegen dynamische Includes
+- [Tags](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tags.html) - `always`, `never`, Vererbung, `--tags` und `--skip-tags`
+- [Variablen verwenden](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html) - die vollständige Rangfolge
+- [`ansible.builtin.first_found`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - das Lookup der Demo-Rolle
 - [ansible-lint](https://docs.ansible.com/projects/lint/) - Profile, Regeln und Konfiguration
 - [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `always` (tag), `defaults/` and `vars/`,
   `first_found`, `import_tasks` / `include_tasks`, `include_vars`, lint profile, role, tag

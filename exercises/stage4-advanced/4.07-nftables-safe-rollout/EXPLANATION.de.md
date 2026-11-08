@@ -88,7 +88,7 @@ standardmäßig nur auf arch installiert).
   daneben. Entscheide, welches Werkzeug die Policy besitzt, bevor du ein zweites ergänzt.
 
 ### Weiterführend
-- Lektion [L13 - Host firewall with nftables](../../../docs/lessons/L13-host-firewall-nftables.de.md): die Konzepte vor dieser Übung, mit Demos und Selbsttest-Fragen.
+- Lektion [L13 - Host-Firewall mit nftables](../../../docs/lessons/L13-host-firewall-nftables.de.md): die Konzepte vor dieser Übung, mit Demos und Selbsttest-Fragen.
 - [Container-Grenzen](../../../docs/CONTAINER_LIMITS.de.md): warum das Lab nie das Regelwerk flusht.
 
 ## Musterlösung

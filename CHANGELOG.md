@@ -403,6 +403,16 @@ MINOR: new features or exercises, PATCH: fixes.
   configuration in reading order, not the effective one (it lists every `install` line). The
   catalogue note of control 1.1.1 in `cis/controls.yml` mentions the openSUSE vendor rules.
   Rebuild: *none*
+- Link pass over all 115 external URLs (checked with curl on 2026-11-08: 114 answer 200, the
+  Alpine wiki sends `curl` a bot challenge): the 57 links to the
+  Ansible documentation now point to `docs.ansible.com/projects/ansible/latest/...`, where the
+  old `docs.ansible.com/ansible/latest/...` addresses redirect. Lesson L06 (DE) linked the
+  English `CONTAINER_LIMITS.md`, eight links in the German EXPLANATIONs of 4.04, 4.07, 5.02 and
+  5.03 named the lessons by their English titles, and the 1.02 EXPLANATION did not link L02, one
+  of its two lessons - fixed. The static gate (`links`) now fails when a German page links the
+  English twin of a page or an English page links a German one (the language switch line
+  excepted). Rebuild: *none*
+
 
 ## [1.4.0] - 2026-11-03
 

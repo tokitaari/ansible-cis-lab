@@ -93,7 +93,7 @@ pull-based tool. On Alpine the cost is the 14 packages and about 40 MB measured 
 - Lesson [L00 - Lab architecture and Ansible basics](../../../docs/lessons/L00-lab-and-ansible-basics.md): how a module runs, `raw`, `changed_when`, check mode.
 - Exercise [0.01 - Lab tour: inventory and connectivity](../0.01-lab-tour/README.md): where the failing `ping` comes from.
 - Exercise [0.03 - Facts: one report across eight distributions](../0.03-facts-report/README.md): needs Python on Alpine.
-- [`ansible.builtin.raw` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html) and [`ansible.builtin.script` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/script_module.html)
+- [`ansible.builtin.raw` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/raw_module.html) and [`ansible.builtin.script` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/script_module.html)
 - [Alpine Package Keeper](https://wiki.alpinelinux.org/wiki/Alpine_Package_Keeper) (`apk`, `--no-cache`)
 
 ## Reference solution

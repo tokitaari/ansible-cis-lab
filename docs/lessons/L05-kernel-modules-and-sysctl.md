@@ -413,8 +413,8 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 ## Further reading
 
-- [`ansible.posix.sysctl`](https://docs.ansible.com/ansible/latest/collections/ansible/posix/sysctl_module.html) and [`community.general.modprobe`](https://docs.ansible.com/ansible/latest/collections/community/general/modprobe_module.html) - all options
-- [Using Ansible collections](https://docs.ansible.com/ansible/latest/collections_guide/index.html) - installing, `requirements.yml`, FQCN
+- [`ansible.posix.sysctl`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/posix/sysctl_module.html) and [`community.general.modprobe`](https://docs.ansible.com/projects/ansible/latest/collections/community/general/modprobe_module.html) - all options
+- [Using Ansible collections](https://docs.ansible.com/projects/ansible/latest/collections_guide/index.html) - installing, `requirements.yml`, FQCN
 - [`sysctl.d(5)`](https://www.freedesktop.org/software/systemd/man/latest/sysctl.d.html) - the directories and the order in which files are read
 - [Documentation for `/proc/sys`](https://docs.kernel.org/admin-guide/sysctl/index.html) - what each parameter does
 - [`modprobe.d(5)`](https://man.archlinux.org/man/modprobe.d.5) - `install`, `blacklist` and the other keywords

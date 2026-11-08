@@ -601,9 +601,9 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [`ansible.builtin.meta`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html) - `reset_connection`
-- [`ansible.builtin.wait_for_connection`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_connection_module.html) - `timeout`, `connect_timeout`, `sleep`, `delay`
-- [`ansible.builtin.async_status`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/async_status_module.html) - die Modi `status` und `cleanup`
+- [`ansible.builtin.meta`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/meta_module.html) - `reset_connection`
+- [`ansible.builtin.wait_for_connection`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/wait_for_connection_module.html) - `timeout`, `connect_timeout`, `sleep`, `delay`
+- [`ansible.builtin.async_status`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/async_status_module.html) - die Modi `status` und `cleanup`
 - [nft(8)](https://manpages.debian.org/unstable/nftables/nft.8.en.html) - die Kommandozeile, `-c`, `-f` und die Verben für Tabellen und Chains
 - [Netfilter hooks](https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks) - Hooks, Prioritäten und wie Base-Chains zusammenwirken
 - [Atomic rule replacement](https://wiki.nftables.org/wiki-nftables/index.php/Atomic_rule_replacement) - warum eine Datei eine Transaktion ist

@@ -98,7 +98,7 @@ vorher die Dateiliste.
 - Lektion [L02 - Sichere Änderungen](../../../docs/lessons/L02-safe-changes.de.md): `--check --diff`, was sich ändert und was nur so aussieht.
 - Lektion [L03 - Basis-Härtung](../../../docs/lessons/L03-base-hardening.de.md): Pakete, Dienste, Dateien, SSH und sudo an einem Ort.
 - Übung [1.04 - FTP-Server stoppen und deaktivieren](../1.04-disable-ftp-server/README.de.md): `package_facts` neben `service`.
-- [Modul `ansible.builtin.package`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html) und [Modul `ansible.builtin.package_facts`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_facts_module.html)
+- [Modul `ansible.builtin.package`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/package_module.html) und [Modul `ansible.builtin.package_facts`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/package_facts_module.html)
 
 ## Musterlösung
 
