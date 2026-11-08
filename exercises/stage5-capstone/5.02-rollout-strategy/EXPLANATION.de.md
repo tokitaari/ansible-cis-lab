@@ -136,9 +136,9 @@ Die Verzeichnisse sind das, was `command -v` ausgab (L14-Messung). Die Lösung r
   Plattform.
 
 ### Weiterführend
-- Lektion [L14 - Production rollout](../../../docs/lessons/L14-production-rollout.de.md): Fehlersemantik, `serial`-Listen, Sperren und Sonden, Prüfung pro Welle, mit Demos und Selbsttest-Fragen.
-- Lektion [L13 - Host firewall with nftables](../../../docs/lessons/L13-host-firewall-nftables.de.md): warum eine frische Verbindung der echte Test ist.
-- Lektion [L10 - Compliance reporting](../../../docs/lessons/L10-compliance-reporting.de.md): woher der Bericht in der 5.01-Rolle kommt.
+- Lektion [L14 - Rollout in Produktion](../../../docs/lessons/L14-production-rollout.de.md): Fehlersemantik, `serial`-Listen, Sperren und Sonden, Prüfung pro Welle, mit Demos und Selbsttest-Fragen.
+- Lektion [L13 - Host-Firewall mit nftables](../../../docs/lessons/L13-host-firewall-nftables.de.md): warum eine frische Verbindung der echte Test ist.
+- Lektion [L10 - Compliance-Berichte](../../../docs/lessons/L10-compliance-reporting.de.md): woher der Bericht in der 5.01-Rolle kommt.
 
 ## Musterlösung
 

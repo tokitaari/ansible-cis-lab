@@ -637,10 +637,12 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` gibt ihre README aus.
 
 ## Weiterführendes
 
-- [`ansible.builtin.async_status`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/async_status_module.html) und [Asynchronous actions and polling](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_async.html) - der Mechanismus und seine Grenzen
-- [`ansible.builtin.command`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html) - `creates` und `removes`
+- [`ansible.builtin.async_status`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/async_status_module.html) und [Asynchronous actions and polling](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_async.html) - der Mechanismus und seine Grenzen
+- [`ansible.builtin.command`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/command_module.html) - `creates` und `removes`
 - [`audit.rules(7)`](https://man.archlinux.org/man/audit.rules.7) und [`auditctl(8)`](https://man.archlinux.org/man/auditctl.8) - Regelsyntax, Felder, das Enabled-Flag
 - [`augenrules(8)`](https://man.archlinux.org/man/augenrules.8) und [`auditd.conf(5)`](https://man.archlinux.org/man/auditd.conf.5) - Zusammenfügen der Regeldateien und Einstellungen des Daemons
 - [`pam_loginuid(8)`](https://man.archlinux.org/man/pam_loginuid.8) - woher die Login-ID kommt
 - [`aide(1)`](https://manpages.debian.org/unstable/aide/aide.1.en.html) und [`aide.conf(5)`](https://manpages.debian.org/unstable/aide/aide.conf.5.en.html) - Befehle, Exit-Codes, Regeln und Auswahlzeilen
 - [`systemd.timer(5)`](https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html) und [`systemd.service(5)`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html) - Timer und `Type=oneshot`
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: AIDE, `async` / `poll` / `async_status`,
+  auditd, immutable audit configuration

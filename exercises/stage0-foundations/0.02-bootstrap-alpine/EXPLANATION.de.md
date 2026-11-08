@@ -98,7 +98,7 @@ von oben.
 - Lektion [L00 - Lab-Aufbau und Ansible-Grundlagen](../../../docs/lessons/L00-lab-and-ansible-basics.de.md): wie ein Modul läuft, `raw`, `changed_when`, Check-Modus.
 - Übung [0.01 - Rundgang: Inventar und Erreichbarkeit](../0.01-lab-tour/README.de.md): woher der fehlschlagende `ping` kommt.
 - Übung [0.03 - Facts: ein Bericht über acht Distributionen](../0.03-facts-report/README.de.md): braucht Python auf Alpine.
-- [Modul `ansible.builtin.raw`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html) und [Modul `ansible.builtin.script`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/script_module.html)
+- [Modul `ansible.builtin.raw`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/raw_module.html) und [Modul `ansible.builtin.script`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/script_module.html)
 - [Alpine Package Keeper](https://wiki.alpinelinux.org/wiki/Alpine_Package_Keeper) (`apk`, `--no-cache`)
 
 ## Musterlösung

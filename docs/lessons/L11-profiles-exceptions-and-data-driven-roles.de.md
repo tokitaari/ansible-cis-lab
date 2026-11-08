@@ -635,11 +635,13 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` gibt ihre README aus.
 
 ## Weiterführendes
 
-- [Role argument validation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - `meta/argument_specs.yml`, Typen, `choices` und verschachtelte `options`
-- [Conditionals](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html) und [Blocks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html) - `when` und was ein Block an seine Tasks weitergibt
-- [Using variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - die vollständige Rangfolge
-- [`ansible.builtin.include_vars`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html) - Datendateien zur Laufzeit laden
-- [`ansible.builtin.first_found`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - der Lookup hinter der Fallback-Kette
-- [`ansible.builtin.assert`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html) - `that`, `fail_msg` und `quiet`
-- [Using filters to manipulate data](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html) - `to_datetime`, `map` und `type_debug`
-- [`ansible.posix.json` callback](https://docs.ansible.com/ansible/latest/collections/ansible/posix/json_callback.html) - der Callback hinter dem Vertragstest
+- [Role argument validation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - `meta/argument_specs.yml`, Typen, `choices` und verschachtelte `options`
+- [Conditionals](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_conditionals.html) und [Blocks](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_blocks.html) - `when` und was ein Block an seine Tasks weitergibt
+- [Using variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html) - die vollständige Rangfolge
+- [`ansible.builtin.include_vars`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/include_vars_module.html) - Datendateien zur Laufzeit laden
+- [`ansible.builtin.first_found`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - der Lookup hinter der Fallback-Kette
+- [`ansible.builtin.assert`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/assert_module.html) - `that`, `fail_msg` und `quiet`
+- [Using filters to manipulate data](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_filters.html) - `to_datetime`, `map` und `type_debug`
+- [`ansible.posix.json` callback](https://docs.ansible.com/projects/ansible/latest/collections/ansible/posix/json_callback.html) - der Callback hinter dem Vertragstest
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `assert`, capability flag, exception,
+  `first_found`, `include_vars`, Level 1 / Level 2, platform data, profile (CIS)

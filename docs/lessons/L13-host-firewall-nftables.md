@@ -587,10 +587,12 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 ## Further reading
 
-- [`ansible.builtin.meta`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html) - `reset_connection`
-- [`ansible.builtin.wait_for_connection`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_connection_module.html) - `timeout`, `connect_timeout`, `sleep`, `delay`
-- [`ansible.builtin.async_status`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/async_status_module.html) - the modes `status` and `cleanup`
+- [`ansible.builtin.meta`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/meta_module.html) - `reset_connection`
+- [`ansible.builtin.wait_for_connection`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/wait_for_connection_module.html) - `timeout`, `connect_timeout`, `sleep`, `delay`
+- [`ansible.builtin.async_status`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/async_status_module.html) - the modes `status` and `cleanup`
 - [nft(8)](https://manpages.debian.org/unstable/nftables/nft.8.en.html) - the command line, `-c`, `-f`, and the verbs for tables and chains
 - [Netfilter hooks](https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks) - hooks, priorities and how base chains combine
 - [Atomic rule replacement](https://wiki.nftables.org/wiki-nftables/index.php/Atomic_rule_replacement) - why one file is one transaction
 - [systemd.service(5)](https://manpages.debian.org/unstable/systemd/systemd.service.5.en.html) - `Type=oneshot`, `RemainAfterExit`, `ExecStop`
+- [Glossary](../GLOSSARY.md) - terms of this lesson: dead-man switch, hook (netfilter), nftables,
+  `wait_for_connection`

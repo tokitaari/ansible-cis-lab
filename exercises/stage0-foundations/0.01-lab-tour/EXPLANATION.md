@@ -104,8 +104,8 @@ to look at the network or at the host.
 ### Further reading
 - Lesson [L00 - Lab architecture and Ansible basics](../../../docs/lessons/L00-lab-and-ansible-basics.md): the concepts before this exercise (inventory, patterns, how a module runs).
 - Exercise [0.02 - Bootstrap Python on Alpine with raw](../0.02-bootstrap-alpine/README.md): the fix for the failing host.
-- [How to build your inventory](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html) and [Patterns: targeting hosts and groups](https://docs.ansible.com/ansible/latest/inventory_guide/intro_patterns.html)
-- [Interpreter discovery](https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html) and the [`ansible.builtin.raw` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html)
+- [How to build your inventory](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_inventory.html) and [Patterns: targeting hosts and groups](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_patterns.html)
+- [Interpreter discovery](https://docs.ansible.com/projects/ansible/latest/reference_appendices/interpreter_discovery.html) and the [`ansible.builtin.raw` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/raw_module.html)
 
 ## Reference solution
 

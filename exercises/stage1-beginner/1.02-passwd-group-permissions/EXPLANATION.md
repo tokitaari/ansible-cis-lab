@@ -70,6 +70,7 @@ The reference solution does not change the backups.
 - Backups can be missing on a real host. Check with `stat` and use `when`, as in the bonus.
 
 ### Further reading
+- Lesson [L02 - Safe changes](../../../docs/lessons/L02-safe-changes.md): `--check --diff` before a change, and what check mode can predict.
 - Lesson [L03 - Base hardening](../../../docs/lessons/L03-base-hardening.md): packages, services, files, SSH and sudo in one place.
 - Exercise [1.01 - Remove insecure client packages](../1.01-remove-telnet/README.md)
 - Exercise [2.01 - /etc/shadow: correct permissions per OS family](../../stage2-building-blocks/2.01-shadow-permissions-per-family/README.md)

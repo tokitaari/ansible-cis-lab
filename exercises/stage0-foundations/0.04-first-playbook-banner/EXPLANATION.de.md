@@ -102,7 +102,7 @@ Variable, damit sie zentral änderbar sind - das machst du in 2.06. Der Text vor
 - Lektion [L00 - Lab-Aufbau und Ansible-Grundlagen](../../../docs/lessons/L00-lab-and-ansible-basics.de.md): Idempotenz, `--check --diff` und der CIS-Hintergrund zu Control 1.6.
 - Übung [2.02 - SSH-Server-Härtung mit Jinja2-Template](../../stage2-building-blocks/2.02-sshd-template/README.de.md): wo `Banner` gesetzt wird.
 - Übung [2.06 - Alle Login-Banner aus einem Template](../../stage2-building-blocks/2.06-banners-template-loop/README.de.md): dieselbe Idee für `/etc/issue`, `/etc/issue.net` und `/etc/motd`.
-- [Modul `ansible.builtin.copy`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
+- [Modul `ansible.builtin.copy`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/copy_module.html)
 - [`sshd_config(5)`: `Banner`](https://man.openbsd.org/sshd_config) und [`issue(5)`](https://man7.org/linux/man-pages/man5/issue.5.html)
 
 ## Musterlösung

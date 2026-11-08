@@ -38,6 +38,9 @@ Writing rules:
 - Every relative link must resolve (static-check links); link exercises to their README.md
   (the placeholder below points to INDEX.md only so that the template passes the link check).
 - Platform differences: add columns as needed (e.g. Hosts) but keep one row per os_family.
+- Further reading: lab links first, then external ones, last the glossary line with the terms
+  whose glossary entry links to this lesson. A new term goes into docs/GLOSSARY.md and
+  GLOSSARY.de.md (English headword in both, sorted; DE adds the German term in brackets).
 - Write the details tag only in the self-check: a hidden-answers view cuts from the first
   opening tag to the next closing tag, even inside this comment.
 -->
@@ -129,3 +132,4 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 - [Ansible documentation](https://docs.ansible.com/) - *the relevant module or guide page*
 - *man page or upstream documentation of the configured tool*
+- [Glossary](../GLOSSARY.md) - terms of this lesson: *the entries that link to this lesson*

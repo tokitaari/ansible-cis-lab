@@ -108,8 +108,8 @@ oder beim Host suchen musst.
 ### Weiterführend
 - Lektion [L00 - Lab-Aufbau und Ansible-Grundlagen](../../../docs/lessons/L00-lab-and-ansible-basics.de.md): die Konzepte vor dieser Übung (Inventar, Muster, wie ein Modul läuft).
 - Übung [0.02 - Python auf Alpine per raw nachrüsten](../0.02-bootstrap-alpine/README.de.md): die Lösung für den fehlschlagenden Host.
-- [How to build your inventory](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html) und [Patterns: targeting hosts and groups](https://docs.ansible.com/ansible/latest/inventory_guide/intro_patterns.html)
-- [Interpreter discovery](https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html) und das [Modul `ansible.builtin.raw`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html)
+- [How to build your inventory](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_inventory.html) und [Patterns: targeting hosts and groups](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_patterns.html)
+- [Interpreter discovery](https://docs.ansible.com/projects/ansible/latest/reference_appendices/interpreter_discovery.html) und das [Modul `ansible.builtin.raw`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/raw_module.html)
 
 ## Musterlösung
 

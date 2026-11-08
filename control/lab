@@ -4,6 +4,7 @@ set -uo pipefail
 
 LAB_ROOT="${LAB_ROOT:-/lab}"
 EX_DIR="$LAB_ROOT/exercises"
+LESSON_DIR="$LAB_ROOT/docs/lessons"
 # LAB_WORK_DIR overrides the work directory (CI checks the reference solutions in a temporary
 # one, see tools/stage-solution.sh). Exported for check.sh/check.yml; roles_path follows it.
 WORK_DIR="${LAB_WORK_DIR:-$LAB_ROOT/work}"
@@ -35,6 +36,8 @@ lab - Ansible CIS lab helper
   lab status                connectivity of all targets
   lab progress              exercises you have passed
   lab placement [answers]   placement test to find your starting point (then the key)
+  lab lesson [n] [answers]  list the lessons, or show lesson n (5, 05, L05 or an exercise
+                            id like 2.03) without, or with the self-check answers
   lab view <file.md>        render any markdown file (also: 'md <file>', 'less <file.md>')
   lab docs [name]           list the guides in /lab/docs, or show one (e.g. lab docs troubleshooting)
 
@@ -158,6 +161,7 @@ cmd_start() {
   fi
   info "Work directory: $target"
   find "$target" -mindepth 1 -maxdepth 1 -printf "    %f\n" 2>/dev/null
+  lesson_note "$id"
   missing="$(requires_missing "$d")"
   if [[ -n "$missing" ]]; then
     echo "${c_yel}note:${c_off} $id builds on exercises you have not passed yet: $missing"
@@ -272,7 +276,7 @@ sys.exit(0 if all(not (r.get("unreachable") or r.get("failed")) for r in hosts.v
 }
 
 cmd_progress() {
-  [[ -s "$STATE_DIR/progress" ]] || { echo "nothing passed yet - start with 'lab placement' or 'lab show 0.01'"; return; }
+  [[ -s "$STATE_DIR/progress" ]] || { echo "nothing passed yet - start with 'lab placement', 'lab lesson 0' or 'lab show 0.01'"; return; }
   sort -V "$STATE_DIR/progress"
 }
 
@@ -295,6 +299,7 @@ cmd_docs() {
     echo "Guides (lab docs <name>):"
     cmd_docs --names | sed 's/^/  /'
     echo "  readme              (lab overview)"
+    echo "Lessons: lab lesson"
     return
   fi
   name="$(tr 'a-z-' 'A-Z_' <<<"$1")"
@@ -312,6 +317,104 @@ cmd_placement() {
   fi
 }
 
+# lesson_info list               -> the lesson table (lab lesson without arguments)
+# lesson_info for <exercise id>  -> "<n> <title>" per lesson whose header lists the exercise
+# The header table of each lesson (docs/lessons/LNN-slug.md) is the single source.
+lesson_info() {
+  python3 - "$LESSON_DIR" "$(lang)" "$STATE_DIR/progress" "$([[ -t 1 ]] && echo 1)" "$@" <<'PY'
+import glob, os, re, signal, sys
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+ldir, lang, progress, tty, mode = sys.argv[1:6]
+done = set()
+if os.path.exists(progress):
+    done = {l.split()[0] for l in open(progress, encoding="utf-8") if l.strip()}
+lessons = []
+for f in sorted(glob.glob(os.path.join(ldir, "L[0-9][0-9]-*.md"))):
+    if f.endswith(".de.md"):
+        continue
+    shown = f[:-3] + ".de.md" if lang == "de" and os.path.isfile(f[:-3] + ".de.md") else f
+    lines = open(shown, encoding="utf-8").read().splitlines()
+    title = lines[0].split(" - ", 1)[-1] if lines else "?"
+    rows = [l for l in lines[2:12] if l.startswith("|")]
+    cells = [c.strip() for c in rows[2].strip("|").split("|")] if len(rows) > 2 else ["-", "-", "?", "-"]
+    ex = [] if cells[0] == "-" else [x.strip() for x in cells[0].split(",")]
+    lessons.append((os.path.basename(f)[:3], title, ex, cells[2]))
+
+def ranges(ids):          # 1.01, 1.02, 1.03, 2.01 -> 1.01-1.03, 2.01
+    out = []
+    for i in ids:
+        s, n = i.split(".")
+        if out and out[-1][0] == s and out[-1][2] + 1 == int(n):
+            out[-1][2] = int(n)
+        else:
+            out.append([s, int(n), int(n)])
+    parts = []
+    for s, a, b in out:
+        parts += [f"{s}.{a:02d}-{s}.{b:02d}"] if b - a >= 2 else [f"{s}.{i:02d}" for i in range(a, b + 1)]
+    return ", ".join(parts) or "-"
+
+if mode == "for":
+    for lid, title, ex, _ in lessons:
+        if sys.argv[6] in ex:
+            print(int(lid[1:]), lid, title)
+    sys.exit(0)
+grn, off = ("\033[32m", "\033[0m") if tty else ("", "")
+if lang == "de":
+    print("Lektionen - lesen mit: lab lesson <n>   (mit Antworten: lab lesson <n> answers)\n")
+else:
+    print("Lessons - read one with: lab lesson <n>   (with answers: lab lesson <n> answers)\n")
+for lid, title, ex, time in lessons:
+    mark = f"{grn}✔{off}" if ex and all(e in done for e in ex) else " "
+    print(f"  {mark} {lid}  {time:<8} {ranges(ex):<22} {title}")
+print()
+PY
+}
+
+cmd_lesson() {
+  local arg="${1:-}" mode="${2:-}" n base f hits=()
+  if [[ -z "$arg" ]]; then lesson_info list; return; fi
+  [[ -z "$mode" || "$mode" == answers ]] || die "usage: lab lesson [n] [answers]"
+  if [[ "$arg" =~ ^[0-9]\.[0-9]{2}$ ]]; then            # an exercise id -> its lesson(s)
+    resolve "$arg"
+    mapfile -t hits < <(lesson_info for "$arg")
+    if [[ ${#hits[@]} -eq 0 ]]; then die "no lesson prepares $arg (try: lab lesson)"; fi
+    if [[ ${#hits[@]} -gt 1 ]]; then
+      if [[ "$(lang)" == de ]]; then echo "$arg wird von ${#hits[@]} Lektionen vorbereitet:"
+      else echo "$arg is prepared by ${#hits[@]} lessons:"; fi
+      printf '%s\n' "${hits[@]}" | while read -r n lid title; do
+        printf '  lab lesson %-3s %s - %s\n' "$n" "$lid" "$title"
+      done
+      return
+    fi
+    arg="${hits[0]%% *}"
+  fi
+  [[ "$arg" =~ ^[Ll]?[0-9]{1,2}$ ]] ||
+    die "invalid lesson '$1' (expected e.g. 5, 05, L05 or an exercise id like 2.03, try: lab lesson)"
+  n=$((10#${arg#[Ll]}))
+  for f in "$LESSON_DIR/L$(printf '%02d' "$n")"-*.md; do
+    [[ -f "$f" && "$f" != *.de.md ]] && { base="$f"; break; }
+  done
+  [[ -n "${base:-}" ]] || die "unknown lesson '$1' (try: lab lesson)"
+  f="$(localized "$LESSON_DIR" "$(basename "$base" .md)")"
+  if [[ "$mode" == answers ]]; then view "$f"
+  else view --strip-details "$f"
+       if [[ "$(lang)" == de ]]; then echo "Antworten der Selbstkontrolle:  lab lesson $n answers"
+       else echo "Self-check answers:  lab lesson $n answers"; fi
+  fi
+}
+
+lesson_note() { # lesson_note <exercise id> -> one line naming the lesson(s) that prepare it
+  local hits=() h n lid title line=""
+  mapfile -t hits < <(lesson_info for "$1")
+  [[ ${#hits[@]} -gt 0 ]] || return 0
+  for h in "${hits[@]}"; do
+    read -r n lid title <<<"$h"
+    line+="${line:+, }lab lesson $n ($lid)"
+  done
+  if [[ "$(lang)" == de ]]; then echo "${c_yel}Lektion:${c_off} $line - am besten vorher lesen"
+  else echo "${c_yel}Lesson:${c_off} $line - best read first"; fi
+}
+
 sub="${1:-help}"; shift || true
 case "$sub" in
   list)      cmd_list ;;
@@ -326,6 +429,7 @@ case "$sub" in
   status)    cmd_status ;;
   progress)  cmd_progress ;;
   placement) cmd_placement "$@" ;;
+  lesson)    cmd_lesson "$@" ;;
   view)      cmd_view "$@" ;;
   docs)      cmd_docs "$@" ;;
   reset)     die "reset needs Docker - run it on the host: ./lab.sh reset <host|all>" ;;

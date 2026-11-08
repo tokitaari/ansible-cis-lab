@@ -30,7 +30,7 @@ alias ap='ansible-playbook'
 alias al='ansible-lint --offline'
 # completion for the lab command
 _lab_complete() {
-  local cmds="list show start hint check explain solution solve lang status progress placement view docs help"
+  local cmds="list show start hint check explain solution solve lang status progress placement lesson view docs help"
   if (( COMP_CWORD == 1 )); then
     mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "${COMP_WORDS[1]}")
   elif (( COMP_CWORD == 2 )); then
@@ -40,7 +40,11 @@ _lab_complete() {
       lang) mapfile -t COMPREPLY < <(compgen -W "en de" -- "${COMP_WORDS[2]}") ;;
       view) mapfile -t COMPREPLY < <(compgen -f -- "${COMP_WORDS[2]}") ;;
       docs) mapfile -t COMPREPLY < <(compgen -W "$(lab docs --names 2>/dev/null)" -- "${COMP_WORDS[2]}") ;;
+      lesson) mapfile -t COMPREPLY < <(compgen -W "$(find /lab/docs/lessons -maxdepth 1 -name 'L[0-9][0-9]-*.md' ! -name '*.de.md' -printf '%f\n' | cut -c1-3 | sort)" -- "${COMP_WORDS[2]}") ;;
+      placement) mapfile -t COMPREPLY < <(compgen -W "answers" -- "${COMP_WORDS[2]}") ;;
     esac
+  elif (( COMP_CWORD == 3 )) && [[ "${COMP_WORDS[1]}" == lesson ]]; then
+    mapfile -t COMPREPLY < <(compgen -W "answers" -- "${COMP_WORDS[3]}")
   fi
 }
 complete -F _lab_complete lab

@@ -608,11 +608,13 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 ## Further reading
 
-- [Role argument validation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - `meta/argument_specs.yml`, types, `choices` and nested `options`
-- [Conditionals](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html) and [Blocks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html) - `when` and what a block hands to its tasks
-- [Using variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - the full order of precedence
-- [`ansible.builtin.include_vars`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html) - loading data files at run time
-- [`ansible.builtin.first_found`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - the lookup behind the fallback chain
-- [`ansible.builtin.assert`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html) - `that`, `fail_msg` and `quiet`
-- [Using filters to manipulate data](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html) - `to_datetime`, `map` and `type_debug`
-- [`ansible.posix.json` callback](https://docs.ansible.com/ansible/latest/collections/ansible/posix/json_callback.html) - the callback behind the contract test
+- [Role argument validation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - `meta/argument_specs.yml`, types, `choices` and nested `options`
+- [Conditionals](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_conditionals.html) and [Blocks](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_blocks.html) - `when` and what a block hands to its tasks
+- [Using variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html) - the full order of precedence
+- [`ansible.builtin.include_vars`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/include_vars_module.html) - loading data files at run time
+- [`ansible.builtin.first_found`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - the lookup behind the fallback chain
+- [`ansible.builtin.assert`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/assert_module.html) - `that`, `fail_msg` and `quiet`
+- [Using filters to manipulate data](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_filters.html) - `to_datetime`, `map` and `type_debug`
+- [`ansible.posix.json` callback](https://docs.ansible.com/projects/ansible/latest/collections/ansible/posix/json_callback.html) - the callback behind the contract test
+- [Glossary](../GLOSSARY.md) - terms of this lesson: `assert`, capability flag, exception,
+  `first_found`, `include_vars`, Level 1 / Level 2, platform data, profile (CIS)

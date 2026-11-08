@@ -396,10 +396,13 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 ## Further reading
 
-- [How to build your inventory](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html) and [Patterns: targeting hosts and groups](https://docs.ansible.com/ansible/latest/inventory_guide/intro_patterns.html)
-- [Introduction to ad hoc commands](https://docs.ansible.com/ansible/latest/command_guide/intro_adhoc.html)
-- [Discovering variables: facts and magic variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html)
-- [Validating tasks: check mode and diff mode](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_checkmode.html)
-- [`ansible.builtin.raw` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html) and [Interpreter discovery](https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html)
-- [Ansible configuration settings](https://docs.ansible.com/ansible/latest/reference_appendices/config.html) - search order of `ansible.cfg`
+- [How to build your inventory](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_inventory.html) and [Patterns: targeting hosts and groups](https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_patterns.html)
+- [Introduction to ad hoc commands](https://docs.ansible.com/projects/ansible/latest/command_guide/intro_adhoc.html)
+- [Discovering variables: facts and magic variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_vars_facts.html)
+- [Validating tasks: check mode and diff mode](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_checkmode.html)
+- [`ansible.builtin.raw` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/raw_module.html) and [Interpreter discovery](https://docs.ansible.com/projects/ansible/latest/reference_appendices/interpreter_discovery.html)
+- [Ansible configuration settings](https://docs.ansible.com/projects/ansible/latest/reference_appendices/config.html) - search order of `ansible.cfg`
 - `man 5 sshd_config` (`Banner`), `man 5 issue`
+- [Glossary](../GLOSSARY.md) - terms of this lesson: ad-hoc command, `become`, `changed` / `ok`,
+  `changed_when` / `failed_when`, control node, diff mode, facts, `hostvars`, idempotency,
+  interpreter discovery, inventory, module, pattern, `raw`, reset (lab), target

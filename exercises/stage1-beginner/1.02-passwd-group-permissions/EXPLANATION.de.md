@@ -71,6 +71,7 @@ Die Musterlösung ändert die Sicherungen nicht.
 - Auf echten Hosts können Sicherungen fehlen. Mit `stat` prüfen und `when` nutzen, wie im Bonus.
 
 ### Weiterführend
+- Lektion [L02 - Sichere Änderungen](../../../docs/lessons/L02-safe-changes.de.md): `--check --diff` vor einer Änderung und was der Check-Modus vorhersagen kann.
 - Lektion [L03 - Basis-Härtung](../../../docs/lessons/L03-base-hardening.de.md): Pakete, Dienste, Dateien, SSH und sudo an einem Ort.
 - Übung [1.01 - Unsichere Client-Pakete entfernen](../1.01-remove-telnet/README.de.md)
 - Übung [2.01 - /etc/shadow: richtige Rechte je OS-Familie](../../stage2-building-blocks/2.01-shadow-permissions-per-family/README.de.md)

@@ -117,8 +117,8 @@ Die Spalte `visudo` zeigt, was `command -v` ausgab (Messung aus L14). Die Lösun
   der Linter.
 
 ### Weiterführend
-- Lektion [L12 - Secrets with Ansible Vault](../../../docs/lessons/L12-secrets-with-ansible-vault.de.md): die Konzepte vor dieser Übung, mit Demos und Selbsttest-Fragen.
-- Lektion [L08 - Accounts and PAM](../../../docs/lessons/L08-accounts-and-pam.de.md): was die Alterungsfelder und das Hash-Präfix bedeuten.
+- Lektion [L12 - Geheimnisse mit Ansible Vault](../../../docs/lessons/L12-secrets-with-ansible-vault.de.md): die Konzepte vor dieser Übung, mit Demos und Selbsttest-Fragen.
+- Lektion [L08 - Konten und PAM](../../../docs/lessons/L08-accounts-and-pam.de.md): was die Alterungsfelder und das Hash-Präfix bedeuten.
 
 ## Musterlösung
 

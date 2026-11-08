@@ -18,7 +18,7 @@ MINOR: new features or exercises, PATCH: fixes.
   sudo, `ANSIBLE_CONFIG`), inventory and patterns, how a module runs and why `raw` needs
   `changed_when`, facts and `hostvars`, idempotency and `--check --diff`; with
   platform table, container notes, pitfalls and self-check questions. Prepares 0.01-0.04. Read
-  it with `lab view docs/lessons/L00-lab-and-ansible-basics.md` (`lab lesson` follows).
+  it with `lab lesson 0`.
   Rebuild: *none*
 - Lesson L01 *CIS Benchmarks: structure, levels and the lab catalogue* in `docs/lessons/` (EN
   and DE): what a Benchmark is and how it is made (consensus process, licence, CIS Controls,
@@ -28,7 +28,7 @@ MINOR: new features or exercises, PATCH: fixes.
   `cis/controls.yml` and the exercises' `meta.yml` connect to the PDFs - with a tested play
   that queries the catalogue, container values, pitfalls and self-check questions. Background
   for all exercises, applied directly in 4.01, 4.02 and 5.03. Read it with
-  `lab view docs/lessons/L01-cis-benchmarks.md`. Rebuild: *none*
+  `lab lesson 1`. Rebuild: *none*
 - Lesson L02 *Safe changes: check mode, validate, handlers and conditionals* in
   `docs/lessons/` (EN and DE): what `--check --diff` can and cannot predict (skipped
   `command` tasks, `check_mode: false`, `diff: false`), what `validate` proves and what it
@@ -36,7 +36,7 @@ MINOR: new features or exercises, PATCH: fixes.
   after a failure), conditionals with `package_facts`, `failed_when` instead of
   `ignore_errors`, and ordering a risky change (`--limit`, `--step`, `backup`,
   `block`/`rescue`) - with tested examples, platform table, pitfalls and self-check
-  questions. Prepares 1.01-1.05. Read it with `lab view docs/lessons/L02-safe-changes.md`.
+  questions. Prepares 1.01-1.05. Read it with `lab lesson 2`.
   Rebuild: *none*
 - Lesson L03 *Base hardening: packages, services, file permissions, SSH and sudo* in
   `docs/lessons/` (EN and DE): the layers of attack surface (installed, running, enabled,
@@ -46,7 +46,7 @@ MINOR: new features or exercises, PATCH: fixes.
   wins, `Match`, `sshd -T`, reload versus restart) and how sudo reads `sudoers.d` (later
   wins, dotted names ignored, sudo-rs) - with tested examples, platform table, pitfalls and
   self-check questions. Prepares 1.01-1.05 and 2.01. Read it with
-  `lab view docs/lessons/L03-base-hardening.md`. Rebuild: *none*
+  `lab lesson 3`. Rebuild: *none*
 - Lesson L04 *Platform differences as data: dictionaries, loops, Jinja2 and templates* in
   `docs/lessons/` (EN and DE): a dictionary keyed by `os_family` instead of a chain of `when`
   conditions (and what a missing key or a `default` means), registered loop results
@@ -54,7 +54,7 @@ MINOR: new features or exercises, PATCH: fixes.
   values in ansible-core 2.21, templates (block trimming, `ansible_managed`, deterministic
   output, `--diff`) and where a variable gets its value (layers, `ansible-inventory --host`) -
   with tested examples, platform table, pitfalls and self-check questions. Prepares 2.01, 2.02
-  and 2.06. Read it with `lab view docs/lessons/L04-platform-differences-as-data.md`.
+  and 2.06. Read it with `lab lesson 4`.
   Rebuild: *none*
 - Lesson L05 *Kernel hardening: modules and sysctl* in `docs/lessons/` (EN and DE): namespaced
   vs. global kernel parameters and why a privileged container makes the difference matter,
@@ -63,7 +63,7 @@ MINOR: new features or exercises, PATCH: fixes.
   `install` and `blacklist` in `modprobe.d` really do and what a rule does not cover (loaded
   modules, `insmod`, the initramfs), and collections (FQCN, `requirements.yml`) - with tested
   examples, platform table, pitfalls and self-check questions. Prepares 2.03 and 2.04. Read it
-  with `lab view docs/lessons/L05-kernel-modules-and-sysctl.md`.
+  with `lab lesson 5`.
   Rebuild: *none*
 - Lesson L06 *Job schedulers: who runs what, and who may schedule it* in `docs/lessons/` (EN
   and DE): where cron reads jobs from and under whose authority they run (system crontab,
@@ -73,7 +73,7 @@ MINOR: new features or exercises, PATCH: fixes.
   (existing crontabs, drop-ins, BusyBox), `at`, systemd timers and anacron as other places for
   jobs, and the `ansible.builtin.cron` module (name marker, `cron_file`) - with tested examples,
   platform table, pitfalls and self-check questions. Prepares 2.05. Read it with
-  `lab view docs/lessons/L06-job-schedulers.md`. Rebuild: *none*
+  `lab lesson 6`. Rebuild: *none*
 - Lesson L07 *Roles, tags and project structure: one baseline, many switches* in
   `docs/lessons/` (EN and DE): the directory contract of a role (what Ansible loads on its own,
   where it searches for a role, `roles:` against `import_role`/`include_role`), `defaults/` against
@@ -81,7 +81,7 @@ MINOR: new features or exercises, PATCH: fixes.
   `include_tasks` (what `--list-tasks` and `--tags` do with each), tags with `always`/`never`, and
   `ansible-lint` profiles from `min` to `production` with a worked violation list - with a
   runnable demo role, platform table, pitfalls (tested error texts) and self-check questions.
-  Prepares 3.01. Read it with `lab view docs/lessons/L07-roles-tags-project-structure.md`.
+  Prepares 3.01. Read it with `lab lesson 7`.
   Rebuild: *none*
 - Lesson L08 *Accounts and PAM: who may log in, how, and with what password* in
   `docs/lessons/` (EN and DE): the `passwd`/`shadow` fields and what `*`, `!` and an empty field
@@ -92,7 +92,7 @@ MINOR: new features or exercises, PATCH: fixes.
   (drop-in order, `enforce_for_root`, tally, lock-out analysis), and why `umask` and `TMOUT` from a
   profile script are invisible to an Ansible task - with tested examples, a platform table
   measured on all eight targets, pitfalls and self-check questions. Prepares 3.02, 3.03, 3.05
-  and 4.06. Read it with `lab view docs/lessons/L08-accounts-and-pam.md`. Rebuild: *none*
+  and 4.06. Read it with `lab lesson 8`. Rebuild: *none*
 - Lesson L09 *Auditing and integrity: auditd, AIDE and long-running tasks* in `docs/lessons/`
   (EN and DE): why the audit subsystem belongs to the host kernel, watch and syscall rules, keys
   and `auid`/`unset`, the `rules.d` merge order and the last-`-e` rule (tested), `-e 2` and what it
@@ -102,7 +102,7 @@ MINOR: new features or exercises, PATCH: fixes.
   and `async`/`poll`/`async_status` (failures stay invisible until collected, `poll: 0` with
   `creates` is `changed` on every run) - with tested examples, a platform table measured on all
   eight targets, pitfalls and self-check questions. Prepares 3.04 and 4.08. Read it with
-  `lab view docs/lessons/L09-auditing-and-integrity.md`. Rebuild: *none*
+  `lab lesson 9`. Rebuild: *none*
 - Lesson L10 *Compliance reporting: audit mode, enforce mode and custom facts* in
   `docs/lessons/` (EN and DE): one code path for audit and enforce through check mode, how each
   kind of task reports (and why a skipped `command` means "unknown"), a `check_mode` keyword
@@ -112,7 +112,7 @@ MINOR: new features or exercises, PATCH: fixes.
   and Markdown report with a "no data" list, and custom facts (`facts.d`, static and executable,
   stale `ansible_local`, types, broken facts, privileges) - with a platform table measured on all
   eight targets, pitfalls and self-check questions. Prepares 4.01, 4.05 and 5.01. Read it with
-  `lab view docs/lessons/L10-compliance-reporting.md`. Rebuild: *none*
+  `lab lesson 10`. Rebuild: *none*
 - Lesson L11 *Profiles, exceptions and data-driven roles* in `docs/lessons/` (EN and DE): a
   profile as one validated value (`-e` gives a string, a block's `when` is evaluated per task,
   a lower level undoes nothing), exceptions as records with a reason and an end date (YAML
@@ -122,7 +122,7 @@ MINOR: new features or exercises, PATCH: fixes.
   fallback, the precedence of `include_vars`), and testing a role from the outside with the JSON
   callback and `--check` - all tested - with a platform table measured on all eight targets,
   pitfalls and self-check questions. Prepares 4.02 and 4.03. Read it with
-  `lab view docs/lessons/L11-profiles-exceptions-and-data-driven-roles.md`. Rebuild: *none*
+  `lab lesson 11`. Rebuild: *none*
 - Lesson L12 *Secrets with Ansible Vault* in `docs/lessons/` (EN and DE): what Vault protects
   and where a secret still shows up, vault files, password sources (file, environment variable,
   executable) and ids, a whole file or one value with the `vault_` naming convention, why a
@@ -130,7 +130,7 @@ MINOR: new features or exercises, PATCH: fixes.
   on the control node's hashing library and what `update_password: on_create` costs, and which
   output shows a secret (`--diff`, registered results, command lines) with and without `no_log`;
   with platform table, container notes, pitfalls and self-check questions. Prepares 4.04. Read it
-  with `lab view docs/lessons/L12-secrets-with-ansible-vault.md`. Rebuild: *none*
+  with `lab lesson 12`. Rebuild: *none*
 - Lesson L13 *Host firewall with nftables* in `docs/lessons/` (EN and DE): tables, hooks and why
   a firewall owns one table (several base chains on one hook, a drop is final, `flush ruleset`
   in a throw-away namespace), loading rules (the check-only mode and what it cannot know, one file
@@ -139,7 +139,7 @@ MINOR: new features or exercises, PATCH: fixes.
   new SSH connection, `wait_for_connection` and the rule for its timeout), and what survives a
   restart (file, service, live ruleset) - with platform table measured on all eight targets,
   pitfalls and self-check questions. Prepares 4.07. Read it with
-  `lab view docs/lessons/L13-host-firewall-nftables.md`. Rebuild: *none*
+  `lab lesson 13`. Rebuild: *none*
 - Lesson L14 *Production rollout* in `docs/lessons/` (EN and DE): failure semantics of a play
   (what one failed host does to the others, the later batches and the later plays with and
   without `serial`, `max_fail_percentage` and `any_errors_fatal`, the strict threshold, the recap
@@ -150,7 +150,24 @@ MINOR: new features or exercises, PATCH: fixes.
   community roles (Galaxy, Git, pins in `requirements.yml`, what a second install does, reading a
   role without running it, adopt, fork or build) - with platform table measured on all eight
   targets, a Galaxy example measured by the user, pitfalls and self-check questions. Prepares
-  5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
+  5.02 and 5.03. Read it with `lab lesson 14`. Rebuild: *none*
+- `lab lesson [n] [answers]`: without arguments it lists the lessons L00-L14 with reading time,
+  the exercises each one prepares and a ✔ once you have passed all of them; `lab lesson 5`
+  (also `05`, `L05`) shows lesson L05 in your language with the self-check answers hidden,
+  `lab lesson 5 answers` with the answers. An exercise id works too: `lab lesson 2.03` shows the
+  lesson that prepares 2.03, or lists them when there are two (1.01-1.05, 2.01).
+  `lab start <id>` names the lesson(s) of the exercise. The lesson header is the only source of this
+  mapping. Tab completion for `lab lesson` (lesson ids, `answers`) and `lab placement`
+  (`answers`); the README lists the lessons and the new commands (and no longer promises a
+  getting-started guide in `docs/`). Rebuild: *none* (open a new shell for the completion)
+- Glossary `docs/GLOSSARY.md` (EN and DE, `lab docs glossary`): 97 terms of the lessons and
+  exercises - Ansible (check mode, handler, `validate`, tags, `serial`, Vault, ...), CIS
+  (Benchmark, recommendation, Level 1/2, *Automated* / *Manual*, ...), Linux (PAM, faillock,
+  `modprobe.d`, sysctl, auditd, nftables, ...) and the lab itself - each in one or two sentences
+  with a link to the lesson section that explains it. Sorted by the English term; the German
+  page adds the German term where the lessons use one. Every lesson ends its *Further reading*
+  with a line naming its glossary terms; the lesson template, LEARNING_PATH and the README link
+  the glossary. Rebuild: *none*
 
 ### Changed
 - Exercise 5.01 (EN and DE): deeper `EXPLANATION.md` with measured facts (what `check.sh` tests
@@ -334,6 +351,21 @@ MINOR: new features or exercises, PATCH: fixes.
   targets are harmless (`00-cis-` sorts first); `./lab.sh reset all` removes them. 2.03 README
   (requirement, bonus questions), hint 3 and EXPLANATION, the 3.01 EXPLANATION and the 4.02 hint
   are updated. Rebuild: *none*
+- `lab-view` (and so `lab show`, `lab view`, `lab docs`, `md` and `less` on a Markdown file)
+  shows a link by its text only, no longer followed by its target in brackets. A web link stays
+  clickable in terminals that support OSC 8 hyperlinks, also in the pager (`less -R` passes them
+  through); a link to another lab file is shown as styled text. Piped output (no terminal, or `LAB_PLAIN=1`) is
+  unchanged. Rebuild: *none*
+- `exercises/INDEX.md` has a *Lesson* column that links the lesson(s) preparing each exercise;
+  `docs/LEARNING_PATH.md` has a *Lessons* section (what a lesson is, `lab lesson`, a table of all
+  lessons with the exercises they prepare and their reading time), a *Lessons* row in the
+  mechanism table and "read the lesson first" as step 1 of the working style. Both languages.
+  The static gate builds the INDEX column (check `meta`) and the LEARNING_PATH table (check
+  `lessons`) from the lesson headers and fails when they drift. Rebuild: *none*
+- Static gate: the `parity` check compares a link to a heading by the heading's position, so a
+  DE link may carry the translated anchor (`L02-safe-changes.de.md#check-modus-...`); the anchor
+  of a heading with an underscore inside a word (`async_status`, `no_log`) keeps the underscore,
+  as on GitHub - the gate used to drop it. Rebuild: *none*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The
@@ -371,6 +403,16 @@ MINOR: new features or exercises, PATCH: fixes.
   configuration in reading order, not the effective one (it lists every `install` line). The
   catalogue note of control 1.1.1 in `cis/controls.yml` mentions the openSUSE vendor rules.
   Rebuild: *none*
+- Link pass over all 115 external URLs (checked with curl on 2026-11-08: 114 answer 200, the
+  Alpine wiki sends `curl` a bot challenge): the 57 links to the
+  Ansible documentation now point to `docs.ansible.com/projects/ansible/latest/...`, where the
+  old `docs.ansible.com/ansible/latest/...` addresses redirect. Lesson L06 (DE) linked the
+  English `CONTAINER_LIMITS.md`, eight links in the German EXPLANATIONs of 4.04, 4.07, 5.02 and
+  5.03 named the lessons by their English titles, and the 1.02 EXPLANATION did not link L02, one
+  of its two lessons - fixed. The static gate (`links`) now fails when a German page links the
+  English twin of a page or an English page links a German one (the language switch line
+  excepted). Rebuild: *none*
+
 
 ## [1.4.0] - 2026-11-03
 

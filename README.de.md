@@ -17,6 +17,7 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 |---|---|
 | **Targets** | Debian 13, Ubuntu 26.04, Rocky 10, AlmaLinux 10, Fedora 44, openSUSE Leap 16, Arch (rolling), Alpine 3.24 |
 | **Aufgaben** | 31 in 6 Stufen, ~28 h, jeweils mit Ziel, Hintergrund, Anforderungen, 3 gestaffelten Hinweisen, Bonus, Musterlösung, Erklärung, automatischem Check |
+| **Lektionen** | 15 Lektionen zum Selbststudium (L00-L14, ~7 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
 | **Sprachen** | Englisch (Standard) und Deutsch: `lab lang de` |
 | **CIS** | Profil Level 1 Server (+ ausgewählte Level 2); eigener Kontrollkatalog in [`cis/controls.yml`](cis/controls.yml); PDFs: siehe [`cis/README.de.md`](cis/README.de.md) |
 
@@ -31,6 +32,7 @@ Unter Windows WSL2 nutzen und das Lab **im Linux-Dateisystem** ablegen (z. B. `~
 ./lab.sh shell       # Shell im Control Node
 lab lang de          # Texte auf Deutsch
 lab placement        # Einstufungstest mit 10 Fragen → Einstiegspunkt
+lab lesson           # die Lektionen und die Aufgaben, die jede vorbereitet
 lab list             # alle Aufgaben mit deinem Fortschritt
 lab start 0.01       # loslegen
 ```
@@ -39,6 +41,7 @@ Windows PowerShell: `.\lab.ps1 up`, `.\lab.ps1 shell`.
 ## So läuft eine Aufgabe
 
 ```bash
+lab lesson 1.03      # die Lektion(en) zur Aufgabe: erst die Konzepte
 lab show 1.03        # Aufgabe lesen
 lab start 1.03       # legt /lab/work/1.03 an (= ./work/1.03 auf dem Host - mit deiner IDE bearbeiten)
 ansible-playbook playbook.yml
@@ -54,7 +57,7 @@ Host kaputt? `./lab.sh reset debian` (oder `reset all`) erzeugt ihn im Ursprungs
 |---|---|
 | Shell | bash mit [oh-my-bash](https://github.com/ohmybash/oh-my-bash) (Theme `font`; `OSH_THEME` in `~/.bashrc` ändern, Themes in `/opt/oh-my-bash/themes`), Tab-Vervollständigung für `lab` |
 | Editor | `vim` (Syntax, YAML mit 2 Leerzeichen, Cursorspalte für YAML), `nano`; `EDITOR=vim` |
-| Markdown | überall gerendert: `lab view <datei.md>`, `md <datei.md>`, `less <datei.md>`, `lab docs [name]`; vom Host `./lab.sh view <datei.md>` / `.\lab.ps1 view <datei.md>` |
+| Markdown | überall gerendert (Links zeigen ihren Text): `lab view <datei.md>`, `lab lesson [n]`, `md <datei.md>`, `less <datei.md>`, `lab docs [name]`; vom Host `./lab.sh view <datei.md>` / `.\lab.ps1 view <datei.md>` |
 | Aliase | `ap` = ansible-playbook, `al` = ansible-lint --offline |
 
 ## Lab aktualisieren
@@ -108,7 +111,7 @@ targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (p
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
 cis/                  Kontrollkatalog + Ablage für deine CIS-PDFs
-docs/                 Einstieg, Lernpfad, Container-Grenzen, Fehlerbehebung
+docs/                 Lernpfad, lessons/ (L00-L14), Glossar, Container-Grenzen, Fehlerbehebung
 tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate (beide in CI)
 work/                 DEINE Lösungen (eingehängt nach /lab/work)
 ```

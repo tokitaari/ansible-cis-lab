@@ -96,7 +96,7 @@ live in the same package (arch: `hostname`), so read the file list first.
 - Lesson [L02 - Safe changes](../../../docs/lessons/L02-safe-changes.md): `--check --diff`, what changes and what only looks like a change.
 - Lesson [L03 - Base hardening](../../../docs/lessons/L03-base-hardening.md): packages, services, files, SSH and sudo in one place.
 - Exercise [1.04 - Stop and disable the FTP server](../1.04-disable-ftp-server/README.md): `package_facts` next to `service`.
-- [`ansible.builtin.package` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html) and [`ansible.builtin.package_facts` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_facts_module.html)
+- [`ansible.builtin.package` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/package_module.html) and [`ansible.builtin.package_facts` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/package_facts_module.html)
 
 ## Reference solution
 

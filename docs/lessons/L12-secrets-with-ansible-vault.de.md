@@ -485,8 +485,9 @@ Starte sie mit `lab start 4.04`; `lab show 4.04` gibt ihr README aus.
 
 ## Weiterführendes
 
-- [Protecting sensitive data with Ansible vault](https://docs.ansible.com/ansible/latest/vault_guide/index.html) - der Vault-Leitfaden: IDs, `encrypt_string`, Passwortquellen
-- [ansible-vault](https://docs.ansible.com/ansible/latest/cli/ansible-vault.html) - jeder Unterbefehl und jede Option
-- [password_hash filter](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/password_hash_filter.html) - Algorithmen, `salt`, `rounds`
-- [Protecting sensitive data with no_log](https://docs.ansible.com/ansible/latest/reference_appendices/logging.html#protecting-sensitive-data-with-no-log) - was das Schlüsselwort verbirgt und was nicht
+- [Protecting sensitive data with Ansible vault](https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html) - der Vault-Leitfaden: IDs, `encrypt_string`, Passwortquellen
+- [ansible-vault](https://docs.ansible.com/projects/ansible/latest/cli/ansible-vault.html) - jeder Unterbefehl und jede Option
+- [password_hash filter](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/password_hash_filter.html) - Algorithmen, `salt`, `rounds`
+- [Protecting sensitive data with no_log](https://docs.ansible.com/projects/ansible/latest/reference_appendices/logging.html#protecting-sensitive-data-with-no-log) - was das Schlüsselwort verbirgt und was nicht
 - [`crypt(5)`](https://man.archlinux.org/man/crypt.5) - die Hash-Formate und die Bedeutung von `$id$`, Salt und Rounds
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `no_log`, salt, Vault

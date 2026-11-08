@@ -419,8 +419,10 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 ## Weiterführendes
 
-- [Templating (Jinja2)](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_templating.html) und [Filter](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html) im Ansible-Guide
-- [Schleifen](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html) - `loop_control`, `dict2items`, Schleifen registrieren
-- [Variablen verwenden](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - die vollständige Rangfolge
-- [Modul `ansible.builtin.template`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html)
+- [Templating (Jinja2)](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_templating.html) und [Filter](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_filters.html) im Ansible-Guide
+- [Schleifen](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_loops.html) - `loop_control`, `dict2items`, Schleifen registrieren
+- [Variablen verwenden](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html) - die vollständige Rangfolge
+- [Modul `ansible.builtin.template`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/template_module.html)
 - [Jinja-Template-Designer-Dokumentation](https://jinja.palletsprojects.com/en/stable/templates/) - `for`, `if`, Whitespace-Kontrolle
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `group_vars` / `host_vars`, Jinja2,
+  loop, platform data, template, variable precedence

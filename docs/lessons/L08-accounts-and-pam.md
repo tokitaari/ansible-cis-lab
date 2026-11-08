@@ -507,9 +507,11 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 ## Further reading
 
-- [`ansible.builtin.getent`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/getent_module.html), [`ansible.builtin.user`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html) and [`ansible.builtin.find`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/find_module.html) - the modules used in the examples
+- [`ansible.builtin.getent`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/getent_module.html), [`ansible.builtin.user`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/user_module.html) and [`ansible.builtin.find`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/find_module.html) - the modules used in the examples
 - [`shadow(5)`](https://man.archlinux.org/man/shadow.5) and [`login.defs(5)`](https://man.archlinux.org/man/login.defs.5) - the fields and the defaults
 - [`chage(1)`](https://man.archlinux.org/man/chage.1) and [`useradd(8)`](https://man.archlinux.org/man/useradd.8) - per-account and default values
 - [`pam.conf(5)`](https://man.archlinux.org/man/pam.conf.5) and [`pam_unix(8)`](https://man.archlinux.org/man/pam_unix.8) - rule syntax, controls, hash options
 - [`pwquality.conf(5)`](https://man.archlinux.org/man/pwquality.conf.5) and [`pam_pwquality(8)`](https://man.archlinux.org/man/pam_pwquality.8) - password quality settings
 - [`faillock.conf(5)`](https://man.archlinux.org/man/faillock.conf.5), [`pam_faillock(8)`](https://man.archlinux.org/man/pam_faillock.8) and [`faillock(8)`](https://man.archlinux.org/man/faillock.8) - the lock module and its tool
+- [Glossary](../GLOSSARY.md) - terms of this lesson: authselect, faillock, `login.defs`, PAM,
+  pwquality, shadow, `TMOUT`, `umask`

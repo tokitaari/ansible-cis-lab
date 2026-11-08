@@ -98,7 +98,7 @@ so it can be changed centrally - you do that in 2.06. The text shown before auth
 - Lesson [L00 - Lab architecture and Ansible basics](../../../docs/lessons/L00-lab-and-ansible-basics.md): idempotency, `--check --diff` and the CIS background of control 1.6.
 - Exercise [2.02 - SSH server hardening with a Jinja2 template](../../stage2-building-blocks/2.02-sshd-template/README.md): where `Banner` is set.
 - Exercise [2.06 - All login banners from one template](../../stage2-building-blocks/2.06-banners-template-loop/README.md): the same idea for `/etc/issue`, `/etc/issue.net` and `/etc/motd`.
-- [`ansible.builtin.copy` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
+- [`ansible.builtin.copy` module](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/copy_module.html)
 - [`sshd_config(5)`: `Banner`](https://man.openbsd.org/sshd_config) and [`issue(5)`](https://man7.org/linux/man-pages/man5/issue.5.html)
 
 ## Reference solution

@@ -595,9 +595,11 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
 ## Further reading
 
-- [Roles](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - layout, search paths, `roles:` against `import_role` and `include_role`, dependencies
-- [Re-using files and roles](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse.html) - static imports against dynamic includes
-- [Tags](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html) - `always`, `never`, inheritance, `--tags` and `--skip-tags`
-- [Using variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - the full precedence list
-- [`ansible.builtin.first_found`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - the lookup used by the demo role
+- [Roles](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse_roles.html) - layout, search paths, `roles:` against `import_role` and `include_role`, dependencies
+- [Re-using files and roles](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_reuse.html) - static imports against dynamic includes
+- [Tags](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tags.html) - `always`, `never`, inheritance, `--tags` and `--skip-tags`
+- [Using variables](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html) - the full precedence list
+- [`ansible.builtin.first_found`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - the lookup used by the demo role
 - [ansible-lint](https://docs.ansible.com/projects/lint/) - profiles, rules and configuration
+- [Glossary](../GLOSSARY.md) - terms of this lesson: `always` (tag), `defaults/` and `vars/`,
+  `first_found`, `import_tasks` / `include_tasks`, `include_vars`, lint profile, role, tag
