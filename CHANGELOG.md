@@ -333,6 +333,12 @@ MINOR: new features or exercises, PATCH: fixes.
   `lab check 5.01` was a real enforce run, not a dry run. The keyword is now
   `ansible_check_mode or cis_mode == 'audit'` (as in L10), and a dry run in enforce mode
   reports a deviation as `fail` instead of `fixed`. Hint 2 corrected. Rebuild: *none*
+- 3.01 and 4.03: the directory helper tasks `Ensure /etc/sysctl.d exists` and `Ensure
+  /etc/modprobe.d exists` of the reference roles carried only the section tag, so `--tags
+  sysctl` failed on a host without the directory (fresh rocky and alma: `No such file or
+  directory` from `ansible.posix.sysctl`). They now carry the topic tags `sysctl` and
+  `modules`. The 3.01 EXPLANATION is updated, the 4.03 EXPLANATION lists the 6.3 dry-run
+  case. Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 
