@@ -7,7 +7,8 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
 
   meta      meta.yml schema (incl. requires: earlier, known ids), exercise layout,
             solve/hosts vs. solution and check,
-            README header table and INDEX rows vs. meta.yml
+            README header table and INDEX rows vs. meta.yml; the INDEX lesson column vs. the
+            lesson headers
   parity    every EN Markdown file has a DE twin (*.de.md) with the same structure;
             bash/yaml/... code blocks hold the same code (comments may be translated)
   links     relative Markdown links (and #anchors) resolve
@@ -15,7 +16,8 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
   lessons   docs/lessons/LNN-slug(.de).md: title, language switch, header table (exercises,
             CIS ids, reading time, earlier lessons - all known, sorted), the eight fixed
             sections, self-check questions with one folded answer each; EN/DE header values
-            equal. TEMPLATE(.de).md: structure only
+            equal. TEMPLATE(.de).md: structure only. docs/LEARNING_PATH(.de).md: the lesson
+            table lists every lesson with title, link, exercises and reading time of its header
 """
 import collections
 import os
@@ -296,6 +298,8 @@ def check_readme_headers(exs):
 
 
 def check_index(exs):
+    lesson_map = [(lid, stem, [x.strip() for x in cells[0].split(",")])
+                  for lid, stem, _, cells in lesson_headers("en")]
     for f, lang, suffix in (("INDEX.md", "en", ".md"), ("INDEX.de.md", "de", ".de.md")):
         p = os.path.join(EX_ROOT, f)
         if not os.path.isfile(p):
@@ -313,8 +317,10 @@ def check_index(exs):
                 continue
             row = rows.pop(m["id"], None)
             link = os.path.relpath(os.path.join(d, "README" + suffix), EX_ROOT)
+            lessons = ", ".join(f"[{lid}]({posixpath.join('../docs/lessons', stem + suffix)})"
+                                for lid, stem, ex in lesson_map if m["id"] in ex) or "-"
             want = [m["id"], f"[{m['title'].get(lang)}]({link})", stars(m["difficulty"]),
-                    f"~{m['minutes']} min", m["cis"]["section"], f"`{m['hosts']}`"]
+                    f"~{m['minutes']} min", m["cis"]["section"], f"`{m['hosts']}`", lessons]
             if row != want:
                 fail("meta", f"exercises/{f}: row {row} != meta.yml {want}")
         for extra in rows:
@@ -716,6 +722,61 @@ def check_lesson(f, ex_dirs, controls, lessons):
     return cells
 
 
+def lesson_headers(lang):
+    """[(LNN, stem, title line, header cells)] of the tracked lesson files, sorted; lenient -
+    a malformed file is skipped here and reported by the lessons check."""
+    out = []
+    d = os.path.join(ROOT, LESSON_DIR)
+    suffix = ".de.md" if lang == "de" else ".md"
+    names = sorted(posixpath.basename(f) for f in tracked_files()
+                   if posixpath.dirname(f) == LESSON_DIR)
+    for name in names:
+        stem = name[:-len(suffix)]
+        if not name.endswith(suffix) or (lang == "en" and name.endswith(".de.md")) \
+                or not LESSON_NAME_RE.match(stem):
+            continue
+        prose, _ = md_scan(read(os.path.join(d, name)))
+        lines = [l for l in prose if l.strip()]
+        head = table_rows("\n".join(lines[2:5])) if len(lines) > 4 else []
+        if lines and len(head) == 2 and len(head[1]) == 4:
+            out.append((stem[:3], stem, lines[0][2:].strip(), head[1]))
+    return out
+
+
+LP_HEAD = {"en": ["Lesson", "Prepares", "Reading time"], "de": ["Lektion", "Bereitet vor", "Lesezeit"]}
+
+
+def check_learning_path():
+    """docs/LEARNING_PATH(.de).md: the lesson table holds one row per lesson, in order, built from
+    the lesson header (link text = title line, exercises, reading time)."""
+    for lang, f in (("en", "docs/LEARNING_PATH.md"), ("de", "docs/LEARNING_PATH.de.md")):
+        p = os.path.join(ROOT, f)
+        if not os.path.isfile(p):
+            fail("lessons", f"{f} missing")
+            continue
+        rows, table = [], None
+        for line in read(p).splitlines():
+            s = line.strip()
+            if not (s.startswith("|") and s.endswith("|")):
+                table = None
+                continue
+            cells = [c.strip() for c in s[1:-1].split("|")]
+            if table is None:
+                table = cells
+            elif table == LP_HEAD[lang] and not re.fullmatch(r"\|[\s:|-]+\|", s):
+                rows.append(cells)
+        suffix = ".de.md" if lang == "de" else ".md"
+        want = [[f"[{title}](lessons/{stem}{suffix})", cells[0], cells[2]]
+                for _, stem, title, cells in lesson_headers(lang)]
+        if not rows:
+            fail("lessons", f"{f}: no lesson table with the columns {LP_HEAD[lang]}")
+        elif rows != want:
+            diff = [r for r in rows if r not in want] + [w for w in want if w not in rows]
+            fail("lessons", f"{f}: the lesson table must list every lesson in order as "
+                            f"| [title line](lessons/LNN-slug{suffix}) | exercises | reading time | "
+                            f"of its header; rows that differ: {diff or 'none - wrong order or duplicates'}")
+
+
 def check_lessons(files, exs):
     paths = [f for f in files if f.startswith(LESSON_DIR + "/") and f.endswith(".md")]
     nested = [f for f in paths if f.count("/") != LESSON_DIR.count("/") + 1]
@@ -744,6 +805,8 @@ def check_lessons(files, exs):
         tn, td = LESSON_TIME_RE["en"].match(en[2]), LESSON_TIME_RE["de"].match(de[2])
         if (en[0], en[1], en[3]) != (de[0], de[1], de[3]) or (tn and td and tn.group(1) != td.group(1)):
             fail("lessons", f"{f} vs {f[:-3]}.de.md: header table values differ: {en} vs {de}")
+    if lessons:
+        check_learning_path()
 
 
 # --------------------------------------------------------------------------- main

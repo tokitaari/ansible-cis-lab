@@ -348,6 +348,12 @@ MINOR: new features or exercises, PATCH: fixes.
   clickable in terminals that support OSC 8 hyperlinks (`less -R` passes them through); a link
   to another lab file is shown as styled text. Piped output (no terminal, or `LAB_PLAIN=1`) is
   unchanged. Rebuild: *none*
+- `exercises/INDEX.md` has a *Lesson* column that links the lesson(s) preparing each exercise;
+  `docs/LEARNING_PATH.md` has a *Lessons* section (what a lesson is, `lab lesson`, a table of all
+  lessons with the exercises they prepare and their reading time), a *Lessons* row in the
+  mechanism table and "read the lesson first" as step 1 of the working style. Both languages.
+  The static gate builds the INDEX column (check `meta`) and the LEARNING_PATH table (check
+  `lessons`) from the lesson headers and fails when they drift. Rebuild: *none*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The
