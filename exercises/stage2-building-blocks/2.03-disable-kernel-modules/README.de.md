@@ -25,7 +25,8 @@ blacklist <modul>
 
 Die `install`-Zeile lässt jedes Laden des Moduls scheitern, die `blacklist`-Zeile verhindert
 automatisches Laden über die Aliase des Moduls. Schreib die Zeilen ohne Kommentar am Ende - der
-Check akzeptiert nach `/bin/false` nichts mehr.
+Check akzeptiert nach `/bin/false` nichts mehr. Auf den Hosts mit kmod (alle außer alpine) fragt
+er zusätzlich `modprobe --show-depends <modul>`, ob deine `install`-Zeile die geltende ist.
 
 **Container-Hinweis:** Alle Container teilen sich den Kernel des HOSTS. Im Lab schreibst
 du nur die Konfiguration - du darfst **kein** `modprobe -r` ausführen (das würde Module
@@ -34,7 +35,7 @@ aus deinem Host entladen). Lies `docs/CONTAINER_LIMITS.md`.
 ## Anforderungen
 
 - [ ] Variable `cis_disabled_modules_l1`: `cramfs`, `freevxfs`, `hfs`, `hfsplus`, `jffs2`, `usb-storage`.
-- [ ] Eine Datei pro Modul: `/etc/modprobe.d/cis-<modul>.conf`, Inhalt genau die zwei Zeilen oben, `root:root`, `0644`.
+- [ ] Eine Datei pro Modul: `/etc/modprobe.d/00-cis-<modul>.conf`, Inhalt genau die zwei Zeilen oben, `root:root`, `0644`. Durch das `00-` sortiert die Datei vor den Regeldateien der Distribution, sodass deine `install`-Zeile gilt.
 - [ ] Nutze einen einzigen Task mit `loop`.
 - [ ] Kein `modprobe -r`, kein `rmmod`.
 
@@ -54,7 +55,7 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 
 ## Bonus (optional)
 
-- Ergänze eine Liste `cis_disabled_modules_l2` (`squashfs`, `udf`, `dccp`, `tipc`, `rds`, `sctp`) und eine Variable `cis_level` (Standard 1). Level-2-Module werden nur bei `cis_level >= 2` behandelt. Tipp: `cis_disabled_modules_l1 + (cis_disabled_modules_l2 if cis_level | int >= 2 else [])`.
+- Ergänze eine Liste `cis_disabled_modules_l2` (`squashfs`, `udf`, `dccp`, `tipc`, `rds`, `sctp`) und eine Variable `cis_level` (Standard 1). Level-2-Module werden nur bei `cis_level >= 2` behandelt. Tipp: `cis_disabled_modules_l1 + (cis_disabled_modules_l2 if cis_level | int >= 2 else [])`. `lab check 2.03 -e cis_level=2` prüft dann auch die Level-2-Dateien.
 - Auf einer echten VM würdest du geladene Module auch entladen. Schreib diesen Task, schütze ihn aber mit `when: not lab_in_container` (Variable ist im Inventar bereits definiert).
 - Warum kann das Deaktivieren von `squashfs` Ubuntu-Systeme kaputt machen? (Denk an Snaps.)
-- Vergleiche nach deinem Lauf `modprobe -n -v cramfs` und `modprobe -n -v usb-storage` auf opensuse. Warum zeigt eines davon deine Regel nicht? (`ls /usr/lib/modprobe.d/`)
+- Warum beginnt der Dateiname mit `00-`? Benenne auf opensuse `00-cis-cramfs.conf` in `cis-cramfs.conf` um und vergleiche `modprobe -n -v cramfs` vorher und nachher (`ls /usr/lib/modprobe.d/`). Lass danach dein Playbook erneut laufen.

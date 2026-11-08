@@ -70,7 +70,7 @@ Die `tasks/main.yml` der Rolle als Gerüst - setze jedes `"..."` ein:
   block:
     - name: L2-modules | Disable squashfs and udf
       ansible.builtin.copy:
-        dest: "/etc/modprobe.d/cis-{{ item }}.conf"
+        dest: "/etc/modprobe.d/00-cis-{{ item }}.conf"
         content: "..."                # install <Modul> /bin/false und blacklist <Modul>
         owner: root
         group: root

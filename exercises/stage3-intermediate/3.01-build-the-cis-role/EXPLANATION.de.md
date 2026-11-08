@@ -20,7 +20,8 @@ README, "ein Lauf auf frisch zurückgesetzten Hosts" - führe vorher `./lab.sh r
 aus. Gemessen mit der Referenzrolle auf frisch zurückgesetzten Hosts: Alle zwölf Checks `ok` nach
 einem Lauf, der zweite Lauf `changed=0`, `lab check 3.01` bestanden. Die Grenzen der einzelnen
 Checks bleiben (siehe die EXPLANATIONs von 0.04-2.06); die Rolle schreibt wie 2.03
-`cis-<modul>.conf`, also gewinnen auch hier die Vendor-Regeln von openSUSE.
+`00-cis-<modul>.conf`, und der Check von 2.03 fragt kmod auch, welche Regel gilt, mit
+`-e cis_level=2` auch für die Level-2-Module.
 
 ### So funktioniert es
 

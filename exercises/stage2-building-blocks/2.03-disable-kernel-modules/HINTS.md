@@ -19,7 +19,7 @@
   tasks:
     - name: Disable kernel module
       ansible.builtin.copy:
-        dest: "..."              # one file per module, named after the loop item
+        dest: "..."              # /etc/modprobe.d/00-cis-<module>.conf, one per loop item
         content: "..."           # the two lines install and blacklist, e.g. as a block scalar |
         owner: root
         group: root
