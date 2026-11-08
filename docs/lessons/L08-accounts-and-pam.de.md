@@ -347,7 +347,9 @@ eine Login-Shell:
 ```
 
 Auf dem Ubuntu-Host lauten beide Zeilen `umask=0022 TMOUT=unset`: Dort setzt nichts die Werte. Lass
-das Play nach 3.05 noch einmal laufen: Die erste Zeile sollte sich ändern, die zweite nicht.
+das Play nach 3.05 noch einmal laufen: Die erste Zeile ändert sich. Verlass dich nicht darauf, dass
+die zweite bleibt, wie sie war: Auf rocky, alma und fedora zeigten Befehle, die Ansible mit `become`
+ausführte, nach 3.05 ebenfalls `umask=0027` (die EXPLANATION von 3.05 enthält die Messung).
 
 `readonly` verhindert, dass ein Benutzer den Timeout wieder abschaltet. Eine schreibgeschützte
 Variable verweigert Zuweisung und `unset`:

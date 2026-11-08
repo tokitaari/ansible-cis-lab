@@ -153,6 +153,24 @@ MINOR: new features or exercises, PATCH: fixes.
   5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
 
 ### Changed
+- Exercises 3.02 and 3.05 (EN and DE): deeper `EXPLANATION.md` with measured facts (check scope,
+  per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."`. 3.02: only the four
+  `shadow` builds with `libeconf` (rocky, alma, fedora, opensuse) read `/etc/login.defs.d`, so a
+  drop-in passes the check on the other hosts without effect; arch and alpine start without
+  `PASS_*` lines; shadow 4.20 (arch) ignores `PASS_MIN_DAYS`; the `chpasswd` hash did not change
+  on any host. 3.05: the check rejects `umask 0027` and accepts `TMOUT=0`; dash (`/bin/sh` on
+  Debian/Ubuntu) ignores `TMOUT`; after the exercise Ansible's own commands run with umask `0027`
+  on rocky, alma and fedora. The 3.05 README says that `TMOUT=0` switches the timeout off and that
+  `readonly` is not inherited. L08 (EN and DE): no longer predicts that Ansible's own shell keeps
+  its umask after 3.05. Rebuild: *none*
+- Exercise 3.01 (EN and DE): deeper `EXPLANATION.md` with measured facts (what `check.sh` tests
+  and what it leaves out, per-family notes, pitfalls); hint 3 is now a skeleton of the role's
+  `tasks/main.yml` with `"..."`. The EXPLANATION now says that `ansible-lint --profile moderate`
+  does not report missing FQCN or `changed_when` (only `production` does), that variables loaded
+  with `include_vars` beat play vars and stay set for later plays of the same run, that
+  `--skip-tags always` also skips the implicit handler flush, and that
+  `--tags sysctl` fails on freshly reset rocky and alma because the directory task of the
+  reference role carries only `section3`. Rebuild: *none*
 - Exercises 2.01 to 2.03 (EN and DE): deeper `EXPLANATION.md` with measured facts (check
   scope, per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."`. 2.01: who needs
   the group `shadow` (`unix_chkpwd` per family), the backups that start world-readable on four

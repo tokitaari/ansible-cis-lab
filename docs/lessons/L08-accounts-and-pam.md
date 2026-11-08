@@ -337,7 +337,9 @@ through `command` or `shell` still shows the old value. Ask a login shell on pur
 ```
 
 On the Ubuntu host both lines read `umask=0022 TMOUT=unset`: nothing sets the values there. Run
-the play again after 3.05: the first line should change, the second must not.
+the play again after 3.05: the first line changes. Do not rely on the second staying as it was: on
+rocky, alma and fedora, commands that Ansible ran with `become` showed `umask=0027` after 3.05 as
+well (the EXPLANATION of 3.05 has the measurement).
 
 `readonly` is what stops a user from switching the timeout off. A read-only variable refuses
 assignment and `unset`:

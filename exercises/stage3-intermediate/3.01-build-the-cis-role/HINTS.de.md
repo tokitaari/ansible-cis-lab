@@ -10,4 +10,26 @@ Plattform-vars laden: `ansible.builtin.include_vars: "{{ lookup('ansible.builtin
 
 ## Hinweis 3
 
-`import_tasks` ist statisch: Tags am Import werden an jeden Task darin vererbt. Registrierte Variablen in Rollen brauchen auch das Präfix (`register: cis_cron_stat`). Die komplette Referenzrolle: `lab solution 3.01`.
+Die `tasks/main.yml` der Rolle:
+
+```yaml
+- name: Load OS family specific variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', cis_vars_candidates) }}"
+  vars:
+    cis_vars_candidates:
+      files: ["...", "..."]     # zuerst <os_family>.yml, dann die Rückfalldatei
+      paths: ["..."]            # das Verzeichnis vars/ dieser Rolle
+  tags: ["..."]                 # muss bei jeder --tags-Auswahl laufen
+
+- name: Section 1 - initial setup
+  ansible.builtin.import_tasks: "..."
+  tags: ["..."]
+# ... je ein Import für die Abschnitte 2, 3, 5 und 7, gleiches Muster
+```
+
+`import_tasks` ist statisch: Das Tag am Import erreicht jeden Task darin. Gib in den
+Abschnittsdateien jedem Task sein Themen-Tag - auch Hilfs-Tasks wie "Verzeichnis existiert", sonst
+überspringt `--tags sysctl` sie. Registrierte Variablen brauchen ebenfalls das Präfix
+(`register: cis_cron_stat`).
+
+Die komplette Referenzrolle: `lab solution 3.01`.
