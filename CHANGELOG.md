@@ -353,8 +353,8 @@ MINOR: new features or exercises, PATCH: fixes.
   are updated. Rebuild: *none*
 - `lab-view` (and so `lab show`, `lab view`, `lab docs`, `md` and `less` on a Markdown file)
   shows a link by its text only, no longer followed by its target in brackets. A web link stays
-  clickable in terminals that support OSC 8 hyperlinks (`less -R` passes them through); a link
-  to another lab file is shown as styled text. Piped output (no terminal, or `LAB_PLAIN=1`) is
+  clickable in terminals that support OSC 8 hyperlinks, also in the pager (`less -R` passes them
+  through); a link to another lab file is shown as styled text. Piped output (no terminal, or `LAB_PLAIN=1`) is
   unchanged. Rebuild: *none*
 - `exercises/INDEX.md` has a *Lesson* column that links the lesson(s) preparing each exercise;
   `docs/LEARNING_PATH.md` has a *Lessons* section (what a lesson is, `lab lesson`, a table of all

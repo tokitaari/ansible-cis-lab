@@ -125,7 +125,7 @@ def main():
         os.environ.setdefault("PAGER", "less -FRX")
         if "less" in os.environ["PAGER"] and "-R" not in os.environ["PAGER"]:
             os.environ["PAGER"] += " -R"
-        with console.pager(styles=True):
+        with console.pager(styles=True, links=True):
             console.print(group)
     else:
         console.print(group)
