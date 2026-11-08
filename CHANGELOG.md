@@ -362,6 +362,15 @@ MINOR: new features or exercises, PATCH: fixes.
   loads the module; the check read only the files and passed. With the `00-cis-` names (see
   *Changed*) `install /bin/false` applies on all seven kmod targets, and the check fails when
   another file wins. Rebuild: *none*
+- Lesson L05 (EN and DE): self-check question 5 assumed that `modprobe -n -v` prints
+  `install /bin/false` for a module that `lsmod` lists. kmod's dry run prints nothing for a
+  module the kernel has loaded already (measured on the seven kmod targets with a module of the
+  host kernel), so the question now starts from that output and the answer points to
+  `modprobe --show-depends`. A pitfall row says the same, the openSUSE paragraph names the
+  `00-...` file name and `--show-depends`, and `modprobe -c` is described as the merged
+  configuration in reading order, not the effective one (it lists every `install` line). The
+  catalogue note of control 1.1.1 in `cis/controls.yml` mentions the openSUSE vendor rules.
+  Rebuild: *none*
 
 ## [1.4.0] - 2026-11-03
 

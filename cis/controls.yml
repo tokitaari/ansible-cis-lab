@@ -24,7 +24,7 @@ controls:
     level: 1
     container: config
     exercises: ["2.03", "3.01", "5.01"]
-    platforms: /etc/modprobe.d may be missing on minimal systems; module state reflects the host kernel
+    platforms: /etc/modprobe.d may be missing on minimal systems; module state reflects the host kernel; openSUSE ships earlier-sorting install lines in /usr/lib/modprobe.d (rule files 00-cis-*)
 
   - id: "1.1.2"
     section: 1 Initial setup / filesystem partitions

@@ -168,7 +168,8 @@ protocol), and when a device appears. Each path ends in `modprobe`, which reads
   (`modprobe -b`): a plain `modprobe <module>` with the real name **still loads** it.
 
 You can see this without loading anything: `modprobe -n -v` does a dry run, `modprobe -c`
-dumps the effective configuration. With a module that is present, the three cases read:
+dumps the merged configuration in the order kmod reads it (of several `install` lines for one
+name, the first applies). With a module that is present but not loaded, the three cases read:
 
 | Configuration | `modprobe -n -v <module>` prints |
 |---|---|
@@ -294,9 +295,12 @@ so the dry run above cannot work there. Its configuration parser knows only `ali
 line is ignored, and `blacklist` holds for a plain name only with `-b`. A rule file written for
 kmod is *stored* correctly there, but BusyBox does not *enforce* its `install` line.
 openSUSE ships its own `install` lines for many rarely used file systems
-(`/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf`). kmod reads the merged directories in the order
-of the file names and uses the first `install` line for a module, so your rule in a file that
-sorts later does not apply there - `modprobe -n -v` shows which one does (measured on opensuse).
+(`/usr/lib/modprobe.d/60-blacklist_fs-<fs>.conf`), and they load the module when the kernel asks
+for it. kmod reads the merged directories in the byte order of the file names and uses the first
+`install` line for a module, so your rule in a file that sorts later does not apply there, while
+a name such as `00-...` sorts first (measured on opensuse). `modprobe --show-depends <module>`
+prints the line that applies - also for a module the kernel has loaded already, where
+`modprobe -n -v` prints nothing (measured on the seven kmod targets).
 Minimal images do not always contain `/etc/sysctl.d`: rocky and alma ship without it, so
 create the directory first, or the write fails with `No such file or directory` (the example
 above does that). `/etc/modprobe.d` exists on all eight targets.
@@ -321,6 +325,7 @@ above does that). `/etc/modprobe.d` exists on all eight targets.
 | A module with only a `blacklist` line still loads | `blacklist` is applied only with `modprobe -b`; a plain `modprobe <name>` ignores it | add `install <module> /bin/false`; verify with `modprobe -n -v` |
 | `Error running install command '/bin/false'` | the rule works; you ran a real `modprobe` | inspect with `modprobe -n -v` or `-c`, do not load to test |
 | `modprobe -n -v <module>` says the module was not found | no module directory in the container and no rule yet | expected; once the rule exists the output is `install ...` |
+| `modprobe -n -v <module>` prints nothing and exits with 0 | the (host) kernel has the module loaded already, so the dry run stops before it reads `install` | `modprobe --show-depends <module>` shows the rule anyway |
 | `lsmod` still lists the module despite the rule | it was loaded before, is built in, or came from the initramfs | a rule stops *new* loads; unload on a real host, rebuild the initramfs |
 | Other keys of the file changed too | `reload` is `true` by default and runs `sysctl -p <file>` for the whole file | `reload: false`, or know every line of the file |
 | `cannot stat /proc/sys/kernel/yama/ptrace_scope` | `sysctl_set: true` on a key the running kernel does not have (here: no Yama) | write the file only, or `ignoreerrors: true`; decide per key |
@@ -382,14 +387,15 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 
    </details>
 
-5. `modprobe -n -v foo` prints `install /bin/false`, and `lsmod` still lists `foo`. Is
+5. `modprobe -n -v foo` prints nothing and exits with 0, and `lsmod` lists `foo`. Is
    the rule broken?
 
    <details><summary>Answer</summary>
 
-   No. The dry run shows what *future* loads do. A module that is already loaded stays loaded
-   until it is unloaded, and it may have come from the initramfs, whose copy of the
-   configuration changes only with a rebuild. On a real host you unload it
+   Not from this output. For a module the kernel has loaded already, the dry run stops before
+   it reads `install`; `modprobe --show-depends foo` prints the rule that future loads meet. A
+   loaded module stays loaded until it is unloaded, and it may have come from the initramfs,
+   whose copy of the configuration changes only with a rebuild. On a real host you unload it
    (`community.general.modprobe`, `state: absent`); in the lab you never do.
 
    </details>
