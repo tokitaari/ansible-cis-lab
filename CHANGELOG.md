@@ -334,6 +334,11 @@ MINOR: new features or exercises, PATCH: fixes.
   targets are harmless (`00-cis-` sorts first); `./lab.sh reset all` removes them. 2.03 README
   (requirement, bonus questions), hint 3 and EXPLANATION, the 3.01 EXPLANATION and the 4.02 hint
   are updated. Rebuild: *none*
+- `lab-view` (and so `lab show`, `lab view`, `lab docs`, `md` and `less` on a Markdown file)
+  shows a link by its text only, no longer followed by its target in brackets. A web link stays
+  clickable in terminals that support OSC 8 hyperlinks (`less -R` passes them through); a link
+  to another lab file is shown as styled text. Piped output (no terminal, or `LAB_PLAIN=1`) is
+  unchanged. Rebuild: *none*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The

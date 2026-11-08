@@ -8,6 +8,8 @@ with syntax highlighting and line numbers. Long output opens in a pager.
 Usage: lab-view [--strip-details] [--title TEXT] [--render] FILE... | -   (- = stdin, markdown)
   --render   always render with colours, never page (used by 'less' via LESSOPEN)
 Not a TTY (pipes, scripts) or LAB_PLAIN=1: the raw text is printed unchanged.
+Rendered links show their text only: a web link (http, https) stays clickable in terminals
+that support OSC 8 hyperlinks, a link to another lab file is shown as styled text.
 """
 import argparse
 import os
@@ -19,6 +21,10 @@ MAX_WIDTH = 110
 LANG_SWITCH = re.compile(r"^\*\[(Deutsch|English)\]\([^)]*\)\*\s*$", re.MULTILINE)
 DETAILS = re.compile(r"<details>.*?</details>", re.DOTALL)
 SUMMARY = re.compile(r"<summary>(.*?)</summary>", re.DOTALL)
+FENCE = re.compile(r"^\s*(```+|~~~+)")
+CODE_SPAN = re.compile(r"(`+)(?:(?!\1).)+?\1")
+LINK = re.compile(r"(?<!!)\[((?:[^\]\[]|\[[^\]]*\])*)\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
+WEB = re.compile(r"^https?://", re.IGNORECASE)
 LEXERS = {".yml": "yaml", ".yaml": "yaml", ".j2": "jinja", ".sh": "bash", ".fact": "bash",
           ".py": "python", ".json": "json", ".md": "markdown", ".nft": "text", ".cfg": "ini"}
 
@@ -40,6 +46,34 @@ def prepare_markdown(text, strip_details):
         text = SUMMARY.sub(lambda m: f"### {m.group(1).strip()}", text)
         text = text.replace("<details>", "").replace("</details>", "")
     return text
+
+
+def local_links_as_text(text):
+    """Empty the target of every link that is not a web link: rich then shows the link text
+    only (styled), without a hyperlink - a relative path means nothing to the terminal.
+    Code blocks and inline code are left alone."""
+    out, fence = [], None
+    for line in text.split("\n"):
+        m = FENCE.match(line)
+        if fence:
+            if m and m.group(1)[0] == fence[0] and len(m.group(1)) >= len(fence):
+                fence = None
+            out.append(line)
+            continue
+        if m:
+            fence = m.group(1)
+            out.append(line)
+            continue
+        spans = []
+
+        def hide(c):
+            spans.append(c.group(0))
+            return f"\x00{len(spans) - 1}\x00"
+
+        line = CODE_SPAN.sub(hide, line)
+        line = LINK.sub(lambda l: l.group(0) if WEB.match(l.group(2)) else f"[{l.group(1)}]()", line)
+        out.append(re.sub(r"\x00(\d+)\x00", lambda s: spans[int(s.group(1))], line))
+    return "\n".join(out)
 
 
 def main():
@@ -74,8 +108,8 @@ def main():
         if f == "-" or f.endswith(".md"):
             if args.title:
                 parts.append(Rule(f"[bold]{args.title}[/bold]", style="cyan"))
-            parts.append(Markdown(prepare_markdown(t, args.strip_details),
-                                  code_theme="monokai", hyperlinks=False))
+            parts.append(Markdown(local_links_as_text(prepare_markdown(t, args.strip_details)),
+                                  code_theme="monokai", hyperlinks=True))
         else:
             ext = os.path.splitext(f)[1]
             lexer = LEXERS.get(ext) or Syntax.guess_lexer(f, t)
