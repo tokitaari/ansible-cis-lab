@@ -10,4 +10,25 @@ Loading platform vars: `ansible.builtin.include_vars: "{{ lookup('ansible.builti
 
 ## Hint 3
 
-`import_tasks` is static: tags on the import are inherited by every task inside. Registered variables in roles need the prefix too (`register: cis_cron_stat`). The full reference role: `lab solution 3.01`.
+The role's `tasks/main.yml`:
+
+```yaml
+- name: Load OS family specific variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', cis_vars_candidates) }}"
+  vars:
+    cis_vars_candidates:
+      files: ["...", "..."]     # <os_family>.yml first, then the fallback
+      paths: ["..."]            # the vars/ directory of this role
+  tags: ["..."]                 # must run under every --tags selection
+
+- name: Section 1 - initial setup
+  ansible.builtin.import_tasks: "..."
+  tags: ["..."]
+# ... one import each for sections 2, 3, 5 and 7, same pattern
+```
+
+`import_tasks` is static: the tag of the import reaches every task inside. In the section files give
+each task its topic tag - helper tasks such as "directory exists" too, otherwise `--tags sysctl`
+skips them. Registered variables need the prefix as well (`register: cis_cron_stat`).
+
+The full reference role: `lab solution 3.01`.

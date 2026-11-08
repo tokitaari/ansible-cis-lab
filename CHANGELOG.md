@@ -153,6 +153,14 @@ MINOR: new features or exercises, PATCH: fixes.
   5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
 
 ### Changed
+- Exercise 3.01 (EN and DE): deeper `EXPLANATION.md` with measured facts (what `check.sh` tests
+  and what it leaves out, per-family notes, pitfalls); hint 3 is now a skeleton of the role's
+  `tasks/main.yml` with `"..."`. The EXPLANATION now says that `ansible-lint --profile moderate`
+  does not report missing FQCN or `changed_when` (only `production` does), that variables loaded
+  with `include_vars` beat play vars and stay set for later plays of the same run, that
+  `--skip-tags always` also skips the implicit handler flush, and that
+  `--tags sysctl` fails on freshly reset rocky and alma because the directory task of the
+  reference role carries only `section3`. Rebuild: *none*
 - Exercises 2.01 to 2.03 (EN and DE): deeper `EXPLANATION.md` with measured facts (check
   scope, per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."`. 2.01: who needs
   the group `shadow` (`unix_chkpwd` per family), the backups that start world-readable on four
