@@ -513,3 +513,5 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [`pam.conf(5)`](https://man.archlinux.org/man/pam.conf.5) and [`pam_unix(8)`](https://man.archlinux.org/man/pam_unix.8) - rule syntax, controls, hash options
 - [`pwquality.conf(5)`](https://man.archlinux.org/man/pwquality.conf.5) and [`pam_pwquality(8)`](https://man.archlinux.org/man/pam_pwquality.8) - password quality settings
 - [`faillock.conf(5)`](https://man.archlinux.org/man/faillock.conf.5), [`pam_faillock(8)`](https://man.archlinux.org/man/pam_faillock.8) and [`faillock(8)`](https://man.archlinux.org/man/faillock.8) - the lock module and its tool
+- [Glossary](../GLOSSARY.md) - terms of this lesson: authselect, faillock, `login.defs`, PAM,
+  pwquality, shadow, `TMOUT`, `umask`

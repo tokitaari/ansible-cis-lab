@@ -481,3 +481,5 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 - [Blocks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html) und [Error handling in playbooks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_error_handling.html)
 - [Modul `ansible.builtin.copy`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html) - `validate` und `backup`
 - [Modul `ansible.builtin.package_facts`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_facts_module.html)
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `block` / `rescue` / `always`,
+  check mode, diff mode, handler, `register`, `validate`, `when`

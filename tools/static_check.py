@@ -10,7 +10,8 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
             README header table and INDEX rows vs. meta.yml; the INDEX lesson column vs. the
             lesson headers
   parity    every EN Markdown file has a DE twin (*.de.md) with the same structure;
-            bash/yaml/... code blocks hold the same code (comments may be translated)
+            bash/yaml/... code blocks hold the same code (comments may be translated); a link to
+            a heading is compared by the heading's position, so its anchor may be translated
   links     relative Markdown links (and #anchors) resolve
   controls  cis/controls.yml schema and cross-references to the exercises
   lessons   docs/lessons/LNN-slug(.de).md: title, language switch, header table (exercises,
@@ -389,7 +390,21 @@ def md_links(text):
     return links
 
 
-def md_structure(text):
+def heading_ordinal(target, src):
+    """'file.md#anchor' -> 'file.md#@<n>' (n = position of the heading the anchor names), so that
+    an EN link and its DE twin compare equal although the DE heading - and its anchor - is
+    translated. Unresolvable targets stay as they are (the links check reports them)."""
+    path, _, frag = target.partition("#")
+    if not frag or re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I):
+        return target
+    dest = os.path.normpath(os.path.join(os.path.dirname(src), path)) if path else src
+    if not (dest.endswith(".md") and os.path.isfile(dest)):
+        return target
+    order = anchor_order(dest)
+    return f"{path}#@{order.index(frag)}" if frag in order else target
+
+
+def md_structure(text, src=None):
     prose, blocks = md_scan(text)
     headings, lists, rows = [], 0, 0
     for line in prose:
@@ -400,7 +415,8 @@ def md_structure(text):
             lists += 1
         elif line.strip().startswith("|"):
             rows += 1
-    links = sorted(re.sub(r"\.de\.md(?=$|#)", ".md", t) for t in md_links(text))
+    targets = [heading_ordinal(t, src) for t in md_links(text)] if src else md_links(text)
+    links = sorted(re.sub(r"\.de\.md(?=$|#)", ".md", t) for t in targets)
     return {
         "heading levels": headings,
         "list items": lists,
@@ -426,7 +442,8 @@ def check_parity(files):
         if f in PARITY_EXEMPT:
             fail("parity", f"{f}: listed in PARITY_EXEMPT but {de} exists - remove the entry")
         en_t, de_t = read(os.path.join(ROOT, f)), read(os.path.join(ROOT, de))
-        en_s, de_s = md_structure(en_t), md_structure(de_t)
+        en_s = md_structure(en_t, os.path.join(ROOT, f))
+        de_s = md_structure(de_t, os.path.join(ROOT, de))
         for key in en_s:
             if en_s[key] != de_s[key]:
                 fail("parity", f"{f} vs {de}: {key} differ: {short(en_s[key])} vs {short(de_s[key])}")
@@ -462,24 +479,29 @@ def short(v):
 
 def gh_slug(heading):
     """GitHub-style anchor for a heading."""
-    s = re.sub(r"[*_`]|\[([^\]]*)\]\([^)]*\)", r"\1", heading.strip()).lower()
+    s = re.sub(r"[*`]|(?<!\w)_+|_+(?!\w)|\[([^\]]*)\]\([^)]*\)", r"\1", heading.strip()).lower()
     s = "".join(ch for ch in s if ch in " -_" or unicodedata.category(ch)[0] in "LN")
     return s.replace(" ", "-")
 
 
-def anchors(path, cache={}):
+def anchor_order(path, cache={}):
+    """The anchors of a Markdown file in heading order (GitHub style, -1/-2 for repeats)."""
     if path not in cache:
         seen = collections.Counter()
-        out = set()
+        out = []
         prose, _ = md_scan(read(path))
         for line in prose:
             m = re.match(r"^#{1,6}\s+(.*?)\s*#*\s*$", line)
             if m:
                 slug = gh_slug(m.group(1))
-                out.add(slug if not seen[slug] else f"{slug}-{seen[slug]}")
+                out.append(slug if not seen[slug] else f"{slug}-{seen[slug]}")
                 seen[slug] += 1
         cache[path] = out
     return cache[path]
+
+
+def anchors(path):
+    return set(anchor_order(path))
 
 
 def check_links(files):

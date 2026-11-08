@@ -17,7 +17,7 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 |---|---|
 | **Targets** | Debian 13, Ubuntu 26.04, Rocky 10, AlmaLinux 10, Fedora 44, openSUSE Leap 16, Arch (rolling), Alpine 3.24 |
 | **Aufgaben** | 31 in 6 Stufen, ~28 h, jeweils mit Ziel, Hintergrund, Anforderungen, 3 gestaffelten Hinweisen, Bonus, Musterlösung, Erklärung, automatischem Check |
-| **Lektionen** | 15 Lektionen zum Selbststudium (L00-L14, ~7 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson` |
+| **Lektionen** | 15 Lektionen zum Selbststudium (L00-L14, ~7 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
 | **Sprachen** | Englisch (Standard) und Deutsch: `lab lang de` |
 | **CIS** | Profil Level 1 Server (+ ausgewählte Level 2); eigener Kontrollkatalog in [`cis/controls.yml`](cis/controls.yml); PDFs: siehe [`cis/README.de.md`](cis/README.de.md) |
 
@@ -111,7 +111,7 @@ targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (p
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
 cis/                  Kontrollkatalog + Ablage für deine CIS-PDFs
-docs/                 Lernpfad, lessons/ (L00-L14), Container-Grenzen, Fehlerbehebung
+docs/                 Lernpfad, lessons/ (L00-L14), Glossar, Container-Grenzen, Fehlerbehebung
 tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate (beide in CI)
 work/                 DEINE Lösungen (eingehängt nach /lab/work)
 ```

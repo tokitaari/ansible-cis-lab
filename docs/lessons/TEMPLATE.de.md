@@ -38,6 +38,9 @@ Schreibregeln:
 - Jeder relative Link muss auflösen (static-check links); Übungen auf ihre README.de.md verlinken
   (der Platzhalter unten zeigt nur auf INDEX.de.md, damit die Vorlage den Link-Check besteht).
 - Plattformunterschiede: Spalten nach Bedarf ergänzen (z. B. Hosts), aber eine Zeile pro os_family.
+- Weiterführendes: zuerst Links ins Lab, dann externe, zuletzt die Glossar-Zeile mit den Begriffen,
+  deren Glossar-Eintrag auf diese Lektion verweist. Ein neuer Begriff kommt in docs/GLOSSARY.md
+  und GLOSSARY.de.md (englisches Stichwort in beiden, sortiert; DE ergänzt den deutschen Begriff).
 - Das details-Tag nur in der Selbstkontrolle schreiben: eine Ansicht mit ausgeblendeten Antworten
   schneidet vom ersten öffnenden bis zum nächsten schließenden Tag, auch in diesem Kommentar.
 -->
@@ -129,3 +132,4 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 
 - [Ansible-Dokumentation](https://docs.ansible.com/) - *die passende Modul- oder Guide-Seite*
 - *Manpage oder Upstream-Doku des konfigurierten Werkzeugs*
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: *die Einträge, die auf diese Lektion verweisen*

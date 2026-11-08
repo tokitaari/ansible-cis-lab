@@ -490,3 +490,4 @@ Starte sie mit `lab start 4.04`; `lab show 4.04` gibt ihr README aus.
 - [password_hash filter](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/password_hash_filter.html) - Algorithmen, `salt`, `rounds`
 - [Protecting sensitive data with no_log](https://docs.ansible.com/ansible/latest/reference_appendices/logging.html#protecting-sensitive-data-with-no-log) - was das Schlüsselwort verbirgt und was nicht
 - [`crypt(5)`](https://man.archlinux.org/man/crypt.5) - die Hash-Formate und die Bedeutung von `$id$`, Salt und Rounds
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `no_log`, salt, Vault

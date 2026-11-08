@@ -608,3 +608,5 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 - [Netfilter hooks](https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks) - Hooks, Prioritäten und wie Base-Chains zusammenwirken
 - [Atomic rule replacement](https://wiki.nftables.org/wiki-nftables/index.php/Atomic_rule_replacement) - warum eine Datei eine Transaktion ist
 - [systemd.service(5)](https://manpages.debian.org/unstable/systemd/systemd.service.5.en.html) - `Type=oneshot`, `RemainAfterExit`, `ExecStop`
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: dead-man switch, hook (netfilter),
+  nftables, `wait_for_connection`

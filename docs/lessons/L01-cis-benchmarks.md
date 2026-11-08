@@ -353,3 +353,6 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [Changes to CIS Benchmark assessment/recommendation scoring](https://www.cisecurity.org/insights/blog/changes-to-cis-benchmark-assessment-recommendation-scoring) - Automated and Manual
 - [CIS Critical Security Controls](https://www.cisecurity.org/controls)
 - [Working with lookups](https://docs.ansible.com/ansible/latest/plugins/lookup.html) and [Using filters to manipulate data](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html)
+- [Glossary](../GLOSSARY.md) - terms of this lesson: Automated / Manual, CIS Benchmark,
+  CIS Controls, CIS-CAT, control (lab catalogue), Level 1 / Level 2, profile (CIS),
+  recommendation (CIS), `requires` (meta.yml)

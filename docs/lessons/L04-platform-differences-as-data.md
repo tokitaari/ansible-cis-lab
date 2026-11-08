@@ -412,3 +412,5 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [Using variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - the full precedence list
 - [`ansible.builtin.template`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html)
 - [Jinja template designer documentation](https://jinja.palletsprojects.com/en/stable/templates/) - `for`, `if`, whitespace control
+- [Glossary](../GLOSSARY.md) - terms of this lesson: `group_vars` / `host_vars`, Jinja2, loop,
+  platform data, template, variable precedence

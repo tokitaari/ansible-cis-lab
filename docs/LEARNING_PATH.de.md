@@ -31,7 +31,9 @@ ohne sich zu langweilen oder überfordert zu sein:
 Jede Lektion erklärt die Konzepte hinter einer Gruppe von Aufgaben - Theorie, CIS-Hintergrund,
 Plattformunterschiede, Stolperfallen und eine Selbstkontrolle. Lies sie, bevor du die Aufgaben
 beginnst: `lab lesson <n>` oder `lab lesson <aufgaben-id>`; `lab lesson <n> answers` zeigt die
-Antworten der Selbstkontrolle. L01 gehört zu keiner einzelnen Aufgabe: lies sie nach L00.
+Antworten der Selbstkontrolle. L01 gehört zu keiner einzelnen Aufgabe: lies sie nach L00. Das
+[Glossar](GLOSSARY.de.md) (`lab docs glossary`) erklärt die Begriffe in wenigen Zeilen und verweist
+auf die Abschnitte der Lektionen.
 
 | Lektion | Bereitet vor | Lesezeit |
 |---|---|---|

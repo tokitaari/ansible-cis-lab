@@ -601,3 +601,5 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [Using variables](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html) - the full precedence list
 - [`ansible.builtin.first_found`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/first_found_lookup.html) - the lookup used by the demo role
 - [ansible-lint](https://docs.ansible.com/projects/lint/) - profiles, rules and configuration
+- [Glossary](../GLOSSARY.md) - terms of this lesson: `always` (tag), `defaults/` and `vars/`,
+  `first_found`, `import_tasks` / `include_tasks`, `include_vars`, lint profile, role, tag

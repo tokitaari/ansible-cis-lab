@@ -17,7 +17,7 @@ audit mode, exceptions and staged rollout.
 |---|---|
 | **Targets** | Debian 13, Ubuntu 26.04, Rocky 10, AlmaLinux 10, Fedora 44, openSUSE Leap 16, Arch (rolling), Alpine 3.24 |
 | **Exercises** | 31 in 6 stages, ~28 h, each with goal, background, requirements, 3 graded hints, bonus, reference solution, explanation, automatic check |
-| **Lessons** | 15 self-study lessons (L00-L14, ~7 h reading) - concepts before the exercises, platform differences, pitfalls, self-check: `lab lesson` |
+| **Lessons** | 15 self-study lessons (L00-L14, ~7 h reading) - concepts before the exercises, platform differences, pitfalls, self-check: `lab lesson`; a [glossary](docs/GLOSSARY.md) of the terms (`lab docs glossary`) |
 | **Languages** | English (default) and German: `lab lang de` |
 | **CIS** | Level 1 Server profile (+ selected Level 2); own control catalogue in [`cis/controls.yml`](cis/controls.yml); PDFs: see [`cis/README.md`](cis/README.md) |
 
@@ -109,7 +109,7 @@ targets/              one Dockerfile per distribution + common bootstrap (plants
 ansible/              ansible.cfg, inventory (grouped by OS family), shared roles
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, check
 cis/                  control catalogue + place for your CIS PDFs
-docs/                 learning path, lessons/ (L00-L14), container limits, troubleshooting
+docs/                 learning path, lessons/ (L00-L14), glossary, container limits, troubleshooting
 tools/                maintainer checks: release hygiene, static quality gate (both run in CI)
 work/                 YOUR solutions (mounted to /lab/work)
 ```

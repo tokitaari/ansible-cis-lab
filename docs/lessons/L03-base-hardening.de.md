@@ -466,3 +466,5 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 - [Modul `ansible.builtin.file`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html) - `mode`, `owner`, `group`
 - [`sshd_config(5)`](https://man.openbsd.org/sshd_config) - `Include`, `Match`, die Regel "erster Wert gewinnt"; [`sshd(8)`](https://man.openbsd.org/sshd) - `-T` und `-C`
 - [`sudoers(5)`](https://www.sudo.ws/docs/man/sudoers.man/) - Include-Anweisungen, `Defaults`, Regeln für Dateinamen
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: attack surface, drop-in,
+  management channel, mode (file), sshd effective value, sudoers

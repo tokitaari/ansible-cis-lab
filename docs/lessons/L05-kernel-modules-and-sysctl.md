@@ -418,3 +418,5 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [`sysctl.d(5)`](https://www.freedesktop.org/software/systemd/man/latest/sysctl.d.html) - the directories and the order in which files are read
 - [Documentation for `/proc/sys`](https://docs.kernel.org/admin-guide/sysctl/index.html) - what each parameter does
 - [`modprobe.d(5)`](https://man.archlinux.org/man/modprobe.d.5) - `install`, `blacklist` and the other keywords
+- [Glossary](../GLOSSARY.md) - terms of this lesson: `blacklist` (modprobe), collection, FQCN,
+  `modprobe.d`, namespaced parameter, sysctl

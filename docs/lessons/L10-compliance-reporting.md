@@ -545,3 +545,5 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [`ansible.builtin.setup`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/setup_module.html) - `fact_path`, `gather_subset` and `filter`
 - [Special variables](https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html) - `hostvars`, `groups` and `ansible_check_mode`
 - [Using filters to manipulate data](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html) - `to_nice_json`, `selectattr`, `difference`
+- [Glossary](../GLOSSARY.md) - terms of this lesson: audit mode, compliance report, custom facts,
+  `delegate_to` / `run_once`, enforce mode, finding

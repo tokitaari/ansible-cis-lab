@@ -618,3 +618,5 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [`pam_loginuid(8)`](https://man.archlinux.org/man/pam_loginuid.8) - where the login id comes from
 - [`aide(1)`](https://manpages.debian.org/unstable/aide/aide.1.en.html) and [`aide.conf(5)`](https://manpages.debian.org/unstable/aide/aide.conf.5.en.html) - commands, exit codes, rules and selection lines
 - [`systemd.timer(5)`](https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html) and [`systemd.service(5)`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html) - timers and `Type=oneshot`
+- [Glossary](../GLOSSARY.md) - terms of this lesson: AIDE, `async` / `poll` / `async_status`,
+  auditd, immutable audit configuration

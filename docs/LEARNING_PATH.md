@@ -31,7 +31,8 @@ being bored or overwhelmed:
 Each lesson explains the concepts behind a group of exercises - theory, CIS background,
 platform differences, pitfalls and a self-check. Read it before you start the exercises:
 `lab lesson <n>` or `lab lesson <exercise id>`; `lab lesson <n> answers` shows the self-check
-answers. L01 belongs to no single exercise: read it after L00.
+answers. L01 belongs to no single exercise: read it after L00. The [glossary](GLOSSARY.md)
+(`lab docs glossary`) explains the terms in a few lines each and links to the lesson sections.
 
 | Lesson | Prepares | Reading time |
 |---|---|---|

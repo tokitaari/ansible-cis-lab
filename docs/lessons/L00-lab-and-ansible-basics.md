@@ -403,3 +403,6 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [`ansible.builtin.raw` module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html) and [Interpreter discovery](https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html)
 - [Ansible configuration settings](https://docs.ansible.com/ansible/latest/reference_appendices/config.html) - search order of `ansible.cfg`
 - `man 5 sshd_config` (`Banner`), `man 5 issue`
+- [Glossary](../GLOSSARY.md) - terms of this lesson: ad-hoc command, `become`, `changed` / `ok`,
+  `changed_when` / `failed_when`, control node, diff mode, facts, `hostvars`, idempotency,
+  interpreter discovery, inventory, module, pattern, `raw`, reset (lab), target

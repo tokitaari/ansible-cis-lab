@@ -643,3 +643,5 @@ Starte eine Übung mit `lab start <id>`; `lab show <id>` gibt ihre README aus.
 - [`ansible.builtin.assert`](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html) - `that`, `fail_msg` und `quiet`
 - [Using filters to manipulate data](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html) - `to_datetime`, `map` und `type_debug`
 - [`ansible.posix.json` callback](https://docs.ansible.com/ansible/latest/collections/ansible/posix/json_callback.html) - der Callback hinter dem Vertragstest
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `assert`, capability flag, exception,
+  `first_found`, `include_vars`, Level 1 / Level 2, platform data, profile (CIS)

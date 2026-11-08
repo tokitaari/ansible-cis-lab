@@ -364,3 +364,4 @@ Start an exercise with `lab start <id>`; `lab show <id>` prints its README.
 - [`crontab(1)`](https://man.archlinux.org/man/crontab.1) and [`crontab(5)`](https://man.archlinux.org/man/crontab.5) - the allow and deny files, the system format with its user field
 - [`at(1)`](https://man.archlinux.org/man/at.1) - `at.allow`, `at.deny` and the queue
 - [`systemd.timer(5)`](https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html) - timers as the other scheduler on systemd hosts
+- [Glossary](../GLOSSARY.md) - terms of this lesson: allow and deny lists, at, cron, systemd timer

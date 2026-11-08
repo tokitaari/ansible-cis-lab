@@ -160,6 +160,14 @@ MINOR: new features or exercises, PATCH: fixes.
   mapping. Tab completion for `lab lesson` (lesson ids, `answers`) and `lab placement`
   (`answers`); the README lists the lessons and the new commands (and no longer promises a
   getting-started guide in `docs/`). Rebuild: *none* (open a new shell for the completion)
+- Glossary `docs/GLOSSARY.md` (EN and DE, `lab docs glossary`): 97 terms of the lessons and
+  exercises - Ansible (check mode, handler, `validate`, tags, `serial`, Vault, ...), CIS
+  (Benchmark, recommendation, Level 1/2, *Automated* / *Manual*, ...), Linux (PAM, faillock,
+  `modprobe.d`, sysctl, auditd, nftables, ...) and the lab itself - each in one or two sentences
+  with a link to the lesson section that explains it. Sorted by the English term; the German
+  page adds the German term where the lessons use one. Every lesson ends its *Further reading*
+  with a line naming its glossary terms; the lesson template, LEARNING_PATH and the README link
+  the glossary. Rebuild: *none*
 
 ### Changed
 - Exercise 5.01 (EN and DE): deeper `EXPLANATION.md` with measured facts (what `check.sh` tests
@@ -354,6 +362,10 @@ MINOR: new features or exercises, PATCH: fixes.
   mechanism table and "read the lesson first" as step 1 of the working style. Both languages.
   The static gate builds the INDEX column (check `meta`) and the LEARNING_PATH table (check
   `lessons`) from the lesson headers and fails when they drift. Rebuild: *none*
+- Static gate: the `parity` check compares a link to a heading by the heading's position, so a
+  DE link may carry the translated anchor (`L02-safe-changes.de.md#check-modus-...`); the anchor
+  of a heading with an underscore inside a word (`async_status`, `no_log`) keeps the underscore,
+  as on GitHub - the gate used to drop it. Rebuild: *none*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The

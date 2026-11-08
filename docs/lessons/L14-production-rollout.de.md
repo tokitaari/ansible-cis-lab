@@ -577,3 +577,5 @@ Eine Übung startest du mit `lab start <id>`; `lab show <id>` zeigt ihre README.
 - [`ansible-galaxy`](https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html) - `role install`, `role list`, `collection install`, `--force`
 - [Validating tasks: check mode and diff mode](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_checkmode.html) - `check_mode: false` an lesenden Tasks
 - [stat(1)](https://manpages.debian.org/unstable/coreutils/stat.1.en.html) - `-f` für das Dateisystem, `%a`, `%f`, `%S`
+- [Glossar](../GLOSSARY.de.md) - Begriffe dieser Lektion: `any_errors_fatal`, batch, canary,
+  `delegate_to` / `run_once`, Galaxy, gate, `max_fail_percentage`, preflight, `serial`
