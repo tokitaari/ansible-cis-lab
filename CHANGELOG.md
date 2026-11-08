@@ -12,6 +12,10 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.5.0] - 2026-11-08
+
 ### Added
 - Lesson L00 *Lab architecture and Ansible basics* in `docs/lessons/` (EN and DE), the first
   self-study lesson: how the control node reaches the targets (SSH key, `ansible` account,
@@ -366,6 +370,8 @@ MINOR: new features or exercises, PATCH: fixes.
   DE link may carry the translated anchor (`L02-safe-changes.de.md#check-modus-...`); the anchor
   of a heading with an underscore inside a word (`async_status`, `no_log`) keeps the underscore,
   as on GitHub - the gate used to drop it. Rebuild: *none*
+- Control image: `ansible` 14.5.0 -> 14.6.0 (ansible-core 2.21.6) in `control/requirements.txt`
+  (Dependabot, #47). Rebuild: *control*
 
 ### Fixed
 - 5.01: `ansible-playbook site.yml --check` changed the targets in enforce mode. The
@@ -413,6 +419,7 @@ MINOR: new features or exercises, PATCH: fixes.
   English twin of a page or an English page links a German one (the language switch line
   excepted). Rebuild: *none*
 
+Rebuild: *control* (ansible 14.6.0 in the control image)
 
 ## [1.4.0] - 2026-11-03
 
@@ -658,7 +665,8 @@ Rebuild: *targets*
 - Own CIS control catalogue `cis/controls.yml`, docs (learning path, container limits,
   troubleshooting).
 
-[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.3...v1.4.0
 [1.3.3]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.1...v1.3.2
