@@ -20,8 +20,8 @@ nicht verraten - dein Playbook muss sie finden.
 
 CIS 5.4.2: root muss das einzige UID-0-Konto sein; kein Konto darf ein leeres
 Passwortfeld haben. CIS 5.4.3: Standard-`umask` 027 (neue Dateien für "andere" nicht
-lesbar), Shell-Timeout `TMOUT` ≤ 900 Sekunden, `readonly`, damit Benutzer ihn nicht
-entfernen können.
+lesbar), Shell-Timeout `TMOUT` zwischen 1 und 900 Sekunden (0 schaltet ihn ab), `readonly`, damit
+Benutzer ihn in dieser Shell nicht entfernen können (eine Kind-Shell erbt das Attribut nicht).
 
 Ein UID-0-Konto zu entfernen hat eine Falle: `userdel toor` verweigert ("user is
 currently used by process 1"), weil *roots* Prozesse auch UID 0 haben.
