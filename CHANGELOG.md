@@ -153,6 +153,13 @@ MINOR: new features or exercises, PATCH: fixes.
   5.02 and 5.03. Read it with `lab view docs/lessons/L14-production-rollout.md`. Rebuild: *none*
 
 ### Changed
+- Exercise 4.01 (EN and DE): deeper `EXPLANATION.md` with measured facts (what `check.yml`
+  tests and what it leaves out, scores per host at the start, pitfalls, answers to both bonus
+  questions); hint 3 is now a skeleton of the playbook with `"..."`. Measured: a hand-written
+  report with any score passes the check; if all targets fail, the old `report.json` stays; only
+  arch's OpenSSH prints `PermitRootLogin`; `use_pty` is already in effect on all eight hosts, so
+  the README now says that control 5.2 looks at the drop-in `/etc/sudoers.d/50-cis`. Rebuild:
+  *none*
 - Exercises 3.02 and 3.05 (EN and DE): deeper `EXPLANATION.md` with measured facts (check scope,
   per-family notes, pitfalls), hint 3 is now a play skeleton with `"..."`. 3.02: only the four
   `shadow` builds with `libeconf` (rocky, alma, fedora, opensuse) read `/etc/login.defs.d`, so a
