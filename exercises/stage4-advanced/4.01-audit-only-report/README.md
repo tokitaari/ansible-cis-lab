@@ -27,7 +27,7 @@ Try it on a freshly reset host (`./lab.sh reset debian`) and on a hardened one.
 
 - [ ] Playbook `/lab/work/4.01/playbook.yml`. On the targets it must report `changed=0` - in normal mode and with `--check`.
 - [ ] At least these ten controls per host, each with `id`, `title`, `status` (`pass`/`fail`/`n/a`):
-  2.2 telnet not installed · 2.1 vsftpd not running/enabled · 7.1 /etc/passwd 0644 root:root · 7.1 shadow not readable by others · 5.1 PermitRootLogin no (effective) · 5.1 MaxAuthTries ≤ 4 · 5.2 sudo `use_pty` configured · 3.3 `net.ipv4.ip_forward` = 0 · 2.4 `/etc/cron.allow` exists (n/a on Alpine) · 5.4.2 root is the only UID 0 account
+  2.2 telnet not installed · 2.1 vsftpd not running/enabled · 7.1 /etc/passwd 0644 root:root · 7.1 shadow not readable by others · 5.1 PermitRootLogin no (effective) · 5.1 MaxAuthTries ≤ 4 · 5.2 `Defaults use_pty` in the sudo drop-in `/etc/sudoers.d/50-cis` (1.05) · 3.3 `net.ipv4.ip_forward` = 0 · 2.4 `/etc/cron.allow` exists (n/a on Alpine) · 5.4.2 root is the only UID 0 account
 - [ ] `/lab/work/4.01/report.json`: an object keyed by host name, each value with `score` (percent of `pass` among pass+fail) and `results` (list).
 - [ ] `/lab/work/4.01/report.md`: one table row per host with the score, plus a list of all failures.
 - [ ] No `ignore_errors: true` anywhere.

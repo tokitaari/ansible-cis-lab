@@ -10,4 +10,28 @@ Starte von deiner 4.03-Rolle. Verschiebe die Tasks jedes Abschnitts in kleine Da
 
 ## Hinweis 3
 
-Bericht: auf `localhost` mit `run_once` + `delegate_to: localhost`, `check_mode: false`; sammle jeden Host, der ein `cis_summary` hat: `groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname')` - nicht `ansible_play_hosts`, das unter `serial` (5.02) auch Hosts enthält, die noch nicht gelaufen sind. Die vollständige Referenz: `lab solution 5.01` - vergleiche *nachdem* du deine eigene Version hast.
+Die `tasks/control.yml` der Rolle, die `tasks/main.yml` einmal je Registry-Eintrag ausführt
+(`include_tasks` mit `loop: "{{ cis_controls }}"` und `loop_var: cis_control`):
+
+```yaml
+- name: "Decide whether the control applies | {{ cis_control.id }}"
+  ansible.builtin.set_fact:
+    cis_control_state: "..."      # excepted / out-of-profile / not-applicable / active
+    cis_control_results: []
+
+- name: "Execute control | {{ cis_control.id }}"
+  ansible.builtin.include_tasks:
+    file: "..."                   # controls/<file> aus dem Registry-Eintrag
+    apply:
+      check_mode: "..."           # Probelauf im Audit-Modus und bei --check
+  when: "..."                     # nur aktive Kontrollen
+
+- name: "Record the result | {{ cis_control.id }}"
+  vars:
+    cis_noncompliant: "..."       # ein Ergebnis oder Schleifen-Eintrag changed oder 'would have run'
+    cis_status: "..."             # der Zustand, sonst fail / fixed / pass
+  ansible.builtin.set_fact:
+    cis_findings: "..."           # cis_findings + ein Dict: id, level, title, status, reason
+```
+
+Bericht: auf `localhost` mit `run_once` + `delegate_to: localhost`, `check_mode: false` und `changed_when: false`; sammle jeden Host, der ein `cis_summary` hat: `groups['all'] | map('extract', hostvars) | selectattr('cis_summary', 'defined') | map(attribute='inventory_hostname')` - nicht `ansible_play_hosts`, das unter `serial` (5.02) auch Hosts enthält, die noch nicht gelaufen sind. Die vollständige Referenz: `lab solution 5.01` - vergleiche *nachdem* du deine eigene Version hast.

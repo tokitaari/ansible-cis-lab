@@ -27,7 +27,7 @@ Probiere es auf einem frisch zurückgesetzten Host (`./lab.sh reset debian`) und
 
 - [ ] Playbook `/lab/work/4.01/playbook.yml`. Auf den Targets muss es `changed=0` melden - im Normalmodus und mit `--check`.
 - [ ] Mindestens diese zehn Kontrollen pro Host, jeweils mit `id`, `title`, `status` (`pass`/`fail`/`n/a`):
-  2.2 telnet nicht installiert · 2.1 vsftpd läuft nicht/nicht aktiviert · 7.1 /etc/passwd 0644 root:root · 7.1 shadow nicht für andere lesbar · 5.1 PermitRootLogin no (wirksam) · 5.1 MaxAuthTries ≤ 4 · 5.2 sudo `use_pty` konfiguriert · 3.3 `net.ipv4.ip_forward` = 0 · 2.4 `/etc/cron.allow` existiert (n/a auf Alpine) · 5.4.2 root ist das einzige UID-0-Konto
+  2.2 telnet nicht installiert · 2.1 vsftpd läuft nicht/nicht aktiviert · 7.1 /etc/passwd 0644 root:root · 7.1 shadow nicht für andere lesbar · 5.1 PermitRootLogin no (wirksam) · 5.1 MaxAuthTries ≤ 4 · 5.2 `Defaults use_pty` im sudo-Drop-in `/etc/sudoers.d/50-cis` (1.05) · 3.3 `net.ipv4.ip_forward` = 0 · 2.4 `/etc/cron.allow` existiert (n/a auf Alpine) · 5.4.2 root ist das einzige UID-0-Konto
 - [ ] `/lab/work/4.01/report.json`: ein Objekt mit dem Hostnamen als Schlüssel, jeder Wert mit `score` (Prozent `pass` unter pass+fail) und `results` (Liste).
 - [ ] `/lab/work/4.01/report.md`: eine Tabellenzeile pro Host mit Score, plus eine Liste aller Fehler.
 - [ ] Nirgends `ignore_errors: true`.
