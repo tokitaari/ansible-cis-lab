@@ -1,0 +1,4 @@
+# Line endings: LF in the repository AND in the working tree on every platform.
+# The scripts in control/ and targets/ run inside Linux containers straight from the clone;
+# CRLF (Git for Windows, core.autocrlf=true) would break their shebang lines.
+* text=auto eol=lf

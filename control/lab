@@ -39,7 +39,7 @@ lab - Ansible CIS lab helper
   lab lesson [n] [answers]  list the lessons, or show lesson n (5, 05, L05 or an exercise
                             id like 2.03) without, or with the self-check answers
   lab view <file.md>        render any markdown file (also: 'md <file>', 'less <file.md>')
-  lab docs [name]           list the guides in /lab/docs, or show one (e.g. lab docs troubleshooting)
+  lab docs [name]           list the guides (docs/, README, INSTALL), or show one (e.g. lab docs troubleshooting)
 
 Environment: LAB_LANG (en|de), LAB_WORK_DIR (<work-dir>, default /lab/work)
 
@@ -299,11 +299,12 @@ cmd_docs() {
     echo "Guides (lab docs <name>):"
     cmd_docs --names | sed 's/^/  /'
     echo "  readme              (lab overview)"
+    echo "  install             (installation per OS, Docker notes)"
     echo "Lessons: lab lesson"
     return
   fi
   name="$(tr 'a-z-' 'A-Z_' <<<"$1")"
-  if [[ "$name" == README ]]; then f="$LAB_ROOT/README"; else f="$LAB_ROOT/docs/$name"; fi
+  if [[ "$name" == README || "$name" == INSTALL ]]; then f="$LAB_ROOT/$name"; else f="$LAB_ROOT/docs/$name"; fi
   if [[ "$l" != en && -f "$f.$l.md" ]]; then f="$f.$l.md"; else f="$f.md"; fi
   [[ -f "$f" ]] || die "unknown guide '$1' (try: lab docs)"
   view "$f"

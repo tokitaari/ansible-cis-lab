@@ -13,6 +13,17 @@ MINOR: new features or exercises, PATCH: fixes.
 ## [Unreleased]
 
 ### Added
+- `.gitattributes` (`* text=auto eol=lf`): LF line endings in the working tree on every
+  platform. The scripts in `control/` and `targets/` run in Linux containers straight from the
+  clone; a Windows clone with `core.autocrlf=true` had CRLF and broke them (INSTALL, *Windows
+  details*). Already existing clones are not changed - clone again. Rebuild: *none*
+- `INSTALL.md` / `INSTALL.de.md`: installation guide for Windows (Docker Engine in WSL2,
+  Docker Desktop with WSL2, PowerShell), macOS (Docker Desktop, Colima, OrbStack) and Linux
+  (Debian/Ubuntu, Fedora, RHEL family, Arch, openSUSE), with the common steps, requirements
+  (Compose 2.15+ for `cgroup:`, cgroup v2), what is special about Docker on each platform
+  (kernel, resources, file sharing, disk, SELinux, firewall, subnet, line endings, licence)
+  and a symptom table. Tested: Debian (native host, Docker Engine) and WSL2 (Ubuntu 26.04,
+  Docker Engine); the rest follows the vendors' documentation and is marked as untested. README links it (EN and DE). Rebuild: *none*
 - `./lab.sh pause` / `./lab.sh resume` (and `.\lab.ps1 pause` / `resume`): stop and start the
   containers with `docker compose stop` / `start`, so every change on the targets - Python on
   `alpine` from 0.02 included - survives. `resume` waits for SSH like `up`. The names avoid
@@ -20,6 +31,8 @@ MINOR: new features or exercises, PATCH: fixes.
   Rebuild: *none*
 
 ### Changed
+- `lab docs` lists and shows the installation guide too (`lab docs install`, German with
+  `lab lang de`; tab completion offers `readme` and `install`). Live script, Rebuild: *none*
 - `./lab.sh help`: `down` was described as "stop the lab"; it removes the containers, so the
   next `up` starts all targets fresh and non-compliant (like `reset all`; Python on `alpine`
   is gone). README (*Pause or reset?*), TROUBLESHOOTING and L00 say so (EN and DE).
