@@ -27,7 +27,8 @@ namespace, and cgroup limits need extra setup) and **Podman** (`lab.sh` calls `d
 and the lab has not been tried with Podman). Both are untested, not forbidden - expect to debug
 them yourself.
 
-**Tested by the maintainer:** Debian with Docker Engine, and Windows with WSL2. Everything else
+**Tested by the maintainer:** Debian (native host) with Docker Engine, and Windows with WSL2 (Ubuntu 26.04
+with Docker Engine). Everything else
 below is written from the vendors' documentation and **not tested** with this lab; the
 sections say so. Reports and fixes are welcome.
 
@@ -86,32 +87,41 @@ Choose one of three routes.
 
 | Route | What it is | Status |
 |---|---|---|
-| **A. Docker Desktop + WSL2, lab in the WSL distribution** | `./lab.sh` in a WSL terminal | recommended, tested |
-| B. Docker Engine inside WSL2 (no Docker Desktop) | the Linux steps in a WSL distribution with systemd | not tested |
+| **A. Docker Engine in WSL2, no Docker Desktop** | the Linux steps in a WSL distribution with systemd (Ubuntu) | recommended, tested (Ubuntu 26.04) |
+| B. Docker Desktop + WSL2 | Docker Desktop with the WSL integration, `./lab.sh` in a WSL terminal | not tested |
 | C. Docker Desktop + PowerShell, lab on a Windows drive | `.\lab.ps1` | not tested, slower, not recommended |
 
-### Route A: Docker Desktop with the WSL2 backend
+### Route A: Docker Engine in WSL2
 
-1. **Enable WSL2.** Needs hardware virtualization enabled in the BIOS/UEFI and, per Docker's
-   requirements for the WSL2 backend, a 64-bit processor with SLAT and 8 GB system RAM. In an
-   administrator PowerShell:
+1. **Enable WSL2.** Needs hardware virtualization enabled in the BIOS/UEFI. In an administrator
+   PowerShell:
 
    ```powershell
    wsl --install
    wsl --update
    wsl --version
    ```
-   Docker Desktop needs WSL **2.1.5 or later**. `wsl --install` installs a default Linux
-   distribution (Ubuntu); open it once to create your Linux user.
+   `wsl --install` installs a default Linux distribution (Ubuntu); open it once to create your
+   Linux user.
 
-2. **Install Docker Desktop** from [docker.com](https://www.docker.com/products/docker-desktop/)
-   and choose *Use WSL 2 instead of Hyper-V* on the configuration page. Per-user installs
-   (`"Docker Desktop Installer.exe" install --user`) support only the WSL2 backend and need no
-   administrator rights for updates. In *Settings > General* *Use the WSL 2 based engine* must
-   be on, and Docker must run **Linux containers** (the default with WSL2).
+2. **Check that systemd runs** in the distribution (Docker's service needs it). Current Ubuntu on WSL starts it
+   by default:
 
-3. **Switch Docker on for your distribution:** *Settings > Resources > WSL integration*, enable
-   your distribution, *Apply*. In the WSL terminal `docker version` must now show a server.
+   ```bash
+   ps -p 1 -o comm=
+   ```
+   The answer must be `systemd`. If not (older or other distributions), enable it - WSL supports it from
+   version 0.67.6 - in `/etc/wsl.conf` and restart WSL from PowerShell with `wsl --shutdown`:
+
+   ```ini
+   [boot]
+   systemd=true
+   ```
+
+3. **Install Docker Engine** inside the distribution with the Debian/Ubuntu steps from [Linux](#linux),
+   including the `docker` group. Close the terminal and open it again, then check
+   `docker run --rm hello-world`. There is no Docker Desktop, no WSL integration switch and no
+   Docker Desktop licence question; updates and the `docker` group are yours to manage.
 
 4. **Clone inside the Linux file system** (`~`, e.g. `/home/you/ansible-cis-lab`) and run the
    steps from [The same on every platform](#the-same-on-every-platform) **in the WSL terminal**:
@@ -127,18 +137,21 @@ Choose one of three routes.
    the boundary is slow. Edit your solutions from Windows through `\\wsl$\<distribution>\home\you\ansible-cis-lab\work`
    or with VS Code's *WSL* extension.
 
-### Route B: Docker Engine in WSL2
+### Route B: Docker Desktop with the WSL2 backend
 
-Use a distribution with systemd - WSL supports it from version 0.67.6. Enable it per distribution
-in `/etc/wsl.conf`, then restart WSL from PowerShell with `wsl --shutdown`:
+1. **Enable WSL2** as in step 1 of Route A. Per Docker's requirements for the WSL2 backend you
+   need a 64-bit processor with SLAT and 8 GB system RAM, and WSL **2.1.5 or later**.
 
-```ini
-[boot]
-systemd=true
-```
-Install Docker Engine with the Debian/Ubuntu steps from [Linux](#linux) inside that
-distribution. Without Docker Desktop there is no WSL integration switch and no Docker Desktop
-licence question, but updates and the `docker` group are yours to manage.
+2. **Install Docker Desktop** from [docker.com](https://www.docker.com/products/docker-desktop/)
+   and choose *Use WSL 2 instead of Hyper-V* on the configuration page. Per-user installs
+   (`"Docker Desktop Installer.exe" install --user`) support only the WSL2 backend and need no
+   administrator rights for updates. In *Settings > General* *Use the WSL 2 based engine* must
+   be on, and Docker must run **Linux containers** (the default with WSL2).
+
+3. **Switch Docker on for your distribution:** *Settings > Resources > WSL integration*, enable
+   your distribution, *Apply*. In the WSL terminal `docker version` must now show a server.
+
+4. **Clone and start inside the WSL file system** exactly as in step 4 of Route A.
 
 ### Route C: PowerShell with the lab on a Windows drive
 
@@ -166,7 +179,7 @@ care of the line endings (below) and expect `LAB_UID` and `LAB_GID` to default t
   processors=4
   swap=2GB
   ```
-  Apply it with `wsl --shutdown` and start Docker Desktop again. The lab needs 4 GB for Docker
+  Apply it with `wsl --shutdown`, then open your distribution (and Docker Desktop, if you use it) again. The lab needs 4 GB for Docker
   (see above); WSL2 itself wants 8 GB system RAM.
 - **Disk.** Docker's data lives in a virtual disk (VHDX). Inside a target `df /` shows its
   nominal size, not the free space of your Windows drive; when that drive is full, writes
@@ -175,7 +188,7 @@ care of the line endings (below) and expect `LAB_UID` and `LAB_GID` to default t
 - **Kernel.** All targets share the kernel of the WSL2 VM, not Windows. Kernel-wide settings
   stay inside that VM.
 - **Licence.** Docker Desktop in a company with more than 250 employees or more than
-  USD 10 million annual revenue needs a paid subscription; Docker Engine in WSL2 (Route B) does not.
+  USD 10 million annual revenue needs a paid subscription; Docker Engine in WSL2 (Route A) does not.
 - **Hyper-V backend.** Docker Desktop can also run its Linux engine on Hyper-V (Windows Pro,
   Enterprise or Education). Not tested; everything else here applies unchanged.
 
@@ -334,14 +347,14 @@ control node would create a second root user for `learner`. If you must, pass yo
 |---|---|---|---|
 | Where the containers run | on your host | in the WSL2 VM | in Docker Desktop's VM |
 | Kernel the targets share | your host's | the WSL2 kernel | the VM's kernel |
-| Install | Docker Engine from the distribution or Docker's repository | Docker Desktop, or Engine in a WSL distribution | Docker Desktop (or Colima, OrbStack) |
-| Who may use the daemon | members of `docker` (root-equivalent) | your Windows user, through Docker Desktop | your macOS user, through Docker Desktop |
+| Install | Docker Engine from the distribution or Docker's repository | Engine in a WSL distribution, or Docker Desktop | Docker Desktop (or Colima, OrbStack) |
+| Who may use the daemon | members of `docker` (root-equivalent) | members of `docker` in the WSL distribution (Engine), or your Windows user (Docker Desktop) | your macOS user, through Docker Desktop |
 | Resource limits | the host's | `%UserProfile%\.wslconfig` and Docker Desktop | Docker Desktop *Settings > Resources* |
 | Where the repo should live | anywhere | **inside** the WSL file system | anywhere in your home folder |
 | File access to `./work` | native | fast in WSL, slow on `/mnt/c` | through the VM, slower |
 | Disk | the host's disk | virtual disk (VHDX); `df /` shows its size | virtual disk of the VM |
-| Licence | open source | Docker Desktop: paid for large companies | Docker Desktop: paid for large companies |
-| Tested with this lab | Debian | yes | no |
+| Licence | open source | Engine: open source; Docker Desktop: paid for large companies | Docker Desktop: paid for large companies |
+| Tested with this lab | Debian (native host) | yes (Ubuntu 26.04, Docker Engine) | no |
 
 ## Update, pause, remove
 
@@ -360,9 +373,9 @@ for Docker Engine and Docker Desktop.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `Cannot connect to the Docker daemon` | the daemon is not running | Linux: `sudo systemctl enable --now docker`; Windows/macOS: start Docker Desktop and wait until it reports *running* |
+| `Cannot connect to the Docker daemon` | the daemon is not running | Linux and WSL: `sudo systemctl enable --now docker` (in WSL, systemd must run, see Route A step 2); Docker Desktop: start it and wait until it reports *running* |
 | `permission denied ... /var/run/docker.sock` | your user is not in the `docker` group | [Use Docker without sudo](#use-docker-without-sudo), then log in again |
-| `docker: command not found` in a WSL terminal | WSL integration is off for this distribution | Docker Desktop *Settings > Resources > WSL integration* |
+| `docker: command not found` in a WSL terminal | Docker Engine is not installed in this distribution, or (Docker Desktop) the WSL integration is off | Route A step 3, or Docker Desktop *Settings > Resources > WSL integration* |
 | `Unsupported config option ... 'cgroup'` or `'compose' is not a docker command` | the old `docker-compose` (v1), no Compose plugin, or Compose older than 2.15 | install the Compose v2 plugin and use `docker compose` |
 | `Pool overlaps with other one on this address space` | `172.31.250.0/24` is in use elsewhere | change `subnet:` in `compose.yaml` |
 | A systemd target exits immediately | the host does not use cgroup v2 | [Linux](#linux) and the first row of [TROUBLESHOOTING](docs/TROUBLESHOOTING.md) |
