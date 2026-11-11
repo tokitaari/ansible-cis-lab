@@ -54,6 +54,8 @@ How the pieces fit together:
   The `lab` CLI shows exercises, hints and explanations and runs the checks.
 - **Reset.** On the host, `./lab.sh reset <host|all>` (Windows PowerShell: `.\lab.ps1`)
   recreates a target in its original, deliberately non-compliant state. Breaking a target is part of learning, not a disaster.
+  `./lab.sh down` + `./lab.sh up` does the same to all targets (the containers are removed);
+  `./lab.sh pause` / `./lab.sh resume` keeps them as they are.
 
 The targets are reached exactly like servers: over SSH, as an unprivileged account that
 escalates with sudo. `docker exec` would bypass all of that and teach the wrong habits.

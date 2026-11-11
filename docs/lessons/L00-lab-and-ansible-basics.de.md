@@ -55,6 +55,8 @@ So greifen die Teile ineinander:
 - **Zurücksetzen.** Auf dem Host baut `./lab.sh reset <host|all>` (Windows-PowerShell:
   `.\lab.ps1`) ein Target in seinem ursprünglichen, absichtlich nicht konformen Zustand neu
   auf. Ein kaputtes Target gehört zum Lernen dazu und ist kein Unglück.
+  `./lab.sh down` + `./lab.sh up` macht dasselbe mit allen Targets (die Container werden
+  entfernt); `./lab.sh pause` / `./lab.sh resume` lässt sie, wie sie sind.
 
 Die Targets erreichst du genau wie Server: per SSH, als unprivilegiertes Konto, das per sudo
 eskaliert. `docker exec` würde all das umgehen und die falschen Gewohnheiten einüben.

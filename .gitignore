@@ -2,6 +2,7 @@
 !/work/.gitkeep
 /.lab/
 /cis/pdf/*.pdf
+/cis/pdf/*.PDF
 /.ansible/
 **/.ansible/
 __pycache__/
