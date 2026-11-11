@@ -47,21 +47,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # longest first: the chain sets the wall time. Measured locally: fresh 4.03@2 12 min,
-        # fresh 5.01@2 17 min, the chain 35 min before the reruns were added; stages 2-9 min in CI
+        # longest first: the chain sets the wall time. Measured in CI (2026-11-11, whole job):
+        # chain 36 min, fresh 5.01 27, fresh 4.03 20, stages 4-12. minutes = the worst case of
+        # one hung run (its timeout in tools/run-solutions.sh) + the other runs + build and start,
+        # so the runner's own timeout fires first and the summary and logs are still written
         include:
           - name: chain
             key: chain
             specs: chain
-            minutes: 120
+            minutes: 75
           - name: fresh 5.01
             key: fresh-5.01
             specs: 5.01 5.01@2
-            minutes: 90
+            minutes: 60
           - name: fresh 4.03
             key: fresh-4.03
             specs: 4.03 4.03@2
-            minutes: 60
+            minutes: 45
           - name: solo stage0
             key: stage0
             specs: stage0

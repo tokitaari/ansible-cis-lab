@@ -19,8 +19,9 @@ MINOR: new features or exercises, PATCH: fixes.
   without a reference solution, plus 2.03 at level 2), `chain` (3.01 -> 5.02 after one reset)
   and `fresh 4.03` / `fresh 5.01` (the role alone on fresh targets, levels 1 and 2). Runs on pull
   requests and pushes to `main` that touch the lab (documentation-only changes do not), weekly
-  and on demand; logs as artifact `runtime-<job>`, the result table in the job summary.
-  Rebuild: *none*
+  and on demand; logs as artifact `runtime-<job>`, the result table in the job summary. Job
+  timeouts (chain 75 min, fresh 5.01 60, fresh 4.03 45, stages 60) lie above the worst case of
+  one hung run, so the runner reports `FAIL (timeout ...)` itself. Rebuild: *none*
 - `tools/run-solutions.sh`: runtime test of the reference solutions, run on the host with the
   lab up. Every run resets all targets, applies the prerequisites from `requires`, stages the
   solution into a work directory in the control node (`./work` stays untouched), runs its `solve`
@@ -33,7 +34,8 @@ MINOR: new features or exercises, PATCH: fixes.
   fresh (row `fresh/<id>`): only its prerequisites outside the chain are solved (0.02), so its
   role alone must bring fresh targets into the checked state - in the chain the playbooks of
   3.02-3.05 have already done that. Spec `all`: solo, chain and the fresh runs of 4.03 and 5.01
-  at both levels. README (*Changing the lab*, EN and DE). Rebuild: *none*
+  at both levels. Timeout per run or chain step 900 s (3.01 1200, 4.03 1800, 4.08 and 5.01
+  2400; `--timeout` overrides). README (*Changing the lab*, EN and DE). Rebuild: *none*
 - `.gitattributes` (`* text=auto eol=lf`): LF line endings in the working tree on every
   platform. The scripts in `control/` and `targets/` run in Linux containers straight from the
   clone; a Windows clone with `core.autocrlf=true` had CRLF and broke them (INSTALL, *Windows
