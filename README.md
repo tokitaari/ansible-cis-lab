@@ -100,7 +100,8 @@ CI runs the same checks. For a change to exercises, solutions, checks, images or
 tooling, also run the runtime test on the host (lab up): `tools/run-solutions.sh stage2` resets
 all targets before every run (their state is lost, `./work` and `lab progress` stay), applies each
 reference solution of the stage, runs its `lab check` and a second run that must change nothing
-(`--list` shows the plan, `--help` the details).
+(`--list` shows the plan, `--help` the details). CI runs it for stages 0-4, one job per stage
+(workflow `runtime`).
 
 ## Learning path
 
@@ -127,8 +128,8 @@ ansible/              ansible.cfg, inventory (grouped by OS family), shared role
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, check
 cis/                  control catalogue + place for your CIS PDFs
 docs/                 learning path, lessons/ (L00-L14), glossary, container limits, troubleshooting
-tools/                maintainer checks: release hygiene, static quality gate (both run in CI),
-                      runtime test of the reference solutions
+tools/                maintainer checks: release hygiene, static quality gate, runtime test of the
+                      reference solutions (all three run in CI)
 work/                 YOUR solutions (mounted to /lab/work)
 ```
 

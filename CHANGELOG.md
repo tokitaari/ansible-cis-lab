@@ -13,6 +13,12 @@ MINOR: new features or exercises, PATCH: fixes.
 ## [Unreleased]
 
 ### Added
+- CI workflow `runtime` (`.github/workflows/runtime.yml`): `tools/run-solutions.sh` for stages
+  0-4, one job per stage on `ubuntu-26.04`; each job builds the images and starts its own lab.
+  27 runs: every exercise except the cumulative 3.01, 4.03, 5.01, 5.02 and 5.03 (no reference
+  solution), plus 2.03 at level 2. Runs on pull requests and pushes to `main` that touch the lab
+  (documentation-only changes do not), weekly and on demand; logs as artifact
+  `runtime-<stage>`, the result table in the job summary. Rebuild: *none*
 - `tools/run-solutions.sh`: runtime test of the reference solutions, run on the host with the
   lab up. Every run resets all targets, applies the prerequisites from `requires`, stages the
   solution into a work directory in the control node (`./work` stays untouched), runs its `solve`
