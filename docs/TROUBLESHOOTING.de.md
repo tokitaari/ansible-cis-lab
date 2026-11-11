@@ -9,7 +9,8 @@
 | `UNREACHABLE` direkt nach `./lab.sh up` | Targets booten noch / Schlüssel noch nicht installiert | 30 s warten; `./lab.sh logs debian`; im Target `systemctl status lab-keysync` |
 | Alle Hosts `UNREACHABLE` nach einer Aufgabe | sshd- oder Firewall-Änderung hat dich ausgesperrt | `./lab.sh reset all` (oder den einzelnen Host), Playbook korrigieren, `validate` und Totmannschalter nutzen |
 | `sshd -t` scheitert mit `Bad SSH2 KexAlgorithms` | ein älteres OpenSSH kennt `mlkem768x25519-sha256` nicht | aus der Liste entfernen (2.02 / Rollen-Defaults) - alle aktuellen Lab-Images unterstützen es |
-| Viele Checks scheitern nur auf `alpine` | Python fehlt | nach jedem `reset alpine` einmal Aufgabe 0.02 oder `lab solve 0.02` ausführen |
+| Viele Checks scheitern nur auf `alpine` | Python fehlt | nach jedem `reset alpine` und nach jedem `./lab.sh down` + `up` einmal Aufgabe 0.02 oder `lab solve 0.02` ausführen |
+| Gelöste Aufgaben rückgängig, Python auf `alpine` weg nach `./lab.sh down` + `./lab.sh up` | `down` entfernt die Container; `up` legt aus den Images frische, nicht konforme Targets an - dein Fortschritt in `./.lab` bleibt und zeigt weiter *bestanden* | so gewollt; zum Anhalten ohne Zustandsverlust `./lab.sh pause` / `./lab.sh resume` nutzen. Nachholen: `lab solve 0.02 -y`, dann `lab solve <id> -y` für die Aufgaben, die du brauchst |
 | `ansible.cfg` ignoriert, falsches Inventar | Lab liegt auf einem für alle beschreibbaren Mount (z. B. `/mnt/c` in WSL) | im Linux-Dateisystem klonen; `ANSIBLE_CONFIG` ist im Control Node ohnehin gesetzt |
 | Dateien in `./work` gehören auf dem Host root | ohne `lab.sh` gestartet | mit `./lab.sh up` starten (setzt `LAB_UID`/`LAB_GID`) oder `LAB_UID=$(id -u) LAB_GID=$(id -g) docker compose up -d` |
 | `package_facts` scheitert auf Fedora/openSUSE | `python3-rpm` fehlt | Image neu bauen (`./lab.sh destroy && ./lab.sh up`); auf openSUSE heißt das Paket evtl. anders (`python313-rpm`) |

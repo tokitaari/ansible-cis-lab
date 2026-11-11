@@ -9,7 +9,8 @@
 | `UNREACHABLE` right after `./lab.sh up` | targets still booting / key not installed yet | wait 30 s; `./lab.sh logs debian`; inside the target `systemctl status lab-keysync` |
 | Every host `UNREACHABLE` after an exercise | sshd or firewall change locked you out | `./lab.sh reset all` (or the single host), fix the playbook, use `validate` and the dead-man switch |
 | `sshd -t` fails with `Bad SSH2 KexAlgorithms` | an older OpenSSH does not know `mlkem768x25519-sha256` | remove it from the list (2.02 / role defaults) - all current lab images support it |
-| Many checks fail only on `alpine` | Python missing | run exercise 0.02 or `lab solve 0.02` once after each `reset alpine` |
+| Many checks fail only on `alpine` | Python missing | run exercise 0.02 or `lab solve 0.02` once after each `reset alpine` and after each `./lab.sh down` + `up` |
+| Solved exercises undone, Python on `alpine` gone after `./lab.sh down` + `./lab.sh up` | `down` removes the containers; `up` creates fresh, non-compliant targets from the images - your progress in `./.lab` stays and still says *passed* | expected; to stop the lab without losing state use `./lab.sh pause` / `./lab.sh resume`. To catch up: `lab solve 0.02 -y`, then `lab solve <id> -y` for the exercises you need |
 | `ansible.cfg` ignored, wrong inventory | lab on a world-writable mount (e.g. `/mnt/c` in WSL) | clone inside the Linux file system; `ANSIBLE_CONFIG` is set in the control node anyway |
 | Files in `./work` owned by root on the host | started without `lab.sh` | start with `./lab.sh up` (sets `LAB_UID`/`LAB_GID`) or `LAB_UID=$(id -u) LAB_GID=$(id -g) docker compose up -d` |
 | `package_facts` fails on Fedora/openSUSE | `python3-rpm` missing | rebuild the image (`./lab.sh destroy && ./lab.sh up`); on openSUSE the package name may differ (`python313-rpm`) |

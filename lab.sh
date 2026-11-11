@@ -22,7 +22,10 @@ TARGETS=(debian ubuntu rocky alma fedora opensuse arch alpine)
 usage() {
   cat <<'USAGE'
 ./lab.sh up                 build images and start the lab
-./lab.sh down               stop the lab (keeps images and keys)
+./lab.sh pause              stop the containers - they and every change on the targets are kept
+./lab.sh resume             start the paused containers again
+./lab.sh down               remove the containers - every target starts fresh on the next up
+                            (keeps images and keys; Python on alpine is gone: lab solve 0.02 -y)
 ./lab.sh destroy            remove containers, volumes and lab images
 ./lab.sh reset <host|all>   recreate target(s) in their original non-compliant state
 ./lab.sh shell              interactive shell in the control node
@@ -33,18 +36,28 @@ usage() {
 USAGE
 }
 
+wait_ready() {
+  echo "Waiting for targets to accept SSH ..."
+  for _ in $(seq 1 60); do
+    if docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true >/dev/null 2>&1; then
+      break
+    fi
+    sleep 3
+  done
+  docker compose exec -T -u learner control lab status || true
+}
+
 case "${1:-help}" in
   up)
     docker compose up -d --build
-    echo "Waiting for targets to accept SSH ..."
-    for _ in $(seq 1 60); do
-      if docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true >/dev/null 2>&1; then
-        break
-      fi
-      sleep 3
-    done
-    docker compose exec -T -u learner control lab status || true
+    wait_ready
     echo; echo "Ready. Next: ./lab.sh shell   then   lab placement   or   lab show 0.01"
+    ;;
+  pause)   docker compose stop ;;
+  resume)
+    docker compose start
+    wait_ready
+    echo; echo "Resumed with the state of the last pause. Next: ./lab.sh shell"
     ;;
   down)    docker compose down ;;
   destroy) docker compose down -v --rmi local ;;

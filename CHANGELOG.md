@@ -12,7 +12,19 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+- `./lab.sh pause` / `./lab.sh resume` (and `.\lab.ps1 pause` / `resume`): stop and start the
+  containers with `docker compose stop` / `start`, so every change on the targets - Python on
+  `alpine` from 0.02 included - survives. `resume` waits for SSH like `up`. The names avoid
+  `stop`/`start` because `./lab.sh start <id>` is forwarded to `lab start`.
+  Rebuild: *none*
+
+### Changed
+- `./lab.sh help`: `down` was described as "stop the lab"; it removes the containers, so the
+  next `up` starts all targets fresh and non-compliant (like `reset all`; Python on `alpine`
+  is gone). README (*Pause or reset?*), TROUBLESHOOTING and L00 say so (EN and DE).
+  Rebuild: *none*
+- `.gitignore` also ignores `cis/pdf/*.PDF` (upper-case extension). Rebuild: *none*
 
 ## [1.5.0] - 2026-11-08
 

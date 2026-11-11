@@ -18,17 +18,29 @@ if (-not $env:LAB_TZ) {
 if (-not $env:LAB_GID) { $env:LAB_GID = '1000' }
 $Targets = 'debian','ubuntu','rocky','alma','fedora','opensuse','arch','alpine'
 
+function Wait-Ready {
+  Write-Host 'Waiting for targets to accept SSH ...'
+  for ($i = 0; $i -lt 60; $i++) {
+    docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true *> $null
+    if ($LASTEXITCODE -eq 0) { break }
+    Start-Sleep -Seconds 3
+  }
+  docker compose exec -T -u learner control lab status
+}
+
 switch ($Command) {
   'up' {
     docker compose up -d --build
-    Write-Host 'Waiting for targets to accept SSH ...'
-    for ($i = 0; $i -lt 60; $i++) {
-      docker compose exec -T -u learner control ansible targets -m ansible.builtin.raw -a true *> $null
-      if ($LASTEXITCODE -eq 0) { break }
-      Start-Sleep -Seconds 3
-    }
-    docker compose exec -T -u learner control lab status
+    Wait-Ready
     Write-Host "`nReady. Next: .\lab.ps1 shell   then   lab placement   or   lab show 0.01"
+  }
+  # pause/resume keep the containers (and every change made to the targets);
+  # down removes them - the next up starts all targets fresh (Python on alpine: lab solve 0.02 -y)
+  'pause'   { docker compose stop }
+  'resume' {
+    docker compose start
+    Wait-Ready
+    Write-Host "`nResumed with the state of the last pause. Next: .\lab.ps1 shell"
   }
   'down'    { docker compose down }
   'destroy' { docker compose down -v --rmi local }

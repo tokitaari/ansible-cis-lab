@@ -36,7 +36,7 @@ lab lesson           # die Lektionen und die Aufgaben, die jede vorbereitet
 lab list             # alle Aufgaben mit deinem Fortschritt
 lab start 0.01       # loslegen
 ```
-Windows PowerShell: `.\lab.ps1 up`, `.\lab.ps1 shell`.
+Windows PowerShell: `.\lab.ps1 up`, `.\lab.ps1 shell`, `.\lab.ps1 pause` / `resume`.
 
 ## So läuft eine Aufgabe
 
@@ -50,6 +50,16 @@ lab hint 1.03 1      # sanfter Hinweis ... lab hint 1.03 3 fast die Lösung
 lab explain 1.03     # nach dem Bestehen: Stolperfallen, Alternativen, Praxis
 ```
 Host kaputt? `./lab.sh reset debian` (oder `reset all`) erzeugt ihn im Ursprungszustand neu.
+
+**Pausieren oder zurücksetzen?** Änderungen an den Targets leben nur in ihren Containern:
+
+| Befehl (Host) | Container | Targets danach |
+|---|---|---|
+| `./lab.sh pause` / `./lab.sh resume` | gestoppt / wieder gestartet | so, wie du sie verlassen hast (auch Python auf `alpine`) |
+| `./lab.sh down` + `./lab.sh up` | entfernt / neu angelegt | frisch, nicht konform - wie `reset all`; für Python auf `alpine` `lab solve 0.02 -y` ausführen |
+| `./lab.sh reset <host\|all>` | neu erzeugt | frisch, nicht konform |
+
+Deine Dateien in `./work` und dein Fortschritt (`./.lab`) bleiben in jedem Fall erhalten.
 
 ## Komfort im Control Node
 
@@ -105,7 +115,7 @@ Details: [`docs/LEARNING_PATH.de.md`](docs/LEARNING_PATH.de.md) · Übersicht: [
 
 ```
 compose.yaml          Control + 8 Targets (privilegiert, siehe docs/CONTAINER_LIMITS.de.md)
-lab.sh / lab.ps1      Host-Wrapper: up, down, reset, shell und Weiterleitung an 'lab'
+lab.sh / lab.ps1      Host-Wrapper: up, pause, resume, down, reset, shell und Weiterleitung an 'lab'
 control/              Image des Control Nodes, 'lab'-CLI
 targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (pflanzt die Befunde)
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen
