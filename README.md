@@ -103,8 +103,8 @@ reference solution of the stage, runs its `lab check` and a second run that must
 (`--list` shows the plan, `--help` the details). `tools/run-solutions.sh chain` runs the
 cumulative exercises 3.01-5.02 the way a learner does them: one reset, then every step on the
 state the steps before left. `tools/run-solutions.sh 5.01` runs a cumulative role fresh (only
-0.02 before it), `all` runs everything (over two hours). CI runs it for stages 0-4, one job per
-stage (workflow `runtime`).
+0.02 before it), `all` runs everything (over two hours). CI runs stages 0-4, the chain and the
+fresh runs of 4.03 and 5.01, each in a job of its own (workflow `runtime`).
 
 ## Learning path
 

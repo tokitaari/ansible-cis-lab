@@ -106,8 +106,8 @@ aus und einen zweiten Lauf, der nichts ändern darf (`--list` zeigt den Plan, `-
 `tools/run-solutions.sh chain` führt die aufbauenden Aufgaben 3.01-5.02 so aus, wie Lernende sie
 bearbeiten: ein Reset, dann jeder Schritt auf dem Zustand, den die Schritte davor hinterlassen.
 `tools/run-solutions.sh 5.01` prüft eine aufbauende Rolle frisch (nur 0.02 davor), `all` führt
-alles aus (über zwei Stunden). CI führt ihn für die Stufen 0-4 aus, ein Job pro
-Stufe (Workflow `runtime`).
+alles aus (über zwei Stunden). CI führt die Stufen 0-4, die Kette und die frischen Läufe von 4.03
+und 5.01 aus, jeweils in einem eigenen Job (Workflow `runtime`).
 
 ## Lernpfad
 
