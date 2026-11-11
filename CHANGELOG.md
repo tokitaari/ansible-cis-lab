@@ -13,6 +13,10 @@ MINOR: new features or exercises, PATCH: fixes.
 ## [Unreleased]
 
 ### Added
+- `.gitattributes` (`* text=auto eol=lf`): LF line endings in the working tree on every
+  platform. The scripts in `control/` and `targets/` run in Linux containers straight from the
+  clone; a Windows clone with `core.autocrlf=true` had CRLF and broke them (INSTALL, *Windows
+  details*). Already existing clones are not changed - clone again. Rebuild: *none*
 - `INSTALL.md` / `INSTALL.de.md`: installation guide for Windows (Docker Engine in WSL2,
   Docker Desktop with WSL2, PowerShell), macOS (Docker Desktop, Colima, OrbStack) and Linux
   (Debian/Ubuntu, Fedora, RHEL family, Arch, openSUSE), with the common steps, requirements

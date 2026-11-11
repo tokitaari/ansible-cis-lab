@@ -163,12 +163,13 @@ auf die Zeilenenden (unten) und rechne damit, dass `LAB_UID` und `LAB_GID` auf `
 ### Windows-Details
 
 - **Zeilenenden.** Skripte in `control/` und `targets/` laufen **in Linux-Containern direkt
-  aus deinem Klon**. Mit dem Standard `core.autocrlf=true` von Git for Windows bekommt ein auf der Windows-Seite angelegter Klon
-  CRLF-Zeilenenden, und die Skripte scheitern mit Fehlern, die `\r` oder `^M` erwähnen. Klone in WSL
-  (Git dort lässt die Zeilenenden in Ruhe) oder setze die Option für Route C **vor** dem Klonen:
+  aus deinem Klon**, CRLF-Zeilenenden brechen sie daher mit Fehlern, die `\r` oder `^M` erwähnen.
+  Die `.gitattributes` des Repositorys erzwingt auf jeder Plattform LF, ein frischer Klon ist also in Ordnung - auch mit dem
+  Standard `core.autocrlf=true` von Git for Windows. Ein Klon, der vor dieser Datei angelegt wurde, muss
+  neu angelegt werden. So prüfst du einen Klon (es erscheint `0`, wenn keine Datei CRLF hat):
 
-  ```powershell
-  git config --global core.autocrlf input
+  ```bash
+  git -C ansible-cis-lab ls-files --eol | grep -c 'w/crlf'
   ```
 - **Speicher und CPUs.** Die WSL2-VM nimmt sich, was sie braucht, bis zu einer Grenze (standardmäßig ein Anteil deines
   RAM). Begrenze oder erhöhe sie in `%UserProfile%\.wslconfig` (eine Windows-Datei, **nicht** `/etc/wsl.conf`):

@@ -163,12 +163,13 @@ care of the line endings (below) and expect `LAB_UID` and `LAB_GID` to default t
 ### Windows details
 
 - **Line endings.** Scripts in `control/` and `targets/` run **inside Linux containers straight
-  from your clone**. With Git for Windows' default `core.autocrlf=true` a clone made on the Windows side
-  gets CRLF line endings, and the scripts fail with errors that mention `\r` or `^M`. Clone inside WSL
-  (Git there leaves the line endings alone) or, for Route C, set the option **before** cloning:
+  from your clone**, so CRLF line endings break them with errors that mention `\r` or `^M`.
+  The repository's `.gitattributes` forces LF on every platform, so a fresh clone is fine - also with
+  Git for Windows' default `core.autocrlf=true`. A clone made before that file existed has to be
+  made again. To check a clone (it prints `0` when no file has CRLF):
 
-  ```powershell
-  git config --global core.autocrlf input
+  ```bash
+  git -C ansible-cis-lab ls-files --eol | grep -c 'w/crlf'
   ```
 - **Memory and CPUs.** The WSL2 VM takes what it needs up to a limit (by default a share of your
   RAM). Cap or raise it in `%UserProfile%\.wslconfig` (a Windows file, **not** `/etc/wsl.conf`):
