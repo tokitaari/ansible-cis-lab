@@ -13,6 +13,19 @@ MINOR: new features or exercises, PATCH: fixes.
 ## [Unreleased]
 
 ### Added
+- CI workflow `runtime` (`.github/workflows/runtime.yml`): `tools/run-solutions.sh` for stages
+  0-4, one job per stage on `ubuntu-26.04`; each job builds the images and starts its own lab.
+  27 runs: every exercise except the cumulative 3.01, 4.03, 5.01, 5.02 and 5.03 (no reference
+  solution), plus 2.03 at level 2. Runs on pull requests and pushes to `main` that touch the lab
+  (documentation-only changes do not), weekly and on demand; logs as artifact
+  `runtime-<stage>`, the result table in the job summary. Rebuild: *none*
+- `tools/run-solutions.sh`: runtime test of the reference solutions, run on the host with the
+  lab up. Every run resets all targets, applies the prerequisites from `requires`, stages the
+  solution into a work directory in the control node (`./work` stays untouched), runs its `solve`
+  command and `lab check`, then a real second run that must change nothing on any target (the
+  `--check` idempotency test of `lab check` skips `command` and `shell` tasks). Specs `stage<N>`,
+  `solo`, `<id>` and `<id>@2` (CIS level 2); `--list` prints the plan, the result table names
+  the targets that failed or changed. README (*Changing the lab*, EN and DE). Rebuild: *none*
 - `.gitattributes` (`* text=auto eol=lf`): LF line endings in the working tree on every
   platform. The scripts in `control/` and `targets/` run in Linux containers straight from the
   clone; a Windows clone with `core.autocrlf=true` had CRLF and broke them (INSTALL, *Windows
@@ -31,6 +44,10 @@ MINOR: new features or exercises, PATCH: fixes.
   Rebuild: *none*
 
 ### Changed
+- `lab`: the environment variable `LAB_STATE_DIR` moves the progress record and the language
+  setting out of `/lab/.lab` (the default stays). `tools/run-solutions.sh` uses it, so checking
+  the reference solutions does not mark them as passed in your `lab progress`. Live script,
+  Rebuild: *none*
 - `lab docs` lists and shows the installation guide too (`lab docs install`, German with
   `lab lang de`; tab completion offers `readme` and `install`). Live script, Rebuild: *none*
 - `./lab.sh help`: `down` was described as "stop the lab"; it removes the containers, so the

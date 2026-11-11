@@ -1,0 +1,76 @@
+---
+# Runtime test: every solo reference solution on the eight targets (tools/run-solutions.sh).
+# One job per stage; each job builds the images and starts its own lab on a fresh runner
+# (privileged systemd targets need cgroup v2 - compose.yaml is used as it is).
+name: runtime
+"on":
+  pull_request:
+    paths:
+      - ansible/**
+      - control/**
+      - targets/**
+      - exercises/**
+      - "!exercises/**/*.md"
+      - compose.yaml
+      - lab.sh
+      - tools/run-solutions.sh
+      - tools/stage-solution.sh
+      - .github/workflows/runtime.yml
+  push:
+    branches: [main]
+    paths:
+      - ansible/**
+      - control/**
+      - targets/**
+      - exercises/**
+      - "!exercises/**/*.md"
+      - compose.yaml
+      - lab.sh
+      - tools/run-solutions.sh
+      - tools/stage-solution.sh
+      - .github/workflows/runtime.yml
+  schedule:
+    - cron: "17 3 * * 1"    # weekly: base images and package repositories move on
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: runtime-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  solo:
+    name: solo ${{ matrix.stage }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        stage: [stage0, stage1, stage2, stage3, stage4]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Runner facts
+        run: |
+          echo "kernel $(uname -r), $(stat -fc %T /sys/fs/cgroup), $(nproc) CPUs"
+          free -h
+          df -h /
+          docker version --format 'docker {{.Server.Version}}'
+          docker compose version
+      - name: Build the images
+        run: docker compose build
+      - name: Start the lab
+        run: ./lab.sh up
+      - name: Run the reference solutions of ${{ matrix.stage }}
+        run: tools/run-solutions.sh --yes --logs "$RUNNER_TEMP/lab-runs" ${{ matrix.stage }}
+      - name: Container state
+        if: failure()
+        run: |
+          docker compose ps -a
+          docker system df
+      - name: Upload the logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: runtime-${{ matrix.stage }}
+          path: ${{ runner.temp }}/lab-runs
+          retention-days: 14
+          if-no-files-found: ignore

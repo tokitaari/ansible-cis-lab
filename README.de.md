@@ -98,7 +98,12 @@ Verloren nur durch `git clean -fdx`, Löschen des Klons oder einen neuen Klon an
 
 Du änderst das Lab selbst (Aufgaben, Doku, Lösungen)? Führe vor dem Pull Request
 `tools/static-check.sh` aus - im Control Node: `docker compose exec control /lab/tools/static-check.sh`.
-CI führt dieselben Prüfungen aus.
+CI führt dieselben Prüfungen aus. Änderst du Aufgaben, Lösungen, Checks, Images oder das
+`lab`-Werkzeug, führe zusätzlich den Laufzeittest auf dem Host aus (Lab läuft):
+`tools/run-solutions.sh stage2` setzt vor jedem Lauf alle Targets zurück (ihr Zustand geht verloren,
+`./work` und `lab progress` bleiben), wendet jede Musterlösung der Stufe an, führt ihren `lab check`
+aus und einen zweiten Lauf, der nichts ändern darf (`--list` zeigt den Plan, `--help` die Details). CI führt ihn für die Stufen 0-4 aus, ein Job pro
+Stufe (Workflow `runtime`).
 
 ## Lernpfad
 
@@ -125,7 +130,8 @@ ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeins
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
 cis/                  Kontrollkatalog + Ablage für deine CIS-PDFs
 docs/                 Lernpfad, lessons/ (L00-L14), Glossar, Container-Grenzen, Fehlerbehebung
-tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate (beide in CI)
+tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate,
+                      Laufzeittest der Musterlösungen (alle drei in CI)
 work/                 DEINE Lösungen (eingehängt nach /lab/work)
 ```
 
