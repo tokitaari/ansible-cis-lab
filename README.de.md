@@ -102,7 +102,11 @@ CI führt dieselben Prüfungen aus. Änderst du Aufgaben, Lösungen, Checks, Ima
 `lab`-Werkzeug, führe zusätzlich den Laufzeittest auf dem Host aus (Lab läuft):
 `tools/run-solutions.sh stage2` setzt vor jedem Lauf alle Targets zurück (ihr Zustand geht verloren,
 `./work` und `lab progress` bleiben), wendet jede Musterlösung der Stufe an, führt ihren `lab check`
-aus und einen zweiten Lauf, der nichts ändern darf (`--list` zeigt den Plan, `--help` die Details). CI führt ihn für die Stufen 0-4 aus, ein Job pro
+aus und einen zweiten Lauf, der nichts ändern darf (`--list` zeigt den Plan, `--help` die Details).
+`tools/run-solutions.sh chain` führt die aufbauenden Aufgaben 3.01-5.02 so aus, wie Lernende sie
+bearbeiten: ein Reset, dann jeder Schritt auf dem Zustand, den die Schritte davor hinterlassen.
+`tools/run-solutions.sh 5.01` prüft eine aufbauende Rolle frisch (nur 0.02 davor), `all` führt
+alles aus (über zwei Stunden). CI führt ihn für die Stufen 0-4 aus, ein Job pro
 Stufe (Workflow `runtime`).
 
 ## Lernpfad

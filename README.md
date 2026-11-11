@@ -100,8 +100,11 @@ CI runs the same checks. For a change to exercises, solutions, checks, images or
 tooling, also run the runtime test on the host (lab up): `tools/run-solutions.sh stage2` resets
 all targets before every run (their state is lost, `./work` and `lab progress` stay), applies each
 reference solution of the stage, runs its `lab check` and a second run that must change nothing
-(`--list` shows the plan, `--help` the details). CI runs it for stages 0-4, one job per stage
-(workflow `runtime`).
+(`--list` shows the plan, `--help` the details). `tools/run-solutions.sh chain` runs the
+cumulative exercises 3.01-5.02 the way a learner does them: one reset, then every step on the
+state the steps before left. `tools/run-solutions.sh 5.01` runs a cumulative role fresh (only
+0.02 before it), `all` runs everything (over two hours). CI runs it for stages 0-4, one job per
+stage (workflow `runtime`).
 
 ## Learning path
 

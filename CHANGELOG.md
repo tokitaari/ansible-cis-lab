@@ -25,7 +25,13 @@ MINOR: new features or exercises, PATCH: fixes.
   command and `lab check`, then a real second run that must change nothing on any target (the
   `--check` idempotency test of `lab check` skips `command` and `shell` tasks). Specs `stage<N>`,
   `solo`, `<id>` and `<id>@2` (CIS level 2); `--list` prints the plan, the result table names
-  the targets that failed or changed. README (*Changing the lab*, EN and DE). Rebuild: *none*
+  the targets that failed or changed. Spec `chain`: the cumulative exercises 3.01 -> 3.02-3.05
+  -> 4.03 (level 2) -> 5.01 (level 2) -> 5.02 after one reset, every step on the state the steps
+  before left, the first failing step stops the chain. A cumulative exercise as `<id>` runs
+  fresh (row `fresh/<id>`): only its prerequisites outside the chain are solved (0.02), so its
+  role alone must bring fresh targets into the checked state - in the chain the playbooks of
+  3.02-3.05 have already done that. Spec `all`: solo, chain and the fresh runs of 4.03 and 5.01
+  at both levels. README (*Changing the lab*, EN and DE). Rebuild: *none*
 - `.gitattributes` (`* text=auto eol=lf`): LF line endings in the working tree on every
   platform. The scripts in `control/` and `targets/` run in Linux containers straight from the
   clone; a Windows clone with `core.autocrlf=true` had CRLF and broke them (INSTALL, *Windows
