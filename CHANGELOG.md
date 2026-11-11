@@ -31,6 +31,10 @@ MINOR: new features or exercises, PATCH: fixes.
   Rebuild: *none*
 
 ### Changed
+- `lab`: the environment variable `LAB_STATE_DIR` moves the progress record and the language
+  setting out of `/lab/.lab` (the default stays). `tools/run-solutions.sh` uses it, so checking
+  the reference solutions does not mark them as passed in your `lab progress`. Live script,
+  Rebuild: *none*
 - `lab docs` lists and shows the installation guide too (`lab docs install`, German with
   `lab lang de`; tab completion offers `readme` and `install`). Live script, Rebuild: *none*
 - `./lab.sh help`: `down` was described as "stop the lab"; it removes the containers, so the

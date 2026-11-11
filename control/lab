@@ -8,7 +8,9 @@ LESSON_DIR="$LAB_ROOT/docs/lessons"
 # LAB_WORK_DIR overrides the work directory (CI checks the reference solutions in a temporary
 # one, see tools/stage-solution.sh). Exported for check.sh/check.yml; roles_path follows it.
 WORK_DIR="${LAB_WORK_DIR:-$LAB_ROOT/work}"
-STATE_DIR="$LAB_ROOT/.lab"
+# LAB_STATE_DIR overrides the directory of progress and language (tools/run-solutions.sh uses a
+# scratch one, so that checking the reference solutions does not mark them as yours).
+STATE_DIR="${LAB_STATE_DIR:-$LAB_ROOT/.lab}"
 export LAB_ROOT LAB_WORK_DIR="$WORK_DIR"
 export ANSIBLE_ROLES_PATH="${ANSIBLE_ROLES_PATH:-$WORK_DIR/roles:$LAB_ROOT/ansible/roles}"
 mkdir -p "$STATE_DIR" "$WORK_DIR" 2>/dev/null || true
@@ -41,7 +43,8 @@ lab - Ansible CIS lab helper
   lab view <file.md>        render any markdown file (also: 'md <file>', 'less <file.md>')
   lab docs [name]           list the guides (docs/, README, INSTALL), or show one (e.g. lab docs troubleshooting)
 
-Environment: LAB_LANG (en|de), LAB_WORK_DIR (<work-dir>, default /lab/work)
+Environment: LAB_LANG (en|de), LAB_WORK_DIR (<work-dir>, default /lab/work),
+             LAB_STATE_DIR (progress and language, default /lab/.lab)
 
 Reset a target to its original (non-compliant) state from the HOST:
   ./lab.sh reset <host|all>      (Windows: .\lab.ps1 reset <host|all>)
