@@ -13,6 +13,13 @@ MINOR: new features or exercises, PATCH: fixes.
 ## [Unreleased]
 
 ### Added
+- `INSTALL.md` / `INSTALL.de.md`: installation guide for Windows (Docker Desktop with WSL2,
+  Docker Engine in WSL2, PowerShell), macOS (Docker Desktop, Colima, OrbStack) and Linux
+  (Debian/Ubuntu, Fedora, RHEL family, Arch, openSUSE), with the common steps, requirements
+  (Compose 2.15+ for `cgroup:`, cgroup v2), what is special about Docker on each platform
+  (kernel, resources, file sharing, disk, SELinux, firewall, subnet, line endings, licence)
+  and a symptom table. Only Debian and WSL2 are tested; the rest follows the vendors'
+  documentation and is marked as untested. README links it (EN and DE). Rebuild: *none*
 - `./lab.sh pause` / `./lab.sh resume` (and `.\lab.ps1 pause` / `resume`): stop and start the
   containers with `docker compose stop` / `start`, so every change on the targets - Python on
   `alpine` from 0.02 included - survives. `resume` waits for SSH like `up`. The names avoid

@@ -25,6 +25,8 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 
 Voraussetzungen: Docker Engine 24+ oder Docker Desktop mit Compose v2, ~8 GB freier Platz, 4 GB RAM.
 Unter Windows WSL2 nutzen und das Lab **im Linux-Dateisystem** ablegen (z. B. `~/ansible-cis-lab`, nicht `/mnt/c/...`).
+Docker noch nicht installiert, oder etwas scheitert? Schritt für Schritt für Windows, macOS und Linux, mit den
+Besonderheiten von Docker auf jedem System: [`INSTALL.de.md`](INSTALL.de.md).
 
 <!-- parity: lang-specific -->
 ```bash
@@ -116,6 +118,7 @@ Details: [`docs/LEARNING_PATH.de.md`](docs/LEARNING_PATH.de.md) · Übersicht: [
 ```
 compose.yaml          Control + 8 Targets (privilegiert, siehe docs/CONTAINER_LIMITS.de.md)
 lab.sh / lab.ps1      Host-Wrapper: up, pause, resume, down, reset, shell und Weiterleitung an 'lab'
+INSTALL.md            Installation unter Windows, macOS und Linux, inkl. Docker-Hinweisen je Plattform
 control/              Image des Control Nodes, 'lab'-CLI
 targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (pflanzt die Befunde)
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen

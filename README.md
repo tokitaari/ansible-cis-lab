@@ -25,6 +25,8 @@ audit mode, exceptions and staged rollout.
 
 Requirements: Docker Engine 24+ or Docker Desktop with Compose v2, ~8 GB free disk, 4 GB RAM.
 On Windows use WSL2 and clone the lab **inside the Linux file system** (e.g. `~/ansible-cis-lab`, not `/mnt/c/...`).
+Docker not installed yet, or something fails? Step by step for Windows, macOS and Linux, with the
+peculiarities of Docker on each: [`INSTALL.md`](INSTALL.md).
 
 ```bash
 ./lab.sh up          # build + start (first build takes a while)
@@ -114,6 +116,7 @@ Details: [`docs/LEARNING_PATH.md`](docs/LEARNING_PATH.md) · index: [`exercises/
 ```
 compose.yaml          control + 8 targets (privileged, see docs/CONTAINER_LIMITS.md)
 lab.sh / lab.ps1      host wrapper: up, pause, resume, down, reset, shell, and forwarding to 'lab'
+INSTALL.md            installation for Windows, macOS and Linux, incl. Docker notes per platform
 control/              control node image, 'lab' CLI
 targets/              one Dockerfile per distribution + common bootstrap (plants the findings)
 ansible/              ansible.cfg, inventory (grouped by OS family), shared roles
