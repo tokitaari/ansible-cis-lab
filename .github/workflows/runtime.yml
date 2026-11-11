@@ -1,7 +1,9 @@
 ---
-# Runtime test: every solo reference solution on the eight targets (tools/run-solutions.sh).
-# One job per stage; each job builds the images and starts its own lab on a fresh runner
-# (privileged systemd targets need cgroup v2 - compose.yaml is used as it is).
+# Runtime test: the reference solutions on the eight targets (tools/run-solutions.sh).
+# One job per stage (solo runs), one for the chain of the cumulative exercises 3.01 -> 5.02 and
+# one per fresh role run (4.03, 5.01 at both levels). Each job builds the images and starts its
+# own lab on a fresh runner (privileged systemd targets need cgroup v2 - compose.yaml is used as
+# it is). Building in every job costs 100-130 s (measured 2026-11-11) - no image cache.
 name: runtime
 "on":
   pull_request:
@@ -38,14 +40,48 @@ concurrency:
   group: runtime-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
-  solo:
-    name: solo ${{ matrix.stage }}
+  runs:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-26.04
-    timeout-minutes: 60
+    timeout-minutes: ${{ matrix.minutes }}
     strategy:
       fail-fast: false
       matrix:
-        stage: [stage0, stage1, stage2, stage3, stage4]
+        # longest first: the chain sets the wall time. Measured locally: fresh 4.03@2 12 min,
+        # fresh 5.01@2 17 min, the chain 35 min before the reruns were added; stages 2-9 min in CI
+        include:
+          - name: chain
+            key: chain
+            specs: chain
+            minutes: 120
+          - name: fresh 5.01
+            key: fresh-5.01
+            specs: 5.01 5.01@2
+            minutes: 90
+          - name: fresh 4.03
+            key: fresh-4.03
+            specs: 4.03 4.03@2
+            minutes: 60
+          - name: solo stage0
+            key: stage0
+            specs: stage0
+            minutes: 60
+          - name: solo stage1
+            key: stage1
+            specs: stage1
+            minutes: 60
+          - name: solo stage2
+            key: stage2
+            specs: stage2
+            minutes: 60
+          - name: solo stage3
+            key: stage3
+            specs: stage3
+            minutes: 60
+          - name: solo stage4
+            key: stage4
+            specs: stage4
+            minutes: 60
     steps:
       - uses: actions/checkout@v7
       - name: Runner facts
@@ -59,8 +95,8 @@ jobs:
         run: docker compose build
       - name: Start the lab
         run: ./lab.sh up
-      - name: Run the reference solutions of ${{ matrix.stage }}
-        run: tools/run-solutions.sh --yes --logs "$RUNNER_TEMP/lab-runs" ${{ matrix.stage }}
+      - name: Run the reference solutions (${{ matrix.specs }})
+        run: tools/run-solutions.sh --yes --logs "$RUNNER_TEMP/lab-runs" ${{ matrix.specs }}
       - name: Container state
         if: failure()
         run: |
@@ -70,7 +106,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: runtime-${{ matrix.stage }}
+          name: runtime-${{ matrix.key }}
           path: ${{ runner.temp }}/lab-runs
           retention-days: 14
           if-no-files-found: ignore
