@@ -31,6 +31,8 @@ MINOR: new features or exercises, PATCH: fixes.
   Rebuild: *none*
 
 ### Changed
+- `lab docs` lists and shows the installation guide too (`lab docs install`, German with
+  `lab lang de`; tab completion offers `readme` and `install`). Live script, Rebuild: *none*
 - `./lab.sh help`: `down` was described as "stop the lab"; it removes the containers, so the
   next `up` starts all targets fresh and non-compliant (like `reset all`; Python on `alpine`
   is gone). README (*Pause or reset?*), TROUBLESHOOTING and L00 say so (EN and DE).
