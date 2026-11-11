@@ -96,7 +96,11 @@ Changes per version and what to rebuild: [`CHANGELOG.md`](CHANGELOG.md).
 
 Changing the lab itself (exercises, docs, solutions)? Run `tools/static-check.sh` before you open
 a pull request - in the control node: `docker compose exec control /lab/tools/static-check.sh`.
-CI runs the same checks.
+CI runs the same checks. For a change to exercises, solutions, checks, images or the `lab`
+tooling, also run the runtime test on the host (lab up): `tools/run-solutions.sh stage2` resets
+all targets before every run (their state is lost, `./work` and `lab progress` stay), applies each
+reference solution of the stage, runs its `lab check` and a second run that must change nothing
+(`--list` shows the plan, `--help` the details).
 
 ## Learning path
 
@@ -123,7 +127,8 @@ ansible/              ansible.cfg, inventory (grouped by OS family), shared role
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, check
 cis/                  control catalogue + place for your CIS PDFs
 docs/                 learning path, lessons/ (L00-L14), glossary, container limits, troubleshooting
-tools/                maintainer checks: release hygiene, static quality gate (both run in CI)
+tools/                maintainer checks: release hygiene, static quality gate (both run in CI),
+                      runtime test of the reference solutions
 work/                 YOUR solutions (mounted to /lab/work)
 ```
 

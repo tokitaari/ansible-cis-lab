@@ -13,6 +13,13 @@ MINOR: new features or exercises, PATCH: fixes.
 ## [Unreleased]
 
 ### Added
+- `tools/run-solutions.sh`: runtime test of the reference solutions, run on the host with the
+  lab up. Every run resets all targets, applies the prerequisites from `requires`, stages the
+  solution into a work directory in the control node (`./work` stays untouched), runs its `solve`
+  command and `lab check`, then a real second run that must change nothing on any target (the
+  `--check` idempotency test of `lab check` skips `command` and `shell` tasks). Specs `stage<N>`,
+  `solo`, `<id>` and `<id>@2` (CIS level 2); `--list` prints the plan, the result table names
+  the targets that failed or changed. README (*Changing the lab*, EN and DE). Rebuild: *none*
 - `.gitattributes` (`* text=auto eol=lf`): LF line endings in the working tree on every
   platform. The scripts in `control/` and `targets/` run in Linux containers straight from the
   clone; a Windows clone with `core.autocrlf=true` had CRLF and broke them (INSTALL, *Windows
