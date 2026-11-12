@@ -1,5 +1,9 @@
 ---
 # Weekly update PRs; each one runs the release-check workflow incl. the static gate.
+# Minor and patch updates of an ecosystem arrive as ONE grouped PR; a major update stays a PR of
+# its own (ansible 14 -> 15 changes ansible-core, checkout 7 -> 8 the runner contract).
+# Every merged PR needs a CHANGELOG entry; for control/requirements.txt a 'Rebuild: *control*' hint
+# (tools/release-check.sh warns when it is missing).
 version: 2
 updates:
   - package-ecosystem: pip
@@ -8,9 +12,17 @@ updates:
       interval: weekly
     commit-message:
       prefix: control
+    groups:
+      control-packages:
+        patterns: ["*"]
+        update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
     commit-message:
       prefix: ci
+    groups:
+      actions:
+        patterns: ["*"]
+        update-types: [minor, patch]

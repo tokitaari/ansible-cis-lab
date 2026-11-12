@@ -11,7 +11,9 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
             lesson headers
   parity    every EN Markdown file has a DE twin (*.de.md) with the same structure;
             bash/yaml/... code blocks hold the same code (comments may be translated); a link to
-            a heading is compared by the heading's position, so its anchor may be translated
+            a heading is compared by the heading's position, so its anchor may be translated;
+            every table row has the same number of cells; every heading keeps its language-neutral
+            tokens (code spans and words with a digit such as 3.01 or L07 - the rest is translated)
   links     relative Markdown links (and #anchors) resolve; a DE page links German twins, an
             EN page no German page (the language switch line excepted)
   controls  cis/controls.yml schema and cross-references to the exercises
@@ -19,7 +21,9 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
             CIS ids, reading time, earlier lessons - all known, sorted), the eight fixed
             sections, self-check questions with one folded answer each; EN/DE header values
             equal. TEMPLATE(.de).md: structure only. docs/LEARNING_PATH(.de).md: the lesson
-            table lists every lesson with title, link, exercises and reading time of its header
+            table lists every lesson with title, link, exercises and reading time of its header.
+            A *.md in docs/lessons/ that git does not track gives a WARN (the gate reads tracked
+            files only); the exit code stays 0
 """
 import collections
 import os
@@ -55,6 +59,11 @@ def fail(check, msg):
         print(f"FAIL [{check}] {msg}")
 
 
+def warn(check, msg):
+    """A hint that does not change the exit code."""
+    print(f"WARN [{check}] {msg}")
+
+
 def rel(path):
     return os.path.relpath(path, ROOT)
 
@@ -75,6 +84,16 @@ def tracked_files():
         dirnames[:] = [d for d in dirnames if d not in skip]
         files += [rel(os.path.join(dirpath, f)) for f in filenames]
     return sorted(files)
+
+
+def untracked_files(where):
+    """Files below `where` that git does not track and does not ignore (none without git)."""
+    try:
+        out = subprocess.run(["git", "-C", ROOT, "ls-files", "--others", "--exclude-standard", "-z",
+                              "--", where], capture_output=True, check=True).stdout.decode()
+    except (OSError, subprocess.CalledProcessError):
+        return []
+    return sorted(f for f in out.split("\0") if f)
 
 
 def load_yaml(path):
@@ -448,11 +467,58 @@ def check_parity(files):
         for key in en_s:
             if en_s[key] != de_s[key]:
                 fail("parity", f"{f} vs {de}: {key} differ: {short(en_s[key])} vs {short(de_s[key])}")
+        if en_s["table lines"] == de_s["table lines"]:
+            check_table_cells(f, de, en_t, de_t)
+        if en_s["heading levels"] == de_s["heading levels"]:
+            check_heading_tokens(f, de, en_t, de_t)
         if en_s["code blocks (info strings)"] == de_s["code blocks (info strings)"]:
             check_code_parity(f, de, md_scan(en_t)[1], md_scan(de_t)[1])
     for f in PARITY_EXEMPT:
         if f not in have:
             fail("parity", f"PARITY_EXEMPT lists {f}, which does not exist - remove the entry")
+
+
+def table_cells(line):
+    """Number of cells of a table row; a '|' in a code span or escaped as '\\|' is no separator."""
+    s = re.sub(r"(`+).*?\1", lambda m: m.group(0).replace("|", "\0"), line.strip())
+    s = s.replace("\\|", "\0")[1:]
+    return (s[:-1] if s.endswith("|") else s).count("|") + 1
+
+
+def check_table_cells(en, de, en_t, de_t):
+    """Table lines are only counted by md_structure; the cell count of every row must match too
+    (a dropped or added cell shifts a column without changing the line count)."""
+    rows = [[l for l in md_scan(t)[0] if l.strip().startswith("|")] for t in (en_t, de_t)]
+    for n, (a, b) in enumerate(zip(*rows), 1):
+        if table_cells(a) != table_cells(b):
+            fail("parity", f"{en} vs {de}: table line {n} has {table_cells(a)} cells vs "
+                           f"{table_cells(b)}: {a.strip()[:60]!r}")
+
+
+def heading_tokens(heading):
+    """The language-neutral part of a heading: code spans and numbers with their letter prefix
+    (3.01, L07, 5.1.2, WSL2 - also at the start of a German compound such as WSL2-Backend),
+    sorted - the words around them are translated."""
+    h = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", heading)
+    spans = [m.group(2).strip() for m in re.finditer(r"(`+)(.+?)\1", h)]
+    rest = re.sub(r"(`+).+?\1", " ", h)
+    return sorted(spans + re.findall(r"[A-Za-z]*\d+(?:\.\d+)*", rest))
+
+
+def check_heading_tokens(en, de, en_t, de_t):
+    """md_structure compares heading levels only; a heading that names another exercise, control
+    or command in DE than in EN keeps its level and was not caught."""
+    def headings(t):
+        out = []
+        for line in md_scan(t)[0]:
+            m = re.match(r"^#{1,6}\s+(.*?)\s*#*\s*$", line)
+            if m:
+                out.append(m.group(1))
+        return out
+    for n, (a, b) in enumerate(zip(headings(en_t), headings(de_t)), 1):
+        if heading_tokens(a) != heading_tokens(b):
+            fail("parity", f"{en} vs {de}: heading {n} {a!r}: code spans / numbers differ: "
+                           f"{heading_tokens(a)} vs {heading_tokens(b)}")
 
 
 def check_code_parity(en, de, en_blocks, de_blocks):
@@ -826,6 +892,10 @@ def check_learning_path():
 
 
 def check_lessons(files, exs):
+    # The gate reads tracked files only: a new lesson that was not `git add`ed is not checked.
+    for f in untracked_files(LESSON_DIR):
+        if f.endswith(".md"):
+            warn("lessons", f"{f}: not tracked by git, so no check looked at it - git add it")
     paths = [f for f in files if f.startswith(LESSON_DIR + "/") and f.endswith(".md")]
     nested = [f for f in paths if f.count("/") != LESSON_DIR.count("/") + 1]
     for f in nested:
