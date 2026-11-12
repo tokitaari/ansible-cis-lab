@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # all tags: release-check.sh compares control/requirements.txt with the last one
       - name: Release hygiene (on tags also checks the CHANGELOG section)
         run: tools/release-check.sh ${{ github.ref_type == 'tag' && github.ref_name || '' }}
   static:

@@ -6,6 +6,7 @@ set -uo pipefail
 cd "$(git rev-parse --show-toplevel)" || exit 2
 rc=0
 fail() { echo "FAIL: $*"; rc=1; }
+warn() { echo "WARN: $*"; [[ -z "${GITHUB_ACTIONS:-}" ]] || echo "::warning::$*"; return 0; }
 
 tracked() { git ls-files -z | tr '\0' '\n'; }
 
@@ -34,6 +35,21 @@ done
 # 5. CHANGELOG has a release section for the version being tagged (optional arg)
 if [[ -n "${1:-}" ]]; then
   grep -q "^## \[${1#v}\] - " CHANGELOG.md || fail "CHANGELOG.md has no section '## [${1#v}] - <date>'"
+fi
+
+# 6. warning only: control/requirements.txt changed since the last tag, but the changelog section
+#    (the version's, else [Unreleased]) has no 'Rebuild: *control*' / '*targets*' hint - users
+#    would not learn that their control image is outdated (v1.5.0: ansible 14.6.0 had none).
+last=$(git describe --tags --abbrev=0 2>/dev/null || true)
+if [[ -z "$last" ]]; then
+  echo "note: no tag in this clone (shallow? git fetch --tags) - requirements/changelog hint not checked"
+elif ! git diff --quiet "$last" -- control/requirements.txt; then
+  head="## [Unreleased]"
+  [[ -z "${1:-}" ]] || head="## [${1#v}] - "
+  if ! awk -v h="$head" 'index($0, h) == 1 { on = 1; next } /^## / { on = 0 } on' CHANGELOG.md |
+       tr '\n' ' ' | grep -Eq 'Rebuild: +\*(control|targets)\*'; then
+    warn "control/requirements.txt changed since $last, but '${head% - }' in CHANGELOG.md has no 'Rebuild: *control*' (or *targets*) hint"
+  fi
 fi
 
 [[ $rc -eq 0 ]] && echo "release check OK ($(tracked | wc -l) tracked files)"
