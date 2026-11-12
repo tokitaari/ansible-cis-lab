@@ -65,6 +65,12 @@ MINOR: new features or exercises, PATCH: fixes.
   is gone). README (*Pause or reset?*), TROUBLESHOOTING and L00 say so (EN and DE).
   Rebuild: *none*
 - `.gitignore` also ignores `cis/pdf/*.PDF` (upper-case extension). Rebuild: *none*
+- `tools/static-check.sh parity` also compares the number of cells of every table row and the
+  language-neutral part of every heading (code spans and numbers such as `3.01`, `L07`, `WSL2`)
+  between an English page and its German twin; until now a dropped table cell or a different
+  exercise number in a translated heading passed. `lessons` prints a `WARN` for a file in
+  `docs/lessons/` that git does not track (the gate reads tracked files only, so it was not
+  checked at all); the exit code stays 0. Rebuild: *none*
 
 ## [1.5.0] - 2026-11-08
 
