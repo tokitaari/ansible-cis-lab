@@ -54,9 +54,10 @@ declare -A SKIP=([5.03]="no reference solution: self-assessed review")
 EXTRA=(2.03@2)
 # Seconds per run or chain step. Measured on WSL2 (2026-11-11): solo runs at most 218 s (4.08
 # builds the AIDE database, async for up to 1800 s); fresh 4.03@2 715 s, fresh 5.01@2 1015 s
-# (solve + check with its audit run + rerun). CI took 0.8-0.95 times as long.
+# (solve + check with its audit run + rerun). CI took 0.8-0.95 times as long; in CI
+# (2026-11-11) chain/3.01 386 s, the longest fresh runs 4.03@2 545 s and 5.01@2 832 s.
 TIMEOUT_DEFAULT=900
-declare -A TIMEOUT=([4.03]=1800 [4.08]=2400 [5.01]=2400)
+declare -A TIMEOUT=([3.01]=1200 [4.03]=1800 [4.08]=2400 [5.01]=2400)
 # Extra arguments for 'lab check' ({wd} = the work directory)
 declare -A CHECK_ARGS=([4.04]="--vault-password-file {wd}/4.04/.vault-pass")
 # -------------------------------------------------------------------------------------------------
