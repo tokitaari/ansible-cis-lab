@@ -103,6 +103,14 @@ MINOR: new features or exercises, PATCH: fixes.
   `.gitignore` follow. **Your own CIS PDFs are ignored by Git and do not move with `git
   pull`**: move them once with `mv cis/pdf/*.pdf cis-catalogue/pdf/ && rm -r cis`.
   Rebuild: *none*
+- Control node: the Python package `passlib` is no longer installed. `password_hash` of
+  ansible-core 2.21 hashes with the libxcrypt library of the image and used passlib only as a
+  fallback; the pin (1.7.4, last release 2020) was unused. The hashes stay the same string
+  (measured in the control node with and without passlib for `sha512`, `sha256`, `md5` and
+  `blowfish`), so 4.04 reports no change after the rebuild. One effect: with passlib installed
+  the filter rejected `yescrypt` (`not in the list of supported passlib algorithms`), without
+  it `password_hash('yescrypt', <16 characters>)` works. L12 (algorithm bullet, pitfall row)
+  and the 4.04 EXPLANATION say so (EN and DE). Rebuild: *control*
 
 ### Fixed
 - `lab solve 5.01` and `lab solve 5.02` wrote `reports/compliance.json` and `compliance.md` into

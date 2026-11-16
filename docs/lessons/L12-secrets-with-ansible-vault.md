@@ -180,10 +180,13 @@ So a stable hash needs a salt that you control. Four points come with that:
 - **The rules.** For SHA-512 the salt has at most 16 characters from `./0-9A-Za-z`. A longer
   one fails with `invalid salt size supplied (20), expected at most 16`, one with another
   character with `invalid characters in salt` (both tested).
-- **The algorithm.** The filter accepts `md5`, `blowfish`, `sha256` and `sha512`; `yescrypt`, the
-  default of several lab hosts (L08), is rejected with `yescrypt is not in the list of supported
-  passlib algorithms: md5, blowfish, sha256, sha512`. The result starts with `$6$rounds=656000$`:
-  the number of rounds is part of the string (with `rounds=5000` the field was left out).
+- **The algorithm.** The filter accepts `md5`, `blowfish`, `sha256` and `sha512`, and with
+  libxcrypt also `yescrypt`, the default of several lab hosts (L08), with a salt of exactly 16
+  characters. A control node that has the Python package passlib installed rejects it with
+  `yescrypt is not in the list of supported passlib algorithms: md5, blowfish, sha256, sha512`,
+  although its libxcrypt could do it (measured both ways; the lab installs no passlib). The
+  SHA-512 result starts with `$6$rounds=656000$`: the number of rounds is part of the string
+  (with `rounds=5000` the field was left out).
 - **The decision.** Where does the salt come from? One constant for the whole inventory means two
   hosts with the same password have the same hash, which shows the reuse to anyone who reads both
   `shadow` files and lets one precomputed table serve all hosts. A salt that differs per host
@@ -367,7 +370,7 @@ own reason.
 | The secret appears in `--diff` output | a file module shows the new content | `no_log: true`, or `diff: false` for the diff only |
 | A later task prints a secret that the earlier task hid | the registered variable still holds the value | do not print it; do not register it unless needed |
 | `invalid salt size supplied (20), expected at most 16` or `invalid characters in salt` | the salt breaks the rules of the algorithm | at most 16 characters from `./0-9A-Za-z` for SHA-512 |
-| `yescrypt is not in the list of supported passlib algorithms` | the filter does not offer that algorithm | use `sha512` |
+| `yescrypt is not in the list of supported passlib algorithms` | passlib is installed on the control node, and the filter then offers only these four | use `sha512`, or a control node without passlib |
 | Every host is `changed` once after the playbook moved to another machine | the other control node hashes the same salt differently | accept one change, and keep the control node uniform |
 | The diff of a vault file changes although the secret did not | each encryption uses new random values | encrypt only when the content changes |
 

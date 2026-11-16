@@ -35,8 +35,8 @@ hashes on different hosts, so one cracked hash does not show that a password is 
 solution takes 16 characters of the host name's SHA-256, the maximum a SHA-512 salt can hold.
 
 The salt is not the whole input. The filter hands it to a backend on the control node:
-libxcrypt (the lab's control node) or passlib. The same salt comes back as a **different**
-string from the two - measured: the literal salt `demosalt1234` gave `YJKPjBLMgFLA` from
+libxcrypt (the lab's control node) or passlib (a Python package; the lab does not install
+it). The same salt comes back as a **different** string from the two - measured: the literal salt `demosalt1234` gave `YJKPjBLMgFLA` from
 libxcrypt and was kept verbatim by passlib. Each backend is stable on its own, so nothing
 changes between runs. A new control node image, a changed pin or another Python can switch the
 backend, though, and then every host reports one `changed` for the new hash string. The
