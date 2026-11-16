@@ -12,6 +12,10 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.6.0] - 2026-11-16
+
 ### Added
 - CI workflow `runtime` (`.github/workflows/runtime.yml`): `tools/run-solutions.sh` on
   `ubuntu-26.04`, eight jobs in parallel, each builds the images and starts its own lab: one per
@@ -131,6 +135,8 @@ MINOR: new features or exercises, PATCH: fixes.
   where the file exists the dry run compares the values as before, and a host that has the
   package but not the file still fails. 4.03 EXPLANATION: the pitfall row says so (EN and DE).
   Rebuild: *none*
+
+Rebuild: *control* (`ansible-lint` 26.11.0, no `passlib`, new `lab` script and `.bashrc`)
 
 ## [1.5.0] - 2026-11-08
 
@@ -783,7 +789,8 @@ Rebuild: *targets*
 - Own CIS control catalogue `cis/controls.yml`, docs (learning path, container limits,
   troubleshooting).
 
-[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.3...v1.4.0
 [1.3.3]: https://github.com/tokitaari/ansible-cis-lab/compare/v1.3.2...v1.3.3
