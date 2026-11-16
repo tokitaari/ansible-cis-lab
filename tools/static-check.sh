@@ -42,8 +42,7 @@ if wanted lint; then
   # points roles_path at /lab/work/roles, i.e. at the learner's own role):
   # - 4.04 has an encrypted vault.yml; its lab-only password ships with the solution.
   # - 5.02 uses the role 'cis' that the learner built in 5.01 -> lint against the 5.01
-  #   reference role. Without this, ansible resolves 'cis' relative to the working
-  #   directory and picks up the catalogue directory cis/ as an (empty) role.
+  #   reference role; without this the role is not found.
   #   Solutions that bring their own roles/ (3.01, 4.03, 5.01) still use those first.
   #
   # ansible-lint (since 26.x) warns "Directory expansion discovered N file(s)" for every

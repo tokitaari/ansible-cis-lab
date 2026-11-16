@@ -2,7 +2,7 @@
 # Lab control catalogue
 # ---------------------------------------------------------------------------
 # Own wording - NOT the CIS benchmark text. Use it to navigate between the lab
-# exercises and the official CIS PDFs you place in cis/pdf/.
+# exercises and the official CIS PDFs you place in cis-catalogue/pdf/.
 #
 # section:   CIS section in the current (2024+) Linux benchmark structure
 #            (1 Initial setup, 2 Services, 3 Network, 4 Firewall, 5 Access control,

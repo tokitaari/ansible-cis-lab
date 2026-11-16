@@ -4,7 +4,7 @@
 
 The official CIS Benchmark PDFs are **not** part of this lab: CIS distributes them free of
 charge after registration, under terms that do not allow redistribution. Download them
-yourself and place them in `cis/pdf/` (ignored by Git).
+yourself and place them in `cis-catalogue/pdf/` (ignored by Git).
 
 ## Where to get them
 
@@ -23,7 +23,7 @@ yourself and place them in `cis/pdf/` (ignored by Git).
 | arch | - | map controls yourself - that is part of the training |
 | alpine | - | map controls yourself; many controls are N/A (no PAM, busybox) |
 
-Suggested file names: `cis/pdf/<platform>-<version>-v<benchmark-version>.pdf`.
+Suggested file names: `cis-catalogue/pdf/<platform>-<version>-v<benchmark-version>.pdf`.
 Check the release notes of each benchmark version - recommendation numbers can change between versions.
 
 ## controls.yml

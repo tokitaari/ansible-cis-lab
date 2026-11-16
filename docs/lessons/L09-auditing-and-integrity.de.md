@@ -453,7 +453,7 @@ Entferne den Marker und die Job-Datei mit `rm -f /tmp/lesson09-marker /tmp/lesso
 
 ## CIS-Hintergrund
 
-Abschnitt **6.3** des [Kontrollkatalogs](../../cis/controls.yml) ist Level 2 und mit
+Abschnitt **6.3** des [Kontrollkatalogs](../../cis-catalogue/controls.yml) ist Level 2 und mit
 `container: config` markiert; Abschnitt **6.1** ist Level 1 und `container: full`. 6.3 verlangt,
 dass die wichtigen Ereignisse eines Hosts dort aufgezeichnet werden, wo ein Angreifer sie nicht
 löschen kann: Änderungen daran, wer mit administrativen Rechten handeln darf, als anderer Benutzer

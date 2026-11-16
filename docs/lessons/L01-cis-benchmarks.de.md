@@ -20,7 +20,7 @@ Nach dieser Lektion kannst du ...
 - [ ] *Automated*- von *Manual*-Empfehlungen unterscheiden und begründen, warum beide zählen
 - [ ] zwischen Level 1 und Level 2 sowie zwischen Server- und Workstation-Profil wählen
 - [ ] Audit- und Remediation-Teil einer Empfehlung auf Ansible-Tasks abbilden und wissen, was sich nicht automatisieren lässt
-- [ ] mit `cis/controls.yml` und dem CIS-Verweis einer Übung das passende Kapitel eines Benchmarks finden
+- [ ] mit `cis-catalogue/controls.yml` und dem CIS-Verweis einer Übung das passende Kapitel eines Benchmarks finden
 
 ## Theorie
 
@@ -49,13 +49,13 @@ Drei verwandte Dinge werden leicht verwechselt:
 
 Die PDFs sind nach einer Registrierung kostenlos, ihre Nutzungsbedingungen erlauben aber keine
 Weitergabe. Deshalb enthält dieses Lab keinen CIS-Text: Lade die Benchmarks selbst herunter, wie
-in [der CIS-README](../../cis/README.de.md) beschrieben, lege sie in `cis/pdf/` ab (von Git
+in [der CIS-README](../../cis-catalogue/README.de.md) beschrieben, lege sie in `cis-catalogue/pdf/` ab (von Git
 ignoriert) und verwende in Code, Kommentaren und Dokumentation eigene Formulierungen.
 
 ### Aufbau einer Empfehlung
 
 Ein Linux-Benchmark ist in Abschnitte gegliedert. Seit 2024 haben die Linux-Benchmarks diese
-gemeinsame oberste Ebene, die auch [der Control-Katalog](../../cis/controls.yml) verwendet:
+gemeinsame oberste Ebene, die auch [der Control-Katalog](../../cis-catalogue/controls.yml) verwendet:
 
 | Abschnitt | Thema | Beispiele im Lab |
 |---|---|---|
@@ -158,7 +158,7 @@ Benchmark ist eine Baseline zum Starten, kein Beweis, dass ein System sicher ist
 
 ### Der Lab-Katalog: `controls.yml` und `meta.yml`
 
-[`cis/controls.yml`](../../cis/controls.yml) ist der eigene Katalog des Labs, in eigenen Worten.
+[`cis-catalogue/controls.yml`](../../cis-catalogue/controls.yml) ist der eigene Katalog des Labs, in eigenen Worten.
 Ein Eintrag pro Control:
 
 ```yaml
@@ -189,7 +189,7 @@ Control-Node und ändert nichts:
   hosts: localhost
   gather_facts: false
   vars:
-    catalogue: "{{ lookup('ansible.builtin.file', '/lab/cis/controls.yml') | from_yaml }}"
+    catalogue: "{{ lookup('ansible.builtin.file', '/lab/cis-catalogue/controls.yml') | from_yaml }}"
   tasks:
     - name: List the Level 2 controls
       ansible.builtin.debug:
@@ -240,7 +240,7 @@ Einstellungen: Mit ihnen begründest du eine Maßnahme - und widersprichst ihr, 
 | Alpine | alpine | keiner | Controls selbst zuordnen; viele sind nicht anwendbar (kein PAM, busybox) |
 | Archlinux | arch | keiner | Controls selbst zuordnen |
 
-Die herunterzuladenden Versionen stehen in [der CIS-README](../../cis/README.de.md). Controls
+Die herunterzuladenden Versionen stehen in [der CIS-README](../../cis-catalogue/README.de.md). Controls
 einer Plattform ohne Benchmark zuzuordnen gehört zum Training: Die Absicht einer Empfehlung (die
 Rationale) lässt sich übertragen, Befehle und Dateinamen nicht.
 
@@ -272,7 +272,7 @@ Details pro Control stehen in [den Container-Grenzen](../CONTAINER_LIMITS.de.md)
 
 Diese Lektion hat keine eigene Übung: Sie ist der Hintergrund für alle. Jede Übung nennt ihren
 CIS-Abschnitt und ihr Level im Kopf der README und in `lab list`; schlage den Abschnitt vor dem
-Start in `cis/controls.yml` nach. Drei Übungen arbeiten direkt mit den Konzepten:
+Start in `cis-catalogue/controls.yml` nach. Drei Übungen arbeiten direkt mit den Konzepten:
 [4.01](../../exercises/stage4-advanced/4.01-audit-only-report/README.de.md) (Audit ohne
 Remediation),
 [4.02](../../exercises/stage4-advanced/4.02-profiles-and-exceptions/README.de.md) (Level 1/2 und

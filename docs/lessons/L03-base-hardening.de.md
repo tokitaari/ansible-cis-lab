@@ -284,7 +284,7 @@ dort, wo sie ist.
 
 Die Empfehlungen hinter diesen Übungen teilen einen Gedanken: Entferne, was der Host nicht braucht,
 und schließe, was er behalten muss. Die Abschnitte 2.1 (Server-Dienste) und 2.2 (Client-Dienste) im
-[Kontrollkatalog](../../cis/controls.yml) verringern, was ein Angreifer erreichen oder missbrauchen
+[Kontrollkatalog](../../cis-catalogue/controls.yml) verringern, was ein Angreifer erreichen oder missbrauchen
 kann; Klartext-Clients wie telnet sind der Lehrbuchfall, und "entfernen, oder zumindest stoppen und
 deaktivieren" spiegelt die Schichten oben. Abschnitt 5.1 (SSH-Server) begrenzt, wie sich ein
 Angreifer anmelden kann: kein direkter root-Login, damit die Audit-Spur eine Person nennt, und keine

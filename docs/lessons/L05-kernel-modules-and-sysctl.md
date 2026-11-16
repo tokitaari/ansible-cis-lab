@@ -260,7 +260,7 @@ A module that cannot be found fails at once with `couldn't resolve module/action
 
 ## CIS background
 
-The four groups [in the control catalogue](../../cis/controls.yml) are "config only" in the
+The four groups [in the control catalogue](../../cis-catalogue/controls.yml) are "config only" in the
 lab, except 3.3, for the reasons above. **1.1.1** (Level 1) keeps rarely used file-system
 drivers from loading: every driver is kernel code that parses data an attacker may control -
 a crafted image on a removable disk is enough - and a server almost never needs the format.

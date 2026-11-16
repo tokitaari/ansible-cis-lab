@@ -187,10 +187,12 @@ Ein stabiler Hash braucht also einen Salt, den du kontrollierst. Vier Punkte geh
 - **Die Regeln.** Ein SHA-512-Salt hat höchstens 16 Zeichen aus `./0-9A-Za-z`. Ein längerer
   scheitert mit `invalid salt size supplied (20), expected at most 16`, einer mit einem anderen
   Zeichen mit `invalid characters in salt` (beides getestet).
-- **Der Algorithmus.** Der Filter akzeptiert `md5`, `blowfish`, `sha256` und `sha512`; `yescrypt`,
-  der Standard mehrerer Lab-Hosts (L08), wird mit `yescrypt is not in the list of supported passlib
-  algorithms: md5, blowfish, sha256, sha512` abgelehnt. Das Ergebnis beginnt mit
-  `$6$rounds=656000$`: Die Rundenzahl ist Teil der Zeichenkette (bei `rounds=5000` fiel das Feld
+- **Der Algorithmus.** Der Filter akzeptiert `md5`, `blowfish`, `sha256` und `sha512`, mit
+  libxcrypt auch `yescrypt`, den Standard mehrerer Lab-Hosts (L08), mit einem Salt von genau 16
+  Zeichen. Ein Control-Node, auf dem das Python-Paket passlib installiert ist, lehnt es mit
+  `yescrypt is not in the list of supported passlib algorithms: md5, blowfish, sha256, sha512`
+  ab, obwohl sein libxcrypt es könnte (beides gemessen; das Lab installiert kein passlib). Das
+  SHA-512-Ergebnis beginnt mit `$6$rounds=656000$`: Die Rundenzahl ist Teil der Zeichenkette (bei `rounds=5000` fiel das Feld
   weg).
 - **Die Entscheidung.** Woher kommt der Salt? Eine Konstante für das ganze Inventar bedeutet: Zwei
   Hosts mit demselben Passwort haben denselben Hash, was jedem, der beide `shadow`-Dateien liest,
@@ -328,7 +330,7 @@ nicht funktionieren, und es ist deshalb das Konto, das ohne alles andere funktio
 macht es nützlich und gefährlich zugleich: Es ist ein dauerhafter lokaler Administrator. Der Katalog
 des Labs enthält keine Empfehlung, die ein solches Konto verlangt; die Empfehlungen verlangen, dass
 jedes vorhandene Konto denselben Regeln folgt. Passwortalterung und starkes Hashing für lokale
-Konten sind 5.4.1 im [Kontrollkatalog](../../cis/controls.yml) (L08 behandelt, was die Werte
+Konten sind 5.4.1 im [Kontrollkatalog](../../cis-catalogue/controls.yml) (L08 behandelt, was die Werte
 bedeuten und woher sie kommen). Rechteausweitung über sudo, mit Protokollierung und mit eingeschalteter
 erneuter Authentifizierung, ist 5.2 (L03 erklärt die sudoers-Dateien).
 
@@ -383,7 +385,7 @@ eigenen Grund.
 | Das Geheimnis erscheint in der `--diff`-Ausgabe | ein Datei-Modul zeigt den neuen Inhalt | `no_log: true`, oder `diff: false` nur für den Diff |
 | Eine spätere Task gibt ein Geheimnis aus, das die frühere verborgen hat | die registrierte Variable enthält den Wert weiter | nicht ausgeben; nicht registrieren, wenn es nicht nötig ist |
 | `invalid salt size supplied (20), expected at most 16` oder `invalid characters in salt` | der Salt verletzt die Regeln des Algorithmus | für SHA-512 höchstens 16 Zeichen aus `./0-9A-Za-z` |
-| `yescrypt is not in the list of supported passlib algorithms` | der Filter bietet den Algorithmus nicht an | `sha512` benutzen |
+| `yescrypt is not in the list of supported passlib algorithms` | auf dem Control-Node ist passlib installiert, und der Filter bietet dann nur diese vier an | `sha512` benutzen oder einen Control-Node ohne passlib |
 | Jeder Host ist einmal `changed`, nachdem das Playbook auf eine andere Maschine gewandert ist | der andere Control-Node hasht denselben Salt anders | eine Änderung hinnehmen und den Control-Node einheitlich halten |
 | Der Diff einer Vault-Datei ändert sich, obwohl das Geheimnis gleich blieb | jede Verschlüsselung nutzt neue Zufallswerte | nur verschlüsseln, wenn sich der Inhalt ändert |
 

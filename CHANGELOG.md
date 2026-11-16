@@ -64,7 +64,7 @@ MINOR: new features or exercises, PATCH: fixes.
   next `up` starts all targets fresh and non-compliant (like `reset all`; Python on `alpine`
   is gone). README (*Pause or reset?*), TROUBLESHOOTING and L00 say so (EN and DE).
   Rebuild: *none*
-- `.gitignore` also ignores `cis/pdf/*.PDF` (upper-case extension). Rebuild: *none*
+- `.gitignore` also ignores `cis-catalogue/pdf/*.PDF` (upper-case extension). Rebuild: *none*
 - `tools/static-check.sh parity` also compares the number of cells of every table row and the
   language-neutral part of every heading (code spans and numbers such as `3.01`, `L07`, `WSL2`)
   between an English page and its German twin; until now a dropped table cell or a different
@@ -89,6 +89,28 @@ MINOR: new features or exercises, PATCH: fixes.
   pitfall row, shorter text elsewhere (EN and DE). Rebuild: *none*
 - Control image: `ansible-lint` 26.10.1 -> 26.11.0 in `control/requirements.txt` (Dependabot,
   #59). Rebuild: *control*
+- German versions of the three notes that had none: `ansible/roles/README.de.md`,
+  `solution/roles/README.de.md` of 5.02 and `solution/NOTES.de.md` of 5.03. `lab solution <id>`
+  shows a note with a German twin once, in the lab language (it listed every file of
+  `solution/`). The `parity` gate has no exemptions left besides `CHANGELOG.md`. Live script,
+  Rebuild: *none*
+- **The control catalogue moved from `cis/` to `cis-catalogue/`** (`controls.yml`, the README
+  and `pdf/`). Ansible also looks for a role in the current working directory, and a directory
+  named like the role counts even without tasks: with `/lab` as working directory and no role
+  `cis` in `roles_path`, a play with `role: cis` ran the catalogue directory as an empty role
+  and reported no error. Such a play now fails with `The role 'cis' was not found`. Links,
+  lessons (L07 explains the rule without the lab example), glossary, the gate and
+  `.gitignore` follow. **Your own CIS PDFs are ignored by Git and do not move with `git
+  pull`**: move them once with `mv cis/pdf/*.pdf cis-catalogue/pdf/ && rm -r cis`.
+  Rebuild: *none*
+- Control node: the Python package `passlib` is no longer installed. `password_hash` of
+  ansible-core 2.21 hashes with the libxcrypt library of the image and used passlib only as a
+  fallback; the pin (1.7.4, last release 2020) was unused. The hashes stay the same string
+  (measured in the control node with and without passlib for `sha512`, `sha256`, `md5` and
+  `blowfish`), so 4.04 reports no change after the rebuild. One effect: with passlib installed
+  the filter rejected `yescrypt` (`not in the list of supported passlib algorithms`), without
+  it `password_hash('yescrypt', <16 characters>)` works. L12 (algorithm bullet, pitfall row)
+  and the 4.04 EXPLANATION say so (EN and DE). Rebuild: *control*
 
 ### Fixed
 - `lab solve 5.01` and `lab solve 5.02` wrote `reports/compliance.json` and `compliance.md` into

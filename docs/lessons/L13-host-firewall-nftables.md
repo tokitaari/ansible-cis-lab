@@ -440,7 +440,7 @@ always stops first and then starts.
 
 ## CIS background
 
-Section 4 of the benchmarks (id `4` in [the control catalogue](../../cis/controls.yml)) asks for
+Section 4 of the benchmarks (id `4` in [the control catalogue](../../cis-catalogue/controls.yml)) asks for
 one working host firewall with a default-deny stance towards inbound traffic and explicit
 allowances for what the host really offers. It protects against the services that every package
 manager install and every developer tool quietly opens: a database bound to all interfaces, a

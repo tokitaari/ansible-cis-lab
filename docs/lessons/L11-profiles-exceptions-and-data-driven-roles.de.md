@@ -455,7 +455,7 @@ als Änderung (getestet). Ein zweiter Lauf mit `changed=0` (L00) und die Checks 
 
 Die Level (L01) sind der Grund für das Profil: Level 1 ist die Baseline, die keinen Dienst
 brechen soll, Level 2 kauft Schutz mit Kosten, etwa mit mehr Auditing, als jemand liest (L09). Im
-[Kontrollkatalog](../../cis/controls.yml) ist 6.3, der auditd-Abschnitt, der Level-2-Inhalt, den
+[Kontrollkatalog](../../cis-catalogue/controls.yml) ist 6.3, der auditd-Abschnitt, der Level-2-Inhalt, den
 der Katalog beiden Übungen zuordnet; 5.3.3 (Passwortqualität), 5.4.1 (Passwortalterung) sowie
 5.4.2 und 5.4.3 (Konten, Shell-Umgebung) sind die Level-1-Kontrollen, die 4.03 auf jeder
 Plattform zusammenführt. Wie das Level gewählt wird, steht nicht im Benchmark; das entscheidet

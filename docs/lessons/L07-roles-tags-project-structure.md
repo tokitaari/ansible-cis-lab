@@ -184,8 +184,9 @@ which is how you tell roles apart in the output.
 `/lab/work/roles:/lab/ansible/roles`) and the playbook's own directory. The **current working
 directory** is searched as well, although the message does not list it; when the same name
 exists in `roles_path` and in the working directory, `roles_path` wins (measured). The
-working-directory rule bites in the lab: with `/lab` as working directory, `role: cis` can
-resolve to the catalogue directory `cis/` if nothing named `cis` exists in `roles_path`. Run
+working-directory rule can bite: a directory there that has the name of the role is taken as
+the role even if it holds no tasks, and the play then runs without them and reports no error
+(measured). That is why the lab's control catalogue is `cis-catalogue/` and not `cis/`. Run
 from the project directory, keep roles under one `roles/`, and read the list in the error
 message when a role is not found.
 
@@ -429,7 +430,7 @@ Molecule automate the same loop: apply to a fresh instance, verify, apply again.
 
 ## CIS background
 
-All ten catalogue sections in the header (see [the control catalogue](../../cis/controls.yml))
+All ten catalogue sections in the header (see [the control catalogue](../../cis-catalogue/controls.yml))
 list this exercise because it collects earlier work: banners, kernel modules, sysctl values,
 services, cron and file permissions, SSH, sudo and account files. The benchmark itself says
 nothing about how automation is structured; the structure is yours, and the benchmark shapes

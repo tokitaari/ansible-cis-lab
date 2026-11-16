@@ -228,7 +228,7 @@ Cron is one scheduler of several, and a host audit has to ask for the others:
 
 ## CIS background
 
-Section **2.4** of [the control catalogue](../../cis/controls.yml) is Level 1: the scheduler is
+Section **2.4** of [the control catalogue](../../cis-catalogue/controls.yml) is Level 1: the scheduler is
 enabled and running (scheduled maintenance and checks must happen), its files and directories
 cannot be changed by others, and the use of `crontab` is limited to named users. The last two
 close two different paths for an attacker: *modifying* a definition that root already trusts,

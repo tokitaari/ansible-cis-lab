@@ -274,7 +274,7 @@ ist.
 
 ## CIS-Hintergrund
 
-Die vier Gruppen [im Kontrollkatalog](../../cis/controls.yml) sind im Lab "nur Konfiguration",
+Die vier Gruppen [im Kontrollkatalog](../../cis-catalogue/controls.yml) sind im Lab "nur Konfiguration",
 außer 3.3, aus den oben genannten Gründen. **1.1.1** (Level 1) verhindert, dass selten genutzte
 Dateisystemtreiber geladen werden: Jeder Treiber ist Kernel-Code, der Daten verarbeitet, die ein
 Angreifer beeinflussen kann - ein präpariertes Image auf einem Wechseldatenträger genügt -, und

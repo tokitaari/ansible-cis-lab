@@ -229,9 +229,15 @@ cmd_check() {
 cmd_solution() {
   local d f; resolve "${1:-}"; d="$EXD"
   [[ -d "$d/solution" ]] || die "no solution files"
-  local files=()
-  while IFS= read -r f; do files+=("$f"); done \
-    < <(find "$d/solution" -type f ! -name '.vault-pass' ! -name 'vault.yml' | sort)
+  local files=() l; l="$(lang)"
+  # A Markdown note with a German twin (x.md + x.de.md): show only the one in the lab language
+  while IFS= read -r f; do
+    case "$f" in
+      *.de.md) [[ "$l" == de ]] || continue ;;
+      *.md)    [[ "$l" == de && -f "${f%.md}.de.md" ]] && continue ;;
+    esac
+    files+=("$f")
+  done < <(find "$d/solution" -type f ! -name '.vault-pass' ! -name 'vault.yml' | sort)
   view "${files[@]}"
 }
 

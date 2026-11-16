@@ -237,7 +237,7 @@ Cron ist einer von mehreren Schedulern, und eine Host-Prüfung muss nach den and
 
 ## CIS-Hintergrund
 
-Abschnitt **2.4** des [Control-Katalogs](../../cis/controls.yml) ist Level 1: Der Scheduler ist
+Abschnitt **2.4** des [Control-Katalogs](../../cis-catalogue/controls.yml) ist Level 1: Der Scheduler ist
 aktiviert und läuft (geplante Wartung und Prüfungen müssen stattfinden), seine Dateien und
 Verzeichnisse lassen sich von anderen nicht ändern, und die Nutzung von `crontab` ist auf benannte
 Benutzer beschränkt. Die letzten beiden schließen zwei verschiedene Wege für einen Angreifer:

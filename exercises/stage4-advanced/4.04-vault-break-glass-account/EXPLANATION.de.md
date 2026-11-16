@@ -36,8 +36,8 @@ Wiederverwendung. Die Lösung nimmt 16 Zeichen des SHA-256 des Hostnamens, das M
 SHA-512-Salt fasst.
 
 Das Salt ist nicht die ganze Eingabe. Der Filter reicht es an ein Backend auf dem Control-Node
-weiter: libxcrypt (der Control-Node des Labs) oder passlib. Dasselbe Salt kommt von beiden als
-**anderer** String zurück - gemessen: das Literal-Salt `demosalt1234` ergab bei libxcrypt
+weiter: libxcrypt (der Control-Node des Labs) oder passlib (ein Python-Paket; das Lab installiert
+es nicht). Dasselbe Salt kommt von beiden als **anderer** String zurück - gemessen: das Literal-Salt `demosalt1234` ergab bei libxcrypt
 `YJKPjBLMgFLA`, passlib behielt es unverändert. Jedes Backend ist für sich stabil, zwischen
 den Läufen ändert sich also nichts. Ein neues Control-Node-Image, ein geänderter Pin oder ein
 anderes Python kann das Backend aber wechseln, und dann meldet jeder Host einmal `changed` für

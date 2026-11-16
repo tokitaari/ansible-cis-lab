@@ -326,7 +326,7 @@ Services and clients are attack surface, and the recommendations in sections 2.1
 services) and 2.2 (client services) are mostly "remove it, or at least stop and disable it".
 These changes are low risk per host, but the *conditional* matters: the same play meets hosts
 that have the package and hosts that do not (control 2.1 and 2.2 in
-[the control catalogue](../../cis/controls.yml)).
+[the control catalogue](../../cis-catalogue/controls.yml)).
 
 Section 5.1 (SSH server) and 5.2 (privilege escalation) are the controls that can lock you
 out: both configure the programs through which you manage the host. They are Level 1 and

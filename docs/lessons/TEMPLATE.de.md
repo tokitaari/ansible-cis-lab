@@ -15,7 +15,7 @@ Platzhalter ersetzen. tools/static-check.sh lessons prüft die Struktur:
   dann die Kopftabelle oben (gleiche Werte in EN und DE, nur die Zeiteinheit unterscheidet sich)
 - Übungen: Übungs-IDs, sortiert, kommagetrennt, oder '-'; genau diese IDs stehen auch in der
   Tabelle des Abschnitts Übungen, jede mit Link auf die README.de.md ihrer Übung
-- CIS-Abschnitte: IDs aus cis/controls.yml, sortiert, kommagetrennt, oder '-'; die Abschnitte,
+- CIS-Abschnitte: IDs aus cis-catalogue/controls.yml, sortiert, kommagetrennt, oder '-'; die Abschnitte,
   die die Übungen der Lektion abdecken - weitere IDs dürfen im Text mit Katalog-Link vorkommen
 - Lesezeit: '~N Min.' (EN '~N min'), Ziel 15-30 Minuten
 - Baut auf: frühere, vorhandene Lektionen (L00, L03), sortiert, oder '-'
@@ -31,7 +31,7 @@ Schreibregeln:
   Sie laufen unverändert im Lab - jedes testen. L00 meidet alpine (kein Python vor 0.02);
   spätere Lektionen dürfen 0.02 voraussetzen.
 - CIS: nur eigene Formulierungen, nie Benchmark-Text. Empfehlungen über die Abschnitts-IDs
-  aus cis/controls.yml benennen; exakte Nummern unterscheiden sich je Benchmark und Version.
+  aus cis-catalogue/controls.yml benennen; exakte Nummern unterscheiden sich je Benchmark und Version.
 - Plattformwerte wie in den Facts: os_family Debian, RedHat, Suse, Alpine, Archlinux.
 - Getaggte Code-Blöcke (yaml, bash) enthalten in EN und DE denselben Code, inklusive
   Task-'name:'-Werten (bleiben englisch); nur '#'-Kommentare werden übersetzt.
@@ -79,7 +79,7 @@ Nach dieser Lektion kannst du ...
 ## CIS-Hintergrund
 
 *Wogegen die Empfehlungen schützen, warum manche nur Level 2 sind, typische Abwägungen
-im Betrieb. Auf die IDs aus [dem Kontrollkatalog](../../cis/controls.yml) verweisen.*
+im Betrieb. Auf die IDs aus [dem Kontrollkatalog](../../cis-catalogue/controls.yml) verweisen.*
 
 ## Plattformunterschiede
 

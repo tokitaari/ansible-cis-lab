@@ -4,7 +4,7 @@
 
 Die offiziellen CIS-Benchmark-PDFs sind **nicht** Teil dieses Labs: CIS stellt sie nach
 Registrierung kostenlos bereit, aber unter Bedingungen, die eine Weitergabe nicht erlauben.
-Lade sie selbst herunter und lege sie nach `cis/pdf/` (von Git ignoriert).
+Lade sie selbst herunter und lege sie nach `cis-catalogue/pdf/` (von Git ignoriert).
 
 ## Bezugsquelle
 
@@ -23,7 +23,7 @@ Lade sie selbst herunter und lege sie nach `cis/pdf/` (von Git ignoriert).
 | arch | - | Kontrollen selbst übertragen - das ist Teil des Trainings |
 | alpine | - | Kontrollen selbst übertragen; viele sind N/A (kein PAM, busybox) |
 
-Vorgeschlagene Dateinamen: `cis/pdf/<plattform>-<version>-v<benchmark-version>.pdf`.
+Vorgeschlagene Dateinamen: `cis-catalogue/pdf/<plattform>-<version>-v<benchmark-version>.pdf`.
 Prüfe die Release Notes jeder Benchmark-Version - Empfehlungsnummern können sich zwischen Versionen ändern.
 
 ## controls.yml

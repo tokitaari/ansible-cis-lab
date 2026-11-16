@@ -188,9 +188,10 @@ Verzeichnis `roles/` neben dem Playbook, die Verzeichnisse aus `roles_path` (im 
 `/lab/work/roles:/lab/ansible/roles`) und das Verzeichnis des Playbooks selbst. Das **aktuelle
 Arbeitsverzeichnis** wird ebenfalls durchsucht, obwohl die Meldung es nicht aufführt; gibt es
 denselben Namen in `roles_path` und im Arbeitsverzeichnis, gewinnt `roles_path` (gemessen). Die
-Regel mit dem Arbeitsverzeichnis schlägt im Lab zu: Mit `/lab` als Arbeitsverzeichnis kann
-`role: cis` zum Katalogverzeichnis `cis/` aufgelöst werden, wenn in `roles_path` nichts namens
-`cis` existiert. Arbeite aus dem Projektverzeichnis, halte Rollen unter einem einzigen `roles/`
+Regel mit dem Arbeitsverzeichnis kann zuschlagen: Ein Verzeichnis dort, das wie die Rolle heißt,
+wird als die Rolle genommen, auch wenn es keine Tasks enthält; das Play läuft dann ohne sie und
+meldet keinen Fehler (gemessen). Deshalb heißt der Kontrollkatalog des Labs `cis-catalogue/` und
+nicht `cis/`. Arbeite aus dem Projektverzeichnis, halte Rollen unter einem einzigen `roles/`
 und lies die Liste in der Fehlermeldung, wenn eine Rolle nicht gefunden wird.
 
 **Drei Arten, eine Rolle aufzurufen.** `roles:` ist statisch und hat einen festen Platz im Play:
@@ -438,7 +439,7 @@ Instanz anwenden, prüfen, noch einmal anwenden.
 
 ## CIS-Hintergrund
 
-Alle zehn Abschnitte des [Kontrollkatalogs](../../cis/controls.yml) im Kopf führen diese Übung auf,
+Alle zehn Abschnitte des [Kontrollkatalogs](../../cis-catalogue/controls.yml) im Kopf führen diese Übung auf,
 weil sie frühere Arbeit sammelt: Banner, Kernelmodule, sysctl-Werte, Dienste, cron und
 Dateirechte, SSH, sudo und Kontendateien. Der Benchmark selbst sagt nichts darüber, wie
 Automatisierung aufgebaut wird; die Struktur ist deine Sache, und der Benchmark prägt drei

@@ -19,7 +19,7 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 | **Aufgaben** | 31 in 6 Stufen, ~28 h, jeweils mit Ziel, Hintergrund, Anforderungen, 3 gestaffelten Hinweisen, Bonus, Musterlösung, Erklärung, automatischem Check |
 | **Lektionen** | 15 Lektionen zum Selbststudium (L00-L14, ~7 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
 | **Sprachen** | Englisch (Standard) und Deutsch: `lab lang de` |
-| **CIS** | Profil Level 1 Server (+ ausgewählte Level 2); eigener Kontrollkatalog in [`cis/controls.yml`](cis/controls.yml); PDFs: siehe [`cis/README.de.md`](cis/README.de.md) |
+| **CIS** | Profil Level 1 Server (+ ausgewählte Level 2); eigener Kontrollkatalog in [`cis-catalogue/controls.yml`](cis-catalogue/controls.yml); PDFs: siehe [`cis-catalogue/README.de.md`](cis-catalogue/README.de.md) |
 
 ## Schnellstart
 
@@ -132,7 +132,7 @@ control/              Image des Control Nodes, 'lab'-CLI
 targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (pflanzt die Befunde)
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
-cis/                  Kontrollkatalog + Ablage für deine CIS-PDFs
+cis-catalogue/        Kontrollkatalog + Ablage für deine CIS-PDFs
 docs/                 Lernpfad, lessons/ (L00-L14), Glossar, Container-Grenzen, Fehlerbehebung
 tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate,
                       Laufzeittest der Musterlösungen (alle drei in CI)
