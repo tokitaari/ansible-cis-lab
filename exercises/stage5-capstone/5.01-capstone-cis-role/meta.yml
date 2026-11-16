@@ -22,4 +22,4 @@ concepts:
 - reporting
 - ansible-lint production
 idempotency: true
-solve: ansible-playbook site.yml
+solve: ansible-playbook site.yml -e cis_report_dir="${LAB_WORK_DIR:-/lab/work}/5.01/reports"

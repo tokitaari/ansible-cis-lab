@@ -22,4 +22,4 @@ concepts:
 - explicit confirmation
 - post-checks
 idempotency: false
-solve: ansible-playbook rollout.yml -e cis_rollout_confirm=true
+solve: ansible-playbook rollout.yml -e cis_rollout_confirm=true -e cis_report_dir="${LAB_WORK_DIR:-/lab/work}/5.02/reports"

@@ -129,4 +129,5 @@ expire on purpose - the next run fails until someone renews or removes them.
 
 ## Reference solution
 
-Show it with `lab solution 5.01`, apply it with `lab solve 5.01`.
+Show it with `lab solution 5.01`, apply it with `lab solve 5.01` (the report then lies in
+`/lab/work/5.01/reports`).

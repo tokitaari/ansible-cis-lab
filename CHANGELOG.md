@@ -78,8 +78,20 @@ MINOR: new features or exercises, PATCH: fixes.
   fetches all tags for it. Dependabot: minor and patch updates of the pip packages and of the
   GitHub Actions arrive as one grouped pull request each, major updates stay separate. Rebuild:
   *none*
+- Control image: `ansible-lint` 26.10.1 -> 26.11.0 in `control/requirements.txt` (Dependabot,
+  #59). Rebuild: *control*
 
 ### Fixed
+- `lab solve 5.01` and `lab solve 5.02` wrote `reports/compliance.json` and `compliance.md` into
+  the exercise's `solution/` directory (the role's default is `{{ playbook_dir }}/reports`):
+  untracked files in the repository, and `lab solution 5.01` then listed them as part of the
+  solution. The `solve` command of both exercises now passes `-e cis_report_dir=` with
+  `/lab/work/<id>/reports` (the directory the 5.01 README names; `LAB_WORK_DIR` is honoured).
+  The role's default is unchanged. Rebuild: *none*
+- `tools/release-check.sh`: the warning for a changed `control/requirements.txt` stayed silent
+  as soon as a changelog entry merely quoted the hint in a code span - which the entry describing
+  that warning does, so the `ansible-lint` update above went unnoticed. Code spans are now
+  ignored when looking for the hint. Rebuild: *none*
 - 3.04 and 4.03 (reference solutions): `--check` on a host without the audit package no longer
   fails in 6.3 with `Destination /etc/audit/auditd.conf does not exist` (4.03: with
   `-e cis_level=2`; seven of the eight targets after a reset, arch ships the file). The

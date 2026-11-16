@@ -40,14 +40,17 @@ fi
 # 6. warning only: control/requirements.txt changed since the last tag, but the changelog section
 #    (the version's, else [Unreleased]) has no 'Rebuild: *control*' / '*targets*' hint - users
 #    would not learn that their control image is outdated (v1.5.0: ansible 14.6.0 had none).
+#    Code spans are dropped first: an entry that only quotes the hint (`Rebuild: *control*`)
+#    is not a hint.
 last=$(git describe --tags --abbrev=0 2>/dev/null || true)
 if [[ -z "$last" ]]; then
   echo "note: no tag in this clone (shallow? git fetch --tags) - requirements/changelog hint not checked"
 elif ! git diff --quiet "$last" -- control/requirements.txt; then
   head="## [Unreleased]"
   [[ -z "${1:-}" ]] || head="## [${1#v}] - "
+  # shellcheck disable=SC2016  # the backticks are the sed pattern, not a command substitution
   if ! awk -v h="$head" 'index($0, h) == 1 { on = 1; next } /^## / { on = 0 } on' CHANGELOG.md |
-       tr '\n' ' ' | grep -Eq 'Rebuild: +\*(control|targets)\*'; then
+       tr '\n' ' ' | sed 's/`[^`]*`//g' | grep -Eq 'Rebuild: +\*(control|targets)\*'; then
     warn "control/requirements.txt changed since $last, but '${head% - }' in CHANGELOG.md has no 'Rebuild: *control*' (or *targets*) hint"
   fi
 fi

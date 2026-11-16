@@ -138,4 +138,5 @@ verlängert oder entfernt.
 
 ## Musterlösung
 
-Anzeigen mit `lab solution 5.01`, anwenden mit `lab solve 5.01`.
+Anzeigen mit `lab solution 5.01`, anwenden mit `lab solve 5.01` (der Bericht liegt dann in
+`/lab/work/5.01/reports`).
