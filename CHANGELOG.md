@@ -79,6 +79,16 @@ MINOR: new features or exercises, PATCH: fixes.
   GitHub Actions arrive as one grouped pull request each, major updates stay separate. Rebuild:
   *none*
 
+### Fixed
+- 3.04 and 4.03 (reference solutions): `--check` on a host without the audit package no longer
+  fails in 6.3 with `Destination /etc/audit/auditd.conf does not exist` (4.03: with
+  `-e cis_level=2`; seven of the eight targets after a reset, arch ships the file). The
+  `lineinfile` task is skipped in a dry run while the package install is still pending
+  (`when: not (ansible_check_mode and cis_audit_install is changed)`), as the 5.01 role does;
+  where the file exists the dry run compares the values as before, and a host that has the
+  package but not the file still fails. 4.03 EXPLANATION: the pitfall row says so (EN and DE).
+  Rebuild: *none*
+
 ## [1.5.0] - 2026-11-08
 
 ### Added
