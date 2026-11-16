@@ -41,10 +41,6 @@ EX_ROOT = os.path.join(ROOT, "exercises")
 # EN Markdown files that intentionally have no DE twin.
 PARITY_EXEMPT = {
     "CHANGELOG.md": "release notes are English only",
-    # P0 audit gap G8 - remove the entries once the translations exist
-    "ansible/roles/README.md": "G8",
-    "exercises/stage5-capstone/5.02-rollout-strategy/solution/roles/README.md": "G8",
-    "exercises/stage5-capstone/5.03-compare-with-community-role/solution/NOTES.md": "G8",
 }
 
 failures = collections.Counter()

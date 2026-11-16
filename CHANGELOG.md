@@ -89,6 +89,11 @@ MINOR: new features or exercises, PATCH: fixes.
   pitfall row, shorter text elsewhere (EN and DE). Rebuild: *none*
 - Control image: `ansible-lint` 26.10.1 -> 26.11.0 in `control/requirements.txt` (Dependabot,
   #59). Rebuild: *control*
+- German versions of the three notes that had none: `ansible/roles/README.de.md`,
+  `solution/roles/README.de.md` of 5.02 and `solution/NOTES.de.md` of 5.03. `lab solution <id>`
+  shows a note with a German twin once, in the lab language (it listed every file of
+  `solution/`). The `parity` gate has no exemptions left besides `CHANGELOG.md`. Live script,
+  Rebuild: *none*
 
 ### Fixed
 - `lab solve 5.01` and `lab solve 5.02` wrote `reports/compliance.json` and `compliance.md` into
