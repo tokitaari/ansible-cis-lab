@@ -22,6 +22,18 @@
   when: not (cis_mode == 'audit' and cis_r_0 is changed)
   register: cis_r_1
 
+# kmod reads several directories and the first file that names a module wins: ask kmod
+# which rule is in effect. BusyBox modprobe (Alpine) cannot answer - no feature 'kmod'.
+- name: 1.1.1-L2 | Rule in effect
+  ansible.builtin.command: "modprobe --show-depends {{ item }}"
+  loop: "{{ cis_disabled_modules_l2 }}"
+  when: "'kmod' in cis_platform_features"
+  check_mode: false
+  failed_when: false
+  changed_when: not cis_v_1.stdout.startswith('install /bin/false')
+  register: cis_v_1
+
 - name: 1.1.1-L2 | Results
   ansible.builtin.set_fact:
     cis_control_results: ["{{ cis_r_0 }}", "{{ cis_r_1 }}"]
+    cis_control_verify: ["{{ cis_v_1 }}"]

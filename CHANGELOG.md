@@ -78,6 +78,15 @@ MINOR: new features or exercises, PATCH: fixes.
   fetches all tags for it. Dependabot: minor and patch updates of the pip packages and of the
   GitHub Actions arrive as one grouped pull request each, major updates stay separate. Rebuild:
   *none*
+- 5.01 (reference role): the two kernel-module controls (1.1.1, 1.1.1-L2) also ask kmod which
+  rule is in effect (`modprobe --show-depends`, read-only). Until now a file that sorts before
+  `00-cis-<module>.conf` and allows the module left the control at `pass`. Such a deviation is
+  `fail` in the audit **and** in the enforce run (not `fixed`: the role did not bring the host
+  there); a control file hands these results over in `cis_control_verify`. Hosts need the new
+  platform feature `kmod` (all but Alpine, whose BusyBox `modprobe` cannot answer). On fresh
+  hosts the audit recap counts one more `changed` per module control. README: a bonus item
+  (the check does not require it); EXPLANATION: new section *Verifying the state in effect*,
+  pitfall row, shorter text elsewhere (EN and DE). Rebuild: *none*
 - Control image: `ansible-lint` 26.10.1 -> 26.11.0 in `control/requirements.txt` (Dependabot,
   #59). Rebuild: *control*
 

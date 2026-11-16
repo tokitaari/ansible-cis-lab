@@ -10,6 +10,6 @@ cis_pam_tool: manual
 cis_pwquality_supported: false
 cis_pwquality_package: libpwquality
 cis_pam_password_stack: /etc/pam.d/passwd
-cis_platform_features: [pam]
+cis_platform_features: [pam, kmod]
 # refresh the apt package index before installing (container images ship without one)
 cis_apt_cache_refresh: false

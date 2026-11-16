@@ -10,6 +10,7 @@
          else 'not-applicable' if (cis_control.requires | default([])) | difference(cis_platform_features) | length > 0
          else 'active' }}
     cis_control_results: []
+    cis_control_verify: []
 
 - name: "Execute control | {{ cis_control.id }}"
   ansible.builtin.include_tasks:
@@ -32,8 +33,21 @@
         {%- endfor -%}
       {%- endfor -%}
       {{ ns.found }}
+    # a verify task (cis_control_verify) reads the state that is in effect: a deviation there
+    # is a 'fail' in both modes - the tasks of the control did not bring the host there
+    cis_ineffective: >-
+      {%- set ns = namespace(found=false) -%}
+      {%- for r in cis_control_verify -%}
+        {%- for x in [r] + (r.results | default([])) -%}
+          {%- if x.changed | default(false) -%}
+            {%- set ns.found = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+      {{ ns.found }}
     cis_status: >-
       {{ cis_control_state if cis_control_state != 'active'
+         else 'fail' if cis_ineffective | bool
          else ('fail' if ansible_check_mode or cis_mode == 'audit' else 'fixed') if cis_noncompliant | bool
          else 'pass' }}
     cis_reason: >-

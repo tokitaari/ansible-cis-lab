@@ -53,18 +53,28 @@ Schleifen-Einträge eingeschlossen - `changed` ist oder "would have run" meldet.
 registriert `cis_r_<n>` und setzt `cis_control_results`. Gemessen: 5.3.3 ist auf opensuse, arch
 und alpine `not-applicable` (kein Feature `pwquality`).
 
+#### Den wirksamen Zustand prüfen
+Eine Datei kann stimmen und trotzdem nicht wirken: kmod liest mehrere Verzeichnisse, und die erste
+Datei, die ein Modul nennt, gewinnt (2.03). Die beiden Modul-Kontrollen enden darum mit einem
+lesenden Task, `modprobe --show-depends <modul>` (`check_mode: false`, `failed_when: false`,
+`changed`, wenn die Antwort nicht mit `install /bin/false` beginnt), übergeben in einer zweiten
+Liste, `cis_control_verify`. Ein `changed` dort ist in beiden Modi `fail`: Die Tasks der Kontrolle
+sind gelaufen und der Host ist trotzdem nicht im Sollzustand, `fixed` wäre falsch. Gemessen mit
+`00-aaa-cramfs.conf` (`install cramfs /bin/true`) auf debian und opensuse: 1.1.1 ist im Audit und
+im Enforce-Lauf `fail`, bei jedem Lauf mit `changed=1`; ohne den Task meldete die Rolle `pass`.
+BusyBox-`modprobe` kann nicht antworten, der Task braucht darum das Feature `kmod` (nicht auf
+alpine).
+
 #### Probeläufe in fehlenden Zustand
 Auf einem frischen Host prüft ein Audit Tasks, deren Eingabe ein früherer Task erst anlegen würde.
-Gemessen im Check-Modus: `copy` und `template` in ein fehlendes Verzeichnis melden `changed` ohne
-Fehler; `lineinfile` ohne `create` auf eine fehlende Datei scheitert auch im Check-Modus. Das
-`lineinfile` von 6.3 auf `/etc/audit/auditd.conf` ist so ein Task: Die Datei gibt es erst nach der
-Installation des Pakets `auditd`, darum trägt er `when: not ((ansible_check_mode or cis_mode ==
-'audit') and cis_r_1 is changed)`. Im Dry-Run ist die anstehende Paketinstallation schon der
-Befund und die Änderung wird übersprungen; wo die Datei existiert (arch bringt sie mit) oder nach
-einer echten Installation, vergleicht der Task die Werte. Gemessen: Ein **Level-2-Audit auf
-frischen Hosts** endet auf allen acht mit `failed=0` und 6.3 ist überall `fail`; nach dem
-enforce-Lauf ist es `fixed`, danach `pass`. Ohne den Guard scheiterten sieben Hosts und der Bericht
-enthielt nur arch. Die vier `cis_r_0`-Tasks in den Modul- und sysctl-Kontrollen schützen fehlende
+Gemessen im Check-Modus: `copy` und `template` in ein fehlendes Verzeichnis melden `changed`;
+`lineinfile` ohne `create` auf eine fehlende Datei scheitert. 6.3 bearbeitet
+`/etc/audit/auditd.conf`, die erst das Paket `auditd` mitbringt, darum trägt dieser Task
+`when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is changed)`: Im Dry-Run ist
+die anstehende Paketinstallation schon der Befund. Wo die Datei existiert (arch), vergleicht der
+Task die Werte. Gemessen: Ein **Level-2-Audit auf frischen Hosts** endet auf allen acht mit
+`failed=0` und 6.3 ist `fail`, nach dem Enforce-Lauf `fixed`, danach `pass`; ohne den Guard
+scheiterten sieben Hosts und der Bericht enthielt nur arch. Die `cis_r_0`-Tasks schützen fehlende
 Verzeichnisse auf dieselbe Weise.
 
 #### Handler
@@ -83,10 +93,8 @@ nichts geschrieben, und der vorige Bericht bleibt stehen.
 #### Tags und Teilmengen
 Die Kontrollen tragen keine Tags; nur `include_vars` und der apt-Index-Task haben `always`.
 Gemessen: `--tags sysctl` - wie jede andere `--tags`-Auswahl - endet auf allen acht Hosts mit
-`failed=0` und `changed=0` und schreibt keinen Bericht, weil nur die `always`-Tasks laufen (mit
-ungetaggtem `include_vars` scheiterte es am apt-Index-Task: `cis_apt_cache_refresh` undefiniert).
-Kontrollen wählst du mit
-`-e '{"cis_controls_only": ["5.2"]}'`; der Bericht listet dann nur diese. Übergib Booleans als
+`failed=0` und `changed=0` und schreibt keinen Bericht, weil nur die `always`-Tasks laufen.
+Kontrollen wählst du mit `-e '{"cis_controls_only": ["5.2"]}'`; der Bericht listet dann nur diese. Übergib Booleans als
 JSON: `-e cis_apt_cache_refresh=false` ist der String `"false"`, und das `when` lehnt ihn ab
 (gemessen).
 
@@ -95,13 +103,13 @@ Gemessen auf frisch zurückgesetzten Hosts (nach 0.02), Level 1:
 
 | Host | Erstes Audit: `fail` | Zu Beginn nicht `fail` | Recap `changed`, audit / enforce |
 |---|---|---|---|
-| debian | 14 | - | 19 / 21 |
-| ubuntu | 14 | - | 19 / 21 |
-| rocky | 14 | - | 18 / 21 |
-| alma | 13 | 5.4.2 | 17 / 20 |
-| fedora | 14 | - | 18 / 20 |
-| opensuse | 12 | 5.4.2; 5.3.3 `not-applicable` | 16 / 18 |
-| arch | 11 | 2.2, 5.4.2; 5.3.3 `not-applicable` | 15 / 17 |
+| debian | 14 | - | 20 / 21 |
+| ubuntu | 14 | - | 20 / 21 |
+| rocky | 14 | - | 19 / 21 |
+| alma | 13 | 5.4.2 | 18 / 20 |
+| fedora | 14 | - | 19 / 20 |
+| opensuse | 12 | 5.4.2; 5.3.3 `not-applicable` | 17 / 18 |
+| arch | 11 | 2.2, 5.4.2; 5.3.3 `not-applicable` | 16 / 17 |
 | alpine | 11 | 2.2, 5.4.2; 5.3.3 `not-applicable` | 14 / 16 |
 
 Auf Level 1 sind `1.1.1-L2` und `6.3` überall `out-of-profile`. Nach dem ersten Audit war keine
@@ -115,8 +123,8 @@ mit leerem Passwort, daher scheitern ubuntu und fedora (`guest`, 3.05) hier eben
 | Symptom | Ursache | Lösung |
 |---|---|---|
 | `--check` im Enforce-Modus hat die Targets geändert | `check_mode: "{{ cis_mode == 'audit' }}"` ist `false` und schlägt `--check` | `ansible_check_mode or cis_mode == 'audit'` |
-| Das Audit-Recap zeigt `changed=14`-`19` | Der Check-Modus meldet eine mögliche Änderung als `changed` | Auf frischen Hosts erwartet; den Bericht lesen |
-| Level-2-Audit auf frischen Hosts scheitert bei 6.3: `Destination /etc/audit/auditd.conf does not exist` (eigene Rolle) | `lineinfile` ohne `create` auf eine Datei, die erst die Paketinstallation anlegt, scheitert im Check-Modus | `when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is changed)` |
+| Das Audit-Recap zeigt `changed=14`-`20` | Der Check-Modus meldet eine mögliche Änderung als `changed` | Auf frischen Hosts erwartet; den Bericht lesen |
+| 1.1.1 bleibt nach einem Enforce-Lauf `fail`, bei jedem Lauf `changed=1` | eine andere Datei in einem `modprobe.d`-Verzeichnis sortiert vor `00-cis-<modul>.conf` und gewinnt | diese Datei entfernen oder umbenennen; `modprobe --show-depends <modul>` zeigt die wirksame Regel |
 | `--tags ...` wählt nichts aus | die Kontrollen tragen keine Tags, nur die `always`-Tasks laufen | `cis_controls_only` |
 | Der Bericht zeigt alte Daten | Ein gescheiterter Lauf schreibt keinen Bericht | Recap und Dateizeit prüfen |
 | Nach `lab check 5.01` sagt der Bericht `enforce` | Der Lauf mit `--check` schreibt ihn neu | Für den Nachweis das Audit erneut ausführen |
