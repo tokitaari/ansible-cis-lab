@@ -1,8 +1,8 @@
 /work/*
 !/work/.gitkeep
 /.lab/
-/cis/pdf/*.pdf
-/cis/pdf/*.PDF
+/cis-catalogue/pdf/*.pdf
+/cis-catalogue/pdf/*.PDF
 /.ansible/
 **/.ansible/
 __pycache__/

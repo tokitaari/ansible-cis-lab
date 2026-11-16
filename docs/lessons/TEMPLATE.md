@@ -15,7 +15,7 @@ italic placeholder. tools/static-check.sh lessons enforces the structure:
   then the header table above (same values in EN and DE, only the time unit differs)
 - Exercises: exercise ids, sorted, comma-separated, or '-'; the same ids (and only those)
   appear in the table of the Exercises section, each linking to its exercise's README.md
-- CIS sections: ids from cis/controls.yml, sorted, comma-separated, or '-'; list the sections
+- CIS sections: ids from cis-catalogue/controls.yml, sorted, comma-separated, or '-'; list the sections
   the lesson's exercises cover - other ids may be named in the text with a catalogue link
 - Reading time: '~N min' (DE '~N Min.'), aim for 15-30 minutes
 - Builds on: earlier lessons that exist (L00, L03), sorted, or '-'
@@ -31,7 +31,7 @@ Writing rules:
   They run unchanged in the lab - test each one. L00 avoids alpine (no Python before 0.02);
   later lessons may assume 0.02 is done.
 - CIS: own wording only, never benchmark text. Name recommendation numbers by the section
-  ids used in cis/controls.yml; exact numbers differ per benchmark and version.
+  ids used in cis-catalogue/controls.yml; exact numbers differ per benchmark and version.
 - Platform values as in the facts: os_family Debian, RedHat, Suse, Alpine, Archlinux.
 - Tagged code blocks (yaml, bash) hold identical code in EN and DE, task 'name:' values
   included (keep them English); only '#' comments are translated.
@@ -79,7 +79,7 @@ After this lesson you can ...
 ## CIS background
 
 *What the recommendations protect against, why some are Level 2 only, typical
-trade-offs in production. Refer to the ids from [the control catalogue](../../cis/controls.yml).*
+trade-offs in production. Refer to the ids from [the control catalogue](../../cis-catalogue/controls.yml).*
 
 ## Platform differences
 

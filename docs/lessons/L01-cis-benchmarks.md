@@ -20,7 +20,7 @@ After this lesson you can ...
 - [ ] tell *Automated* from *Manual* recommendations and say why both matter
 - [ ] choose between Level 1 and Level 2 and between the Server and Workstation profiles
 - [ ] map the audit and remediation parts of a recommendation to Ansible tasks and know what does not automate
-- [ ] use `cis/controls.yml` and the CIS reference of an exercise to find the matching chapter of a benchmark
+- [ ] use `cis-catalogue/controls.yml` and the CIS reference of an exercise to find the matching chapter of a benchmark
 
 ## Theory
 
@@ -48,13 +48,13 @@ Three related things are easily mixed up:
 
 The PDFs are free after registration, but their terms do not allow redistribution. That is why
 this lab ships no CIS text: download the Benchmarks yourself as described in
-[the CIS README](../../cis/README.md), keep them in `cis/pdf/` (ignored by Git) and write
+[the CIS README](../../cis-catalogue/README.md), keep them in `cis-catalogue/pdf/` (ignored by Git) and write
 your own wording in code, comments and documentation.
 
 ### Anatomy of a recommendation
 
 A Linux Benchmark is organised in sections. Since 2024 the Linux Benchmarks share this
-top-level structure, which [the control catalogue](../../cis/controls.yml) uses:
+top-level structure, which [the control catalogue](../../cis-catalogue/controls.yml) uses:
 
 | Section | Topic | Examples in the lab |
 |---|---|---|
@@ -153,7 +153,7 @@ that a system is safe.
 
 ### The lab catalogue: `controls.yml` and `meta.yml`
 
-[`cis/controls.yml`](../../cis/controls.yml) is the lab's own catalogue, in its own words.
+[`cis-catalogue/controls.yml`](../../cis-catalogue/controls.yml) is the lab's own catalogue, in its own words.
 One entry per control:
 
 ```yaml
@@ -183,7 +183,7 @@ only and changes nothing:
   hosts: localhost
   gather_facts: false
   vars:
-    catalogue: "{{ lookup('ansible.builtin.file', '/lab/cis/controls.yml') | from_yaml }}"
+    catalogue: "{{ lookup('ansible.builtin.file', '/lab/cis-catalogue/controls.yml') | from_yaml }}"
   tasks:
     - name: List the Level 2 controls
       ansible.builtin.debug:
@@ -232,7 +232,7 @@ settings: they let you argue for a measure, and against it where it does not fit
 | Alpine | alpine | none | map the controls yourself; many are not applicable (no PAM, busybox) |
 | Archlinux | arch | none | map the controls yourself |
 
-The exact versions to download are listed in [the CIS README](../../cis/README.md). Mapping
+The exact versions to download are listed in [the CIS README](../../cis-catalogue/README.md). Mapping
 controls to a platform without a Benchmark is part of the training: the intent of a
 recommendation (the Rationale) carries over, the commands and file names do not.
 
@@ -264,7 +264,7 @@ See [container limits](../CONTAINER_LIMITS.md) for the details per control.
 
 This lesson has no exercise of its own: it is the background for all of them. Each exercise
 names its CIS section and level in the README header and in `lab list`; look the section up
-in `cis/controls.yml` before you start. Three exercises work with the concepts directly:
+in `cis-catalogue/controls.yml` before you start. Three exercises work with the concepts directly:
 [4.01](../../exercises/stage4-advanced/4.01-audit-only-report/README.md) (audit without
 remediation),
 [4.02](../../exercises/stage4-advanced/4.02-profiles-and-exceptions/README.md) (Level 1/2 and

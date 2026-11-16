@@ -315,7 +315,7 @@ A break-glass account exists for the day when SSO or the automation account does
 is therefore the account that must work without anything else. That makes it both useful and
 dangerous: it is a standing local administrator. The lab's catalogue has no recommendation that asks for such an
 account; the recommendations ask that every account that exists follows the same rules. Password aging and strong hashing
-for local accounts are 5.4.1 of [the control catalogue](../../cis/controls.yml) (L08 covers what
+for local accounts are 5.4.1 of [the control catalogue](../../cis-catalogue/controls.yml) (L08 covers what
 the values mean and where they come from). Privilege escalation through sudo, with its logging and
 with re-authentication left on, is 5.2 (L03 explains the sudoers files).
 

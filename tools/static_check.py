@@ -16,7 +16,7 @@ Without arguments all checks run. Exit code 1 if any check reports a failure.
             tokens (code spans and words with a digit such as 3.01 or L07 - the rest is translated)
   links     relative Markdown links (and #anchors) resolve; a DE page links German twins, an
             EN page no German page (the language switch line excepted)
-  controls  cis/controls.yml schema and cross-references to the exercises
+  controls  cis-catalogue/controls.yml schema and cross-references to the exercises
   lessons   docs/lessons/LNN-slug(.de).md: title, language switch, header table (exercises,
             CIS ids, reading time, earlier lessons - all known, sorted), the eight fixed
             sections, self-check questions with one folded answer each; EN/DE header values
@@ -617,21 +617,21 @@ CIS_ID_RE = re.compile(r"^\d+(?:\.\d+)*$")
 
 
 def check_controls(exs):
-    path = os.path.join(ROOT, "cis", "controls.yml")
+    path = os.path.join(ROOT, "cis-catalogue", "controls.yml")
     try:
         data = load_yaml(path)
     except (OSError, yaml.YAMLError) as exc:
-        fail("controls", f"cis/controls.yml: {exc}")
+        fail("controls", f"cis-catalogue/controls.yml: {exc}")
         return
     if not (isinstance(data, dict) and list(data) == ["controls"] and isinstance(data["controls"], list)):
-        fail("controls", "cis/controls.yml: top level must be exactly 'controls: [...]'")
+        fail("controls", "cis-catalogue/controls.yml: top level must be exactly 'controls: [...]'")
         return
     meta = {m["id"]: m for _, m in exs if list(m) == META_KEYS}
     known = {m.get("id") for _, m in exs}  # includes exercises whose meta.yml is invalid
     controls = {}
     for c in data["controls"]:
         cid = c.get("id") if isinstance(c, dict) else None
-        where = f"cis/controls.yml: control {cid!r}"
+        where = f"cis-catalogue/controls.yml: control {cid!r}"
         if not isinstance(c, dict) or list(c) != CONTROL_KEYS:
             fail("controls", f"{where}: keys must be {CONTROL_KEYS}")
             continue
@@ -658,7 +658,7 @@ def check_controls(exs):
                 fail("controls", f"{where}: exercise {x} does not exist")
     ids = list(controls)
     if ids != sorted(ids, key=lambda i: [int(p) for p in i.split(".")]):
-        fail("controls", "cis/controls.yml: controls are not sorted by id")
+        fail("controls", "cis-catalogue/controls.yml: controls are not sorted by id")
     # Every CIS id named in an exercise's meta cis.section must be a control that lists the
     # exercise, and the exercise level must cover the control level. Free text like
     # "Sections 1-7" or "(operations)" is not an id and is skipped; deeper ids than the
@@ -671,7 +671,8 @@ def check_controls(exs):
             c = controls.get(tok)
             if c is None:
                 if not any(tok.startswith(k + ".") for k in controls):
-                    fail("controls", f"exercise {mid}: CIS id {tok} (meta cis.section) is not in cis/controls.yml")
+                    fail("controls", f"exercise {mid}: CIS id {tok} (meta cis.section) is not in "
+                                     "cis-catalogue/controls.yml")
                 continue
             if mid not in c["exercises"]:
                 fail("controls", f"exercise {mid}: names CIS {tok} in meta.yml, but control {tok} "
@@ -702,7 +703,7 @@ LESSON_ID_RE = re.compile(r"^L\d\d$")
 
 def control_ids():
     try:
-        data = load_yaml(os.path.join(ROOT, "cis", "controls.yml"))
+        data = load_yaml(os.path.join(ROOT, "cis-catalogue", "controls.yml"))
         return {c["id"] for c in data["controls"] if isinstance(c, dict) and "id" in c}
     except (OSError, yaml.YAMLError, KeyError, TypeError):
         return set()  # reported by the controls check

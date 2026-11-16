@@ -328,7 +328,7 @@ nicht funktionieren, und es ist deshalb das Konto, das ohne alles andere funktio
 macht es nützlich und gefährlich zugleich: Es ist ein dauerhafter lokaler Administrator. Der Katalog
 des Labs enthält keine Empfehlung, die ein solches Konto verlangt; die Empfehlungen verlangen, dass
 jedes vorhandene Konto denselben Regeln folgt. Passwortalterung und starkes Hashing für lokale
-Konten sind 5.4.1 im [Kontrollkatalog](../../cis/controls.yml) (L08 behandelt, was die Werte
+Konten sind 5.4.1 im [Kontrollkatalog](../../cis-catalogue/controls.yml) (L08 behandelt, was die Werte
 bedeuten und woher sie kommen). Rechteausweitung über sudo, mit Protokollierung und mit eingeschalteter
 erneuter Authentifizierung, ist 5.2 (L03 erklärt die sudoers-Dateien).
 

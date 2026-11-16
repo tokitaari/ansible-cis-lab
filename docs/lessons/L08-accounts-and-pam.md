@@ -355,7 +355,7 @@ open - that is a job for the SSH daemon's own settings.
 
 ## CIS background
 
-The five sections of [the control catalogue](../../cis/controls.yml) behind this lesson are all
+The five sections of [the control catalogue](../../cis-catalogue/controls.yml) behind this lesson are all
 Level 1:
 
 - **5.4.1** (shadow password suite): how long a password lives, the hash that protects it, when

@@ -269,7 +269,7 @@ data-driven roles.
 The recommendations behind these exercises differ in kind. Permissions of the files that hold
 password hashes (7.1) have a right answer *per distribution*; the SSH server section (5.1) is
 one recommendation with many parameters; the login warning banners (1.6) are one text that must
-appear in several files. All three are Level 1 in [the control catalogue](../../cis/controls.yml)
+appear in several files. All three are Level 1 in [the control catalogue](../../cis-catalogue/controls.yml)
 and all are "one decision, many places": the *intent* is common, the concrete path, group or
 value is not.
 

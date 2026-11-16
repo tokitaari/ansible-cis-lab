@@ -333,7 +333,7 @@ Dienste und Clients sind Angriffsfläche, und die Empfehlungen in den Abschnitte
 Dienste) und 2.2 (Client-Dienste) lauten meist "entfernen, oder mindestens stoppen und
 deaktivieren". Diese Änderungen sind pro Host risikoarm, aber die *Bedingung* zählt: Dasselbe Play
 trifft Hosts mit dem Paket und Hosts ohne (Controls 2.1 und 2.2 im
-[Control-Katalog](../../cis/controls.yml)).
+[Control-Katalog](../../cis-catalogue/controls.yml)).
 
 Die Abschnitte 5.1 (SSH-Server) und 5.2 (Rechteausweitung) sind die Controls, die dich aussperren
 können: Beide konfigurieren die Programme, über die du den Host verwaltest. Sie sind Level 1 und

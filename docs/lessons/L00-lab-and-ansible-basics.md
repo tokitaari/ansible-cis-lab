@@ -255,7 +255,7 @@ structure, levels and profiles. Two ideas from them already matter here:
   manageability - document it, or stay with `raw`/`script` where Python is not acceptable.
   The same applies to the managed-node account: passwordless sudo for `ansible` is a privileged
   path into every host and must be protected like one (key handling, who can use the control
-  node). Privilege escalation is control 5.2 in [the control catalogue](../../cis/controls.yml).
+  node). Privilege escalation is control 5.2 in [the control catalogue](../../cis-catalogue/controls.yml).
 - **Do not hand out free reconnaissance.** Control 1.6 (Level 1) asks for login banners that warn
   about authorised use and reveal nothing about the operating system or its version. Exercise
   0.04 is the first hardening change of the lab and starts there.

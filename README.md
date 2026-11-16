@@ -19,7 +19,7 @@ audit mode, exceptions and staged rollout.
 | **Exercises** | 31 in 6 stages, ~28 h, each with goal, background, requirements, 3 graded hints, bonus, reference solution, explanation, automatic check |
 | **Lessons** | 15 self-study lessons (L00-L14, ~7 h reading) - concepts before the exercises, platform differences, pitfalls, self-check: `lab lesson`; a [glossary](docs/GLOSSARY.md) of the terms (`lab docs glossary`) |
 | **Languages** | English (default) and German: `lab lang de` |
-| **CIS** | Level 1 Server profile (+ selected Level 2); own control catalogue in [`cis/controls.yml`](cis/controls.yml); PDFs: see [`cis/README.md`](cis/README.md) |
+| **CIS** | Level 1 Server profile (+ selected Level 2); own control catalogue in [`cis-catalogue/controls.yml`](cis-catalogue/controls.yml); PDFs: see [`cis-catalogue/README.md`](cis-catalogue/README.md) |
 
 ## Quick start
 
@@ -129,7 +129,7 @@ control/              control node image, 'lab' CLI
 targets/              one Dockerfile per distribution + common bootstrap (plants the findings)
 ansible/              ansible.cfg, inventory (grouped by OS family), shared roles
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, check
-cis/                  control catalogue + place for your CIS PDFs
+cis-catalogue/        control catalogue + place for your CIS PDFs
 docs/                 learning path, lessons/ (L00-L14), glossary, container limits, troubleshooting
 tools/                maintainer checks: release hygiene, static quality gate, runtime test of the
                       reference solutions (all three run in CI)

@@ -67,7 +67,7 @@ sshd zeigt `/etc/issue.net` nur, wenn `Banner /etc/issue.net` konfiguriert ist. 
 sshd-Härtung in 2.02; 2.06 hält fest, dass die Hosts ohne Banner starten.
 
 #### Einordnung im Katalog
-Control 1.6 in `cis/controls.yml` ("Login banners contain a legal warning and no OS
+Control 1.6 in `cis-catalogue/controls.yml` ("Login banners contain a legal warning and no OS
 information", Level 1) nennt die Übungen 0.04, 2.06, 3.01 und 5.01. Diese hier deckt
 `/etc/issue.net` ab; 2.06 alle drei Dateien.
 

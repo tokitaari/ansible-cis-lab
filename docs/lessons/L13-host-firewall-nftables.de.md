@@ -449,7 +449,7 @@ Unterscheidung: `enabled: true` des `service`-Moduls ändert, was beim Boot gesc
 
 ## CIS-Hintergrund
 
-Abschnitt 4 der Benchmarks (ID `4` im [Kontrollkatalog](../../cis/controls.yml)) verlangt eine
+Abschnitt 4 der Benchmarks (ID `4` im [Kontrollkatalog](../../cis-catalogue/controls.yml)) verlangt eine
 funktionierende Host-Firewall mit einer Standardhaltung „verwerfen“ gegenüber eingehendem
 Datenverkehr und ausdrücklichen Freigaben für das, was der Host wirklich anbietet. Sie schützt vor
 den Diensten, die jede Paketinstallation und jedes Entwicklerwerkzeug still öffnet: eine

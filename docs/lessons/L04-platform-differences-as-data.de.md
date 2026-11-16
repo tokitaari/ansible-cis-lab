@@ -276,7 +276,7 @@ Familie - der Mechanismus hinter datengetriebenen Rollen.
 Die Empfehlungen hinter diesen Übungen sind verschiedener Art. Die Rechte der Dateien mit
 Passwort-Hashes (7.1) haben eine richtige Antwort *je Distribution*; der Abschnitt SSH-Server
 (5.1) ist eine Empfehlung mit vielen Parametern; die Warnbanner beim Login (1.6) sind ein Text,
-der in mehreren Dateien stehen muss. Alle sind Level 1 im [Kontrollkatalog](../../cis/controls.yml)
+der in mehreren Dateien stehen muss. Alle sind Level 1 im [Kontrollkatalog](../../cis-catalogue/controls.yml)
 und alle sind "eine Entscheidung, viele Orte": Die *Absicht* ist gemeinsam, der konkrete Pfad, die
 Gruppe oder der Wert nicht.
 

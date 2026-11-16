@@ -276,7 +276,7 @@ In the lab the account Ansible uses has its own sudo rule; leave it where it is.
 
 The recommendations behind these exercises share one idea: remove what the host does not need
 and close what it must keep. Sections 2.1 (server services) and 2.2 (client services) in
-[the control catalogue](../../cis/controls.yml) reduce what an attacker can reach or abuse;
+[the control catalogue](../../cis-catalogue/controls.yml) reduce what an attacker can reach or abuse;
 clear-text clients such as telnet are the textbook case, and "remove, or at least stop and
 disable" mirrors the layers above. Section 5.1 (SSH server) limits how an attacker can log in:
 no direct root login, so that the audit trail names a person, and no empty passwords. Section

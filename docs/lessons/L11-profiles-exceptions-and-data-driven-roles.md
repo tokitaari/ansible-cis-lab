@@ -440,7 +440,7 @@ exercises' checks, which 4.03 runs as regression tests, are the same safety net.
 
 Levels (L01) are the reason for the profile: Level 1 is the baseline that should not break a
 service, Level 2 buys protection at a cost, such as more auditing than anyone reads (L09). In
-[the control catalogue](../../cis/controls.yml) 6.3, the auditd section, is the Level 2 content
+[the control catalogue](../../cis-catalogue/controls.yml) 6.3, the auditd section, is the Level 2 content
 tied to both exercises; 5.3.3 (password quality), 5.4.1 (password ageing) and 5.4.2 and 5.4.3
 (accounts, shell environment) are the Level 1 controls that 4.03 brings together on every
 platform. How the level is chosen is not part of the benchmark; the role decides.

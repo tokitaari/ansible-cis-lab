@@ -365,7 +365,7 @@ offen bleibt - dafür sind die eigenen Einstellungen des SSH-Daemons zuständig.
 
 ## CIS-Hintergrund
 
-Die fünf Abschnitte des [Kontrollkatalogs](../../cis/controls.yml) hinter dieser Lektion sind alle
+Die fünf Abschnitte des [Kontrollkatalogs](../../cis-catalogue/controls.yml) hinter dieser Lektion sind alle
 Level 1:
 
 - **5.4.1** (Shadow-Passwort-Suite): wie lange ein Passwort lebt, der Hash, der es schützt, wann

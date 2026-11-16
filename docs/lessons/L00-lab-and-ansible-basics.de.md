@@ -266,7 +266,7 @@ Aufbau, ihre Level und Profile. Zwei Ideen daraus zählen schon hier:
   `raw`/`script`, wo Python nicht akzeptabel ist. Dasselbe gilt für das Konto auf dem Host:
   passwortloses sudo für `ansible` ist ein privilegierter Weg auf jeden Host und muss auch so
   geschützt werden (Umgang mit dem Schlüssel, wer den Control-Node benutzen darf).
-  Rechteausweitung ist Kontrolle 5.2 in [dem Kontrollkatalog](../../cis/controls.yml).
+  Rechteausweitung ist Kontrolle 5.2 in [dem Kontrollkatalog](../../cis-catalogue/controls.yml).
 - **Keine kostenlose Aufklärung verteilen.** Kontrolle 1.6 (Level 1) verlangt Login-Banner, die
   vor unbefugter Nutzung warnen und nichts über Betriebssystem oder Version verraten. Übung 0.04
   ist die erste Härtungsänderung des Labs und setzt genau dort an.

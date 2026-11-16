@@ -433,7 +433,7 @@ Remove the marker and the job file with `rm -f /tmp/lesson09-marker /tmp/lesson0
 
 ## CIS background
 
-Section **6.3** of [the control catalogue](../../cis/controls.yml) is Level 2 and marked
+Section **6.3** of [the control catalogue](../../cis-catalogue/controls.yml) is Level 2 and marked
 `container: config`; section **6.1** is Level 1 and `container: full`. 6.3 asks that the
 important events of a host are recorded where an attacker cannot erase them: changes to who may
 act with administrative rights, commands run as another user, changes of the clock (which
