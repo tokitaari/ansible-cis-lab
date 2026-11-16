@@ -65,6 +65,7 @@
       ansible.builtin.package:
         name: "{{ cis_audit_package[ansible_facts.os_family] }}"
         state: present
+      register: cis_audit_install
 
     - name: Ensure the rules directory exists
       ansible.builtin.file:
@@ -99,6 +100,8 @@
         regexp: '^\s*{{ item.key }}\s*='
         line: "{{ item.key }} = {{ item.value }}"
       loop: "{{ cis_auditd_conf | dict2items }}"
+      # a dry run cannot edit a file that only the package install would create
+      when: not (ansible_check_mode and cis_audit_install is changed)
 
     - name: Enable and start auditd (real hosts only)
       ansible.builtin.service:

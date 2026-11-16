@@ -61,5 +61,6 @@ Host kaputt? `./lab.sh reset <host>` auf dem Host stellt ihn wieder her.
 ## Bonus (optional)
 
 - Ergänze 4.06 (faillock), 4.07 (nftables) und 4.08 (AIDE) als Kontrollen - nftables braucht im Audit-Modus besondere Sorgfalt (der Totmannschalter darf nicht laufen).
+- Prüfe, was wirkt, nicht nur, was du geschrieben hast: Eine `modprobe.d`-Datei, die früher sortiert, schlägt deine (2.03). Frage kmod mit einem lesenden Task (`modprobe --show-depends <modul>`) und melde eine Abweichung in beiden Modi als `fail` - die Musterlösung tut das (`lab explain 5.01`).
 - Lass den Bericht für fehlschlagende Kontrollen den *Diff* zeigen (die `--diff`-Ausgabe steckt in den registrierten Ergebnissen).
 - Veröffentliche die Rolle als Collection (`ansible-galaxy collection init lab.cis`) mit `README`, `meta/runtime.yml` und Beispiel-Playbook.

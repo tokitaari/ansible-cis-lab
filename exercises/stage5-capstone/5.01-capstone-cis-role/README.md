@@ -61,5 +61,6 @@ Broken a host? `./lab.sh reset <host>` on the host restores it.
 ## Bonus (optional)
 
 - Add 4.06 (faillock), 4.07 (nftables) and 4.08 (AIDE) as controls - nftables needs special care in audit mode (the dead-man switch must not run).
+- Audit what is in effect, not only what you wrote: a `modprobe.d` file that sorts earlier beats yours (2.03). Ask kmod with a read-only task (`modprobe --show-depends <module>`) and report a deviation as `fail` in both modes - the reference role does (`lab explain 5.01`).
 - Make the report show the *diff* for failing controls (`--diff` output is in the registered results).
 - Publish the role as a collection (`ansible-galaxy collection init lab.cis`) with a `README`, `meta/runtime.yml` and an example playbook.

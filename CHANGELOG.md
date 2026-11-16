@@ -78,6 +78,37 @@ MINOR: new features or exercises, PATCH: fixes.
   fetches all tags for it. Dependabot: minor and patch updates of the pip packages and of the
   GitHub Actions arrive as one grouped pull request each, major updates stay separate. Rebuild:
   *none*
+- 5.01 (reference role): the two kernel-module controls (1.1.1, 1.1.1-L2) also ask kmod which
+  rule is in effect (`modprobe --show-depends`, read-only). Until now a file that sorts before
+  `00-cis-<module>.conf` and allows the module left the control at `pass`. Such a deviation is
+  `fail` in the audit **and** in the enforce run (not `fixed`: the role did not bring the host
+  there); a control file hands these results over in `cis_control_verify`. Hosts need the new
+  platform feature `kmod` (all but Alpine, whose BusyBox `modprobe` cannot answer). On fresh
+  hosts the audit recap counts one more `changed` per module control. README: a bonus item
+  (the check does not require it); EXPLANATION: new section *Verifying the state in effect*,
+  pitfall row, shorter text elsewhere (EN and DE). Rebuild: *none*
+- Control image: `ansible-lint` 26.10.1 -> 26.11.0 in `control/requirements.txt` (Dependabot,
+  #59). Rebuild: *control*
+
+### Fixed
+- `lab solve 5.01` and `lab solve 5.02` wrote `reports/compliance.json` and `compliance.md` into
+  the exercise's `solution/` directory (the role's default is `{{ playbook_dir }}/reports`):
+  untracked files in the repository, and `lab solution 5.01` then listed them as part of the
+  solution. The `solve` command of both exercises now passes `-e cis_report_dir=` with
+  `/lab/work/<id>/reports` (the directory the 5.01 README names; `LAB_WORK_DIR` is honoured).
+  The role's default is unchanged. Rebuild: *none*
+- `tools/release-check.sh`: the warning for a changed `control/requirements.txt` stayed silent
+  as soon as a changelog entry merely quoted the hint in a code span - which the entry describing
+  that warning does, so the `ansible-lint` update above went unnoticed. Code spans are now
+  ignored when looking for the hint. Rebuild: *none*
+- 3.04 and 4.03 (reference solutions): `--check` on a host without the audit package no longer
+  fails in 6.3 with `Destination /etc/audit/auditd.conf does not exist` (4.03: with
+  `-e cis_level=2`; seven of the eight targets after a reset, arch ships the file). The
+  `lineinfile` task is skipped in a dry run while the package install is still pending
+  (`when: not (ansible_check_mode and cis_audit_install is changed)`), as the 5.01 role does;
+  where the file exists the dry run compares the values as before, and a host that has the
+  package but not the file still fails. 4.03 EXPLANATION: the pitfall row says so (EN and DE).
+  Rebuild: *none*
 
 ## [1.5.0] - 2026-11-08
 

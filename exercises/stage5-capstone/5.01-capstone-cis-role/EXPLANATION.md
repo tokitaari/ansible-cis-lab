@@ -49,17 +49,26 @@ control and records it: non-compliant when any registered result - loop items in
 `changed` or "would have run". Each file registers `cis_r_<n>` and sets `cis_control_results`.
 Measured: 5.3.3 is `not-applicable` on opensuse, arch and alpine (no `pwquality` feature).
 
+#### Verifying the state in effect
+A file can be correct and still not in effect: kmod reads several directories, and the first file
+that names a module wins (2.03). So the two module controls end with a read-only task,
+`modprobe --show-depends <module>` (`check_mode: false`, `failed_when: false`, `changed` unless
+the answer starts with `install /bin/false`), handed over in a second list, `cis_control_verify`.
+A `changed` result there is `fail` in both modes: the tasks of the control ran and the host is
+still not in the desired state, so `fixed` would be wrong. Measured with `00-aaa-cramfs.conf`
+(`install cramfs /bin/true`) on debian and opensuse: 1.1.1 is `fail` in the audit and in the
+enforce run, with `changed=1` on every run; without the task the role reported `pass`. BusyBox
+`modprobe` cannot answer, so the task needs the feature `kmod` (not on alpine).
+
 #### Dry runs into missing state
 On a fresh host an audit checks tasks whose input an earlier task would create. Measured in check
-mode: `copy` and `template` into a missing directory report `changed` without error; `lineinfile`
-without `create` on a missing file fails in check mode as well. 6.3's `lineinfile` on
-`/etc/audit/auditd.conf` is such a task: the file exists only once the `auditd` package is
-installed, so it carries `when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is
-changed)`. In a dry run the pending install is already the finding, so the edit is skipped;
-where the file exists (arch) or after a real install, the task compares the values. Measured: a
-**Level 2 audit on fresh hosts** ends with `failed=0` on all eight and 6.3 is `fail` everywhere;
-after the enforce run it is `fixed`, then `pass`. Without the guard seven hosts failed and the
-report held arch only. The four `cis_r_0` tasks in the module and sysctl controls guard missing
+mode: `copy` and `template` into a missing directory report `changed`; `lineinfile` without
+`create` on a missing file fails. 6.3 edits `/etc/audit/auditd.conf`, which only the `auditd`
+package brings, so that task carries `when: not ((ansible_check_mode or cis_mode == 'audit') and
+cis_r_1 is changed)`: in a dry run the pending install is already the finding. Where the file
+exists (arch) the task compares the values. Measured: a **Level 2 audit on fresh hosts** ends with
+`failed=0` on all eight and 6.3 is `fail`, after the enforce run `fixed`, then `pass`; without the
+guard seven hosts failed and the report held arch only. The `cis_r_0` tasks guard missing
 directories the same way.
 
 #### Handlers
@@ -77,9 +86,8 @@ written and the previous report stays.
 #### Tags and subsets
 The controls carry no tags; only `include_vars` and the apt index task are tagged `always`.
 Measured: `--tags sysctl` - like any other `--tags` selection - ends with `failed=0` and `changed=0`
-on all eight hosts and writes no report, because only the `always` tasks run (with `include_vars`
-untagged it failed at the apt index task: `cis_apt_cache_refresh` undefined). Select controls with `-e '{"cis_controls_only": ["5.2"]}'`;
-the report then lists only those. Give booleans as JSON: `-e cis_apt_cache_refresh=false` is the
+on all eight hosts and writes no report, because only the `always` tasks run. Select controls with
+`-e '{"cis_controls_only": ["5.2"]}'`; the report then lists only those. Give booleans as JSON: `-e cis_apt_cache_refresh=false` is the
 string `"false"`, and the `when` refuses it (measured).
 
 ### Per-family notes
@@ -87,13 +95,13 @@ Measured on freshly reset hosts (after 0.02), Level 1:
 
 | Host | First audit: `fail` | Not failing at the start | Recap `changed`, audit / enforce |
 |---|---|---|---|
-| debian | 14 | - | 19 / 21 |
-| ubuntu | 14 | - | 19 / 21 |
-| rocky | 14 | - | 18 / 21 |
-| alma | 13 | 5.4.2 | 17 / 20 |
-| fedora | 14 | - | 18 / 20 |
-| opensuse | 12 | 5.4.2; 5.3.3 `not-applicable` | 16 / 18 |
-| arch | 11 | 2.2, 5.4.2; 5.3.3 `not-applicable` | 15 / 17 |
+| debian | 14 | - | 20 / 21 |
+| ubuntu | 14 | - | 20 / 21 |
+| rocky | 14 | - | 19 / 21 |
+| alma | 13 | 5.4.2 | 18 / 20 |
+| fedora | 14 | - | 19 / 20 |
+| opensuse | 12 | 5.4.2; 5.3.3 `not-applicable` | 17 / 18 |
+| arch | 11 | 2.2, 5.4.2; 5.3.3 `not-applicable` | 16 / 17 |
 | alpine | 11 | 2.2, 5.4.2; 5.3.3 `not-applicable` | 14 / 16 |
 
 At Level 1, `1.1.1-L2` and `6.3` are `out-of-profile` everywhere. After the first audit no file
@@ -107,8 +115,8 @@ ubuntu and fedora (`guest`, 3.05) fail it too.
 | Symptom | Cause | Fix |
 |---|---|---|
 | `--check` in enforce mode changed the targets | `check_mode: "{{ cis_mode == 'audit' }}"` is `false` and beats `--check` | `ansible_check_mode or cis_mode == 'audit'` |
-| The audit recap shows `changed=14`-`19` | Check mode reports a would-be change as `changed` | Expected on fresh hosts; read the report |
-| Level 2 audit on fresh hosts fails at 6.3: `Destination /etc/audit/auditd.conf does not exist` (own role) | `lineinfile` without `create` on a file that only the package install creates fails in check mode | `when: not ((ansible_check_mode or cis_mode == 'audit') and cis_r_1 is changed)` |
+| The audit recap shows `changed=14`-`20` | Check mode reports a would-be change as `changed` | Expected on fresh hosts; read the report |
+| 1.1.1 stays `fail` after an enforce run, `changed=1` on every run | another file in a `modprobe.d` directory sorts before `00-cis-<module>.conf` and wins | remove or rename that file; `modprobe --show-depends <module>` prints the rule in effect |
 | `--tags ...` selects nothing | the controls carry no tags, only the `always` tasks run | `cis_controls_only` |
 | The report shows old data | A failed run writes no report | Check the recap and the file time |
 | After `lab check 5.01` the report says `enforce` | The `--check` run rewrites it | Run the audit again for evidence |
@@ -129,4 +137,5 @@ expire on purpose - the next run fails until someone renews or removes them.
 
 ## Reference solution
 
-Show it with `lab solution 5.01`, apply it with `lab solve 5.01`.
+Show it with `lab solution 5.01`, apply it with `lab solve 5.01` (the report then lies in
+`/lab/work/5.01/reports`).
