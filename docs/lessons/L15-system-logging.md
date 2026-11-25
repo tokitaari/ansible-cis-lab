@@ -292,7 +292,10 @@ Nothing in this lesson touches the host kernel: journald, rsyslog and syslogd ru
 containers as they do on a virtual machine, and each target has its own machine id and journal.
 Two differences: the default size limits are computed from the container's file system, which is
 the large virtual disk of Docker (hence "max 4G"), and `./lab.sh reset` throws every log away
-together with the container. The Docker host's own logging is not affected.
+together with the container. On rocky and alma the image ships
+`/etc/rsyslog.d/00-lab-container.conf`: on some host kernels the el10 rsyslog cannot give up its
+capabilities inside a container and would not even run `rsyslogd -N1`
+([container limits](../CONTAINER_LIMITS.md)). The Docker host's own logging is not affected.
 
 ## Pitfalls
 

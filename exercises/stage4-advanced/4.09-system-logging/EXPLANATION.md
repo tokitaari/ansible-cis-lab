@@ -99,6 +99,7 @@ other hosts have `root:systemd-journal`; `systemd-journald.service(8)` suggests 
 | `$FileCreateMode 0640`, files are 0600 | `UMask=0066` in the unit; on el10 the line has no effect on `action()` | read the mode of the files, not only the line |
 | `module(load="builtin:omfile" fileCreateMode=...)` fails | `omfile` is loaded already in `rsyslog.conf` | a legacy line or `fileCreateMode` per action |
 | `Destination directory /etc/systemd/journald.conf.d does not exist` | only opensuse ships it in `/etc` | an `ansible.builtin.file` task with `state: directory` first |
+| `rsyslogd -N1` fails with `capng_apply=-4` (error -2455) on rocky/alma | el10 rsyslog cannot drop its capabilities in the container on some host kernels | the image's `00-lab-container.conf` (`libcapng.default="off"`, CONTAINER_LIMITS) |
 | `logger: command not found` on opensuse | the image has no `logger` | `systemd-cat` (L15) |
 | A restart of `syslog` also restarts `crond` | `crond` needs `logger` (OpenRC) | expected; plan it |
 

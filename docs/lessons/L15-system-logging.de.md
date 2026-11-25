@@ -302,7 +302,10 @@ Nichts in dieser Lektion berührt den Kernel des Hosts: journald, rsyslog und sy
 Containern wie auf einer virtuellen Maschine, und jedes Target hat seine eigene Machine-ID und sein
 eigenes Journal. Zwei Unterschiede: Die Standard-Größengrenzen werden aus dem Dateisystem des
 Containers berechnet, also der großen virtuellen Platte von Docker (daher "max 4G"), und `./lab.sh
-reset` wirft jedes Log mit dem Container weg. Die Protokollierung des Docker-Hosts selbst ist
+reset` wirft jedes Log mit dem Container weg. Auf rocky und alma liefert das Image
+`/etc/rsyslog.d/00-lab-container.conf` mit: Auf manchen Host-Kerneln kann das rsyslog von el10 im
+Container seine Capabilities nicht abgeben und würde nicht einmal `rsyslogd -N1` ausführen
+([Container-Grenzen](../CONTAINER_LIMITS.de.md)). Die Protokollierung des Docker-Hosts selbst ist
 nicht betroffen.
 
 ## Stolperfallen
