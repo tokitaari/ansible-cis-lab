@@ -68,6 +68,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **faillock** - PAM-Modul (`pam_faillock`), das ein Konto nach einer Anzahl fehlgeschlagener Anmeldungen sperrt; Einstellungen in `faillock.conf`, das Kommando `faillock` zeigt und löscht den Zähler. ([L08](lessons/L08-accounts-and-pam.de.md#zwei-module-im-stack-pwquality-und-faillock))
 - **finding** (Befund) - Das Ergebnis einer Kontrolle auf einem Host, als Datensatz mit einem Status festgehalten - kein gescheiterter Task, der den Lauf anhält. ([L10](lessons/L10-compliance-reporting.de.md#befunde-sind-daten-keine-fehler))
 - **`first_found`** - Lookup, das die erste vorhandene Datei aus einer Liste liefert - geschrieben vom spezifischsten Namen (Distribution) bis zu einem allgemeinen. ([L07](lessons/L07-roles-tags-project-structure.de.md#defaults-und-vars-eine-schnittstelle-und-interne-daten), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.de.md#plattformdaten-und-fähigkeits-flags))
+- **`ForwardToSyslog`** - journald-Einstellung: eine Kopie jeder Nachricht über einen Socket an einen klassischen Syslog-Daemon geben. Ein rsyslog, das mit `imuxsock` empfängt, braucht sie, eines, das das Journal liest (`imjournal`), nicht. ([L15](lessons/L15-system-logging.de.md#eine-nachricht-mehrere-wege))
 - **FQCN** - Vollqualifizierter Collection-Name eines Moduls, etwa `ansible.builtin.copy`. Das Profil `production` von ansible-lint verlangt ihn. ([L05](lessons/L05-kernel-modules-and-sysctl.de.md#collections-woher-ansibleposixsysctl-kommt))
 
 ## G
@@ -94,17 +95,20 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 ## J
 
 - **Jinja2** - Die Template-Sprache von Ansible: `{{ ausdruck }}`, Filter wie `| default(...)` und `{% ... %}`-Anweisungen. ([L04](lessons/L04-platform-differences-as-data.de.md#jinja2-in-ansible-ausdrücke-filter-undefinierte-werte))
+- **journald** - `systemd-journald`, der Protokolldienst der systemd-Hosts: besitzt `/dev/log` und speichert die Nachrichten in einem binären Journal (`journalctl`), flüchtig in `/run/log/journal` oder persistent in `/var/log/journal`. ([L15](lessons/L15-system-logging.de.md#wo-das-journal-liegt-storage-flush-und-größe))
 
 ## L
 
 - **Level 1 / Level 2** - CIS-Profile: Level 1 ist die praxistaugliche Basis mit wenig Auswirkung, Level 2 ergänzt tiefere Verteidigung, die Funktion kosten kann. Das Lab wählt mit `cis_level`. ([L01](lessons/L01-cis-benchmarks.de.md#profile-und-levels), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.de.md#ein-profil-ist-ein-wert))
 - **lint profile** (Lint-Profil) - Die Regelsätze von ansible-lint, jeder erweitert den vorigen: `min`, `basic`, `moderate`, `safety`, `shared`, `production`. ([L07](lessons/L07-roles-tags-project-structure.de.md#eine-rolle-linten))
+- **`listen` (handlers)** - Handler-Schlüsselwort: Mehrere Handler hören auf ein Thema, ein Task benachrichtigt das Thema, und die Handler laufen in der Reihenfolge des Abschnitts `handlers:`. ([L15](lessons/L15-system-logging.de.md#handler-die-zusammengehören-listen))
 - **`login.defs`** - Vorgaben der shadow-Werkzeuge für neue Konten: Passwort-Alterung (`PASS_MAX_DAYS`, ...) und Hash-Verfahren (`ENCRYPT_METHOD`). Bestehende Konten behalten ihre Werte. ([L08](lessons/L08-accounts-and-pam.de.md#alterung-hashing-und-woher-vorgaben-kommen))
 - **loop** (Schleife) - `loop:` wiederholt einen Task für jedes Element einer Liste; `item` ist das aktuelle Element. ([L04](lessons/L04-platform-differences-as-data.de.md#schleifen-über-daten))
 
 ## M
 
 - **management channel** (Verwaltungskanal) - Der Weg, über den du einen Host verwaltest - SSH und sudo. Ein Fehler dort sperrt dich aus, darum brauchen diese Änderungen die meiste Sorgfalt. ([L03](lessons/L03-base-hardening.de.md#sudo-drop-ins-reihenfolge-und-der-verwaltungskanal))
+- **mask (drop-in)** (Maskieren) - Eine Datei in `/etc` mit dem Namen eines Hersteller-Drop-ins ersetzt es; ein Symlink dieses Namens auf `/dev/null` entfernt es. `systemd-analyze cat-config` zeigt das Ergebnis. ([L15](lessons/L15-system-logging.de.md#journald-dateien-drop-ins-und-der-wirksame-wert))
 - **`max_fail_percentage`** - Play-Schlüsselwort: beendet den Lauf, wenn mehr als dieser Anteil der Hosts in der aktuellen Welle gescheitert ist. ([L14](lessons/L14-production-rollout.de.md#fehlersemantik-wer-hält-an-wenn-etwas-scheitert))
 - **mode (file)** (Modus) - Die Rechte-Bits einer Datei. Schreib ihn als Zeichenkette in Anführungszeichen (`"0644"`): YAML liest `644` als Dezimalzahl. Ein CIS-Modus ist ein Maximum - strenger besteht. ([L03](lessons/L03-base-hardening.de.md#modi-bits-schreibweise-und-warum-compliance-eine-schranke-ist))
 - **`modprobe.d`** - Konfigurationsverzeichnisse von `modprobe`. `install <modul> /bin/false` stoppt das Laden über den Namen; kmod liest die Dateien in Namensreihenfolge und nimmt die erste `install`-Zeile, die es findet. ([L05](lessons/L05-kernel-modules-and-sysctl.de.md#kernelmodule-wer-sie-lädt-und-was-modprobed-stoppen-kann))
@@ -133,6 +137,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **`requires` (meta.yml)** - Lab: die Aufgaben, auf deren Zielzustand eine Aufgabe aufbaut. `lab start` warnt, wenn du sie noch nicht bestanden hast. ([L01](lessons/L01-cis-benchmarks.de.md#der-lab-katalog-controlsyml-und-metayml))
 - **reset (lab)** - `./lab.sh reset <host|all>` auf dem Host erzeugt Targets im ursprünglichen, nicht konformen Zustand neu. ([L00](lessons/L00-lab-and-ansible-basics.de.md#das-lab-ein-control-node-acht-targets))
 - **role** (Rolle) - Ein Verzeichnis mit festem Aufbau (`tasks/`, `handlers/`, `defaults/`, `vars/`, `templates/`, `files/`, `meta/`), das ein Play als eine Einheit nutzt. ([L07](lessons/L07-roles-tags-project-structure.de.md#eine-rolle-ist-ein-verzeichnis-mit-einem-vertrag))
+- **rsyslog** - Ein klassischer Syslog-Daemon: Regeln aus Facility und Priorität schicken Nachrichten in Dateien oder an andere Hosts. `rsyslogd -N1` prüft die ganze Konfiguration. ([L15](lessons/L15-system-logging.de.md#rsyslog-regeln-zwei-syntaxen-und-eine-prüfung-der-ganzen-konfiguration))
 
 ## S
 
@@ -142,6 +147,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **sshd effective value** (effektiver Wert) - sshd liest Hauptdatei und Drop-ins der Reihe nach und nimmt für fast jedes Schlüsselwort den ersten Wert. `sshd -T` zeigt, was gilt. ([L03](lessons/L03-base-hardening.de.md#sshd-mehrere-dateien-ein-effektiver-wert))
 - **sudoers** - Die sudo-Konfiguration (`/etc/sudoers` und `sudoers.d`). Eine kaputte Datei kann dich root kosten, darum wird eine neue geprüft, bevor sie gilt (`validate`). ([L03](lessons/L03-base-hardening.de.md#sudo-drop-ins-reihenfolge-und-der-verwaltungskanal))
 - **sysctl** - Kernel-Parameter unter `/proc/sys`. Es zählt der laufende Wert; Dateien in den `sysctl.d`-Verzeichnissen setzen ihn beim Start, in der Reihenfolge ihrer Namen. ([L05](lessons/L05-kernel-modules-and-sysctl.de.md#sysctl-laufender-wert-datei-und-die-reihenfolge-der-dateien))
+- **syslogd (BusyBox)** - Der Syslog-Daemon von Alpine (OpenRC-Dienst `syslog`): schreibt `/var/log/messages` und rotiert sie selbst (`-s`, `-b`). ([L15](lessons/L15-system-logging.de.md#busybox-syslogd-und-openrc))
 - **systemd timer** (systemd-Timer) - Eine Unit, die einen Dienst nach Zeitplan startet - einer der Orte, an denen Jobs außerhalb von cron laufen. ([L06](lessons/L06-job-schedulers.de.md#weitere-orte-an-denen-sich-jobs-verstecken))
 
 ## T

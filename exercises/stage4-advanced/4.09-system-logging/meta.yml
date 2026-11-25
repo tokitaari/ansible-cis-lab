@@ -1,0 +1,25 @@
+---
+id: '4.09'
+slug: system-logging
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: 'System logging: one logger per host, chosen by data'
+  de: 'Systemprotokollierung: ein Logger je Host, gewählt über Daten'
+difficulty: 4
+minutes: 60
+cis:
+  section: 6.2 System logging
+  level: L1
+hosts: targets
+requires:
+- '0.02'
+concepts:
+- choice by data + assert
+- systemd drop-ins and masking
+- whole-config check before restart
+- handlers with listen
+- service across systemd and OpenRC
+idempotency: true
+solve: ansible-playbook playbook.yml

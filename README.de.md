@@ -17,7 +17,7 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 |---|---|
 | **Targets** | Debian 13, Ubuntu 26.04, Rocky 10, AlmaLinux 10, Fedora 44, openSUSE Leap 16, Arch (rolling), Alpine 3.24 |
 | **Aufgaben** | 31 in 6 Stufen, ~28 h, jeweils mit Ziel, Hintergrund, Anforderungen, 3 gestaffelten Hinweisen, Bonus, Musterlösung, Erklärung, automatischem Check |
-| **Lektionen** | 15 Lektionen zum Selbststudium (L00-L14, ~7 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
+| **Lektionen** | 16 Lektionen zum Selbststudium (L00-L15, ~7,5 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
 | **Sprachen** | Englisch (Standard) und Deutsch: `lab lang de` |
 | **CIS** | Profil Level 1 Server (+ ausgewählte Level 2); eigener Kontrollkatalog in [`cis-catalogue/controls.yml`](cis-catalogue/controls.yml); PDFs: siehe [`cis-catalogue/README.de.md`](cis-catalogue/README.de.md) |
 
@@ -117,7 +117,7 @@ und 5.01 aus, jeweils in einem eigenen Job (Workflow `runtime`).
 | 1 Einsteiger | package, file, copy + validate, Handler, service | 1.01-1.05 |
 | 2 Bausteine | Variablen, Schleifen, Templates, Daten pro Familie, Collections | 2.01-2.06 |
 | 3 Mittelstufe | Rollen, PAM, Passwortrichtlinie, auditd, Konten-Audit | 3.01-3.05 |
-| 4 Fortgeschritten | Audit-Berichte, Profile/Ausnahmen, datengetriebene Multi-Plattform, Vault, Custom Facts, faillock, Firewall mit Rollback, async | 4.01-4.08 |
+| 4 Fortgeschritten | Audit-Berichte, Profile/Ausnahmen, datengetriebene Multi-Plattform, Vault, Custom Facts, faillock, Firewall mit Rollback, async, Systemprotokollierung | 4.01-4.09 |
 | 5 Abschluss | Rolle mit Audit-/Enforce-Modus, Rollout-Strategie, Review einer Community-Rolle | 5.01-5.03 |
 
 Details: [`docs/LEARNING_PATH.de.md`](docs/LEARNING_PATH.de.md) · Übersicht: [`exercises/INDEX.de.md`](exercises/INDEX.de.md)
@@ -133,7 +133,7 @@ targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (p
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
 cis-catalogue/        Kontrollkatalog + Ablage für deine CIS-PDFs
-docs/                 Lernpfad, lessons/ (L00-L14), Glossar, Container-Grenzen, Fehlerbehebung
+docs/                 Lernpfad, lessons/ (L00-L15), Glossar, Container-Grenzen, Fehlerbehebung
 tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate,
                       Laufzeittest der Musterlösungen (alle drei in CI)
 work/                 DEINE Lösungen (eingehängt nach /lab/work)

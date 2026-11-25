@@ -1,0 +1,170 @@
+---
+- name: Check 4.09 - System logging
+  hosts: targets
+  become: true
+  gather_facts: true
+  gather_subset: [min]
+  vars:
+    logger_by_family:
+      Debian: journald
+      RedHat: rsyslog
+      Suse: journald
+      Archlinux: journald
+      Alpine: syslogd
+    logger: "{{ logger_by_family[ansible_facts.os_family] }}"
+    # a mode no looser than 0640: group at most read, nothing for others (0600 and 0640 pass)
+    mode_ok: "^0?[0-7][04]0$"
+  tasks:
+    - name: Journald
+      when: logger != 'syslogd'
+      block:
+        - name: Configuration in effect (files in parse order)
+          ansible.builtin.command: systemd-analyze cat-config systemd/journald.conf
+          register: jcfg
+          changed_when: false
+          check_mode: false
+
+        - name: Persistent journal files
+          ansible.builtin.find:
+            paths: /var/log/journal
+            recurse: true
+            patterns: system.journal
+          register: jfiles
+
+        - name: Last value of each key wins
+          ansible.builtin.set_fact:
+            jd: "{{ dict(jcfg.stdout_lines | select('match', '^[A-Za-z]+=') | map('split', '=', 1)) }}"
+
+        - name: Journald persistent, compressed, size-limited
+          ansible.builtin.assert:
+            that:
+              - jd.Storage | default('') == 'persistent'
+              - jd.Compress | default('') == 'yes'
+              - jd.SystemMaxUse | default('') is match('^[0-9]+[KMGT]?$')
+              - logger != 'journald' or jd.ForwardToSyslog | default('') == 'no'
+              - jfiles.matched > 0
+            fail_msg: >-
+              Storage={{ jd.Storage | default('-') }} Compress={{ jd.Compress | default('-') }}
+              SystemMaxUse={{ jd.SystemMaxUse | default('-') }}
+              ForwardToSyslog={{ jd.ForwardToSyslog | default('-') }} (logger {{ logger }})
+              journal files in /var/log/journal={{ jfiles.matched }}
+            quiet: true
+
+    - name: Rsyslog
+      when: logger == 'rsyslog'
+      block:
+        - name: Configuration check
+          ansible.builtin.command: rsyslogd -N1
+          register: rcheck
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: Service state
+          ansible.builtin.command: systemctl is-enabled rsyslog
+          register: renabled
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: Service running
+          ansible.builtin.command: systemctl is-active rsyslog
+          register: ractive
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: FileCreateMode lines
+          ansible.builtin.shell: >-
+            set -o pipefail;
+            cat /etc/rsyslog.conf /etc/rsyslog.d/*.conf 2>/dev/null
+            | sed -n 's/^[[:space:]]*\$FileCreateMode[[:space:]]\{1,\}\([0-7]\{3,4\}\).*/\1/p'
+          args:
+            executable: /bin/bash
+          register: rmode
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: Network inputs
+          ansible.builtin.shell: >-
+            grep -Ehs '^[^#]*(imtcp|imudp)' /etc/rsyslog.conf /etc/rsyslog.d/*.conf || true
+          register: rnet
+          changed_when: false
+          check_mode: false
+
+        - name: Send a test message
+          ansible.builtin.command: logger -p user.info "cis-check-4.09 {{ inventory_hostname }}"
+          changed_when: false
+          check_mode: false
+
+        - name: The test message reaches /var/log/messages
+          ansible.builtin.command: grep -c "cis-check-4.09 {{ inventory_hostname }}" /var/log/messages
+          register: rseen
+          changed_when: false
+          failed_when: false
+          check_mode: false
+          until: rseen.rc == 0
+          retries: 5
+          delay: 1
+
+        - name: Log files written by rsyslog
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          loop: [/var/log/messages, /var/log/secure]
+          register: rfiles
+
+        - name: Rsyslog configured, running and protected
+          ansible.builtin.assert:
+            that:
+              - rcheck.rc == 0
+              - renabled.stdout | trim == 'enabled'
+              - ractive.stdout | trim == 'active'
+              - rmode.stdout_lines | length > 0
+              - rmode.stdout_lines | reject('match', mode_ok) | list | length == 0
+              - rnet.stdout | trim == ''
+              - rseen.rc == 0
+              - rfiles.results | rejectattr('stat.exists') | list | length == 0
+              - rfiles.results | map(attribute='stat.mode') | reject('match', mode_ok) | list | length == 0
+            fail_msg: >-
+              rsyslogd -N1 rc={{ rcheck.rc }} enabled={{ renabled.stdout | trim }}
+              active={{ ractive.stdout | trim }} FileCreateMode={{ rmode.stdout_lines | join(',') | default('-', true) }}
+              network inputs={{ rnet.stdout_lines | length }} test message seen={{ rseen.rc == 0 }}
+              modes={{ rfiles.results | map(attribute='stat.mode', default='missing') | join(',') }}
+            quiet: true
+
+    - name: Busybox syslogd
+      when: logger == 'syslogd'
+      block:
+        - name: Runlevel default
+          ansible.builtin.command: rc-update show default
+          register: srunlevel
+          changed_when: false
+          check_mode: false
+
+        - name: Running daemon and its arguments
+          ansible.builtin.shell: ps -o args | grep '^/sbin/syslogd' || true
+          register: sproc
+          changed_when: false
+          check_mode: false
+
+        - name: Options file
+          ansible.builtin.command: grep '^SYSLOGD_OPTS=' /etc/conf.d/syslog
+          register: sopts
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: Syslogd enabled, running and rotating
+          ansible.builtin.assert:
+            that:
+              - srunlevel.stdout is search('(?m)^\s*syslog\s*\|')
+              - sproc.stdout_lines | length == 1
+              - sopts.stdout is search('-s ?[1-9]')
+              - sopts.stdout is search('-b ?[1-9]')
+              - sproc.stdout is search('-s ?[1-9]')
+              - sproc.stdout is search('-b ?[1-9]')
+            fail_msg: >-
+              in runlevel default={{ srunlevel.stdout is search('(?m)^\s*syslog\s*\|') }}
+              running={{ sproc.stdout | default('-', true) }} options={{ sopts.stdout | default('-', true) }}
+            quiet: true

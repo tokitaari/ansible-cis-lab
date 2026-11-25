@@ -55,6 +55,7 @@ The *Lesson* column names the lesson(s) that prepare the exercise: read them fir
 | 4.06 | [Account lockout with pam_faillock (authselect)](stage4-advanced/4.06-faillock-authselect/README.md) | ★★★★☆ | ~45 min | 5.3.2 / 5.3.3.1 pam_faillock | `redhat_family` | [L08](../docs/lessons/L08-accounts-and-pam.md) |
 | 4.07 | [Host firewall with nftables - safe rollout](stage4-advanced/4.07-nftables-safe-rollout/README.md) | ★★★★★ | ~90 min | 4 Host based firewall | `targets:!suse_family` | [L13](../docs/lessons/L13-host-firewall-nftables.md) |
 | 4.08 | [File integrity with AIDE - long-running tasks](stage4-advanced/4.08-aide-async/README.md) | ★★★★☆ | ~60 min | 6.1 Filesystem integrity checking | `debian_family:redhat_family` | [L09](../docs/lessons/L09-auditing-and-integrity.md) |
+| 4.09 | [System logging: one logger per host, chosen by data](stage4-advanced/4.09-system-logging/README.md) | ★★★★☆ | ~60 min | 6.2 System logging | `targets` | [L15](../docs/lessons/L15-system-logging.md) |
 
 ## Stage 5 - Capstone
 
