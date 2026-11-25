@@ -52,10 +52,12 @@ is the switch the reference solutions use. The same code does the full job on re
 - rsyslog on rocky and alma (exercise 4.09) gives up its capabilities with libcap-ng at start,
   also for `rsyslogd -N1`, and aborts when the kernel refuses. On the GitHub runner (kernel
   7.0) it did: `capng_apply=-4` (no `CAP_SETPCAP` for the bounding set), error -2455; on
-  WSL2 (kernel 6.6) and on fedora it did not. The rocky and alma images therefore ship
-  `/etc/rsyslog.d/00-lab-container.conf` with `global(libcapng.default="off")`: rsyslog logs
-  the failure and continues, and still drops its capabilities where it can. Do not copy the
-  file to other families - an rsyslog built without libcap-ng rejects the option.
+  WSL2 (kernel 6.6) and on fedora it did not. `global(libcapng.default="off")` only stopped
+  the abort: the error was still logged and `rsyslogd -N1` still exited 1 (measured on the
+  runner). The rocky and alma images therefore ship `/etc/rsyslog.d/00-lab-container.conf`
+  with `global(libcapng.enable="off")`: rsyslog keeps the capabilities of its unit and does not
+  try to drop any. Do not copy the file to other families - an rsyslog built without libcap-ng
+  rejects the option.
 
 ## Want the full picture?
 

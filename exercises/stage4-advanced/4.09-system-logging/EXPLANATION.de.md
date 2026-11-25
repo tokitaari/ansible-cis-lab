@@ -105,7 +105,7 @@ Besitzer und Modus zu geben.
 | `$FileCreateMode 0640`, die Dateien haben 0600 | `UMask=0066` in der Unit; auf el10 wirkt die Zeile nicht auf `action()` | den Modus der Dateien lesen, nicht nur die Zeile |
 | `module(load="builtin:omfile" fileCreateMode=...)` scheitert | `omfile` ist in `rsyslog.conf` schon geladen | eine Legacy-Zeile oder `fileCreateMode` je Action |
 | `Destination directory /etc/systemd/journald.conf.d does not exist` | nur opensuse liefert es in `/etc` mit | zuerst ein `ansible.builtin.file`-Task mit `state: directory` |
-| `rsyslogd -N1` scheitert mit `capng_apply=-4` (Fehler -2455) auf rocky/alma | das rsyslog von el10 kann auf manchen Host-Kerneln im Container seine Capabilities nicht abgeben | das `00-lab-container.conf` des Images (`libcapng.default="off"`, CONTAINER_LIMITS) |
+| `rsyslogd -N1` scheitert mit `capng_apply=-4` (Fehler -2455) auf rocky/alma | das rsyslog von el10 kann auf manchen Host-Kerneln im Container seine Capabilities nicht abgeben | das `00-lab-container.conf` des Images (`libcapng.enable="off"`, CONTAINER_LIMITS) |
 | `logger: command not found` auf opensuse | das Image hat kein `logger` | `systemd-cat` (L15) |
 | Ein Neustart von `syslog` startet auch `crond` neu | `crond` braucht `logger` (OpenRC) | erwartet; einplanen |
 

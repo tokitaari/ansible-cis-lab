@@ -11,10 +11,10 @@ RUN dnf -y install \
  && dnf clean all
 COPY common/ /opt/lab/
 RUN sh /opt/lab/bootstrap.sh redhat alma
-# el10 rsyslog drops its capabilities with libcap-ng and aborts when that fails, which it did
-# on the GitHub runner (kernel 7.0, capng_apply=-4). Let it continue (docs/CONTAINER_LIMITS.md).
+# el10 rsyslog drops its capabilities with libcap-ng; on the GitHub runner (kernel 7.0) that
+# failed (capng_apply=-4) and even `rsyslogd -N1` exited 1. Skip it (docs/CONTAINER_LIMITS.md).
 RUN mkdir -p /etc/rsyslog.d \
  && printf '%s\n' '# Lab container workaround, see docs/CONTAINER_LIMITS.md' \
-      'global(libcapng.default="off")' > /etc/rsyslog.d/00-lab-container.conf
+      'global(libcapng.enable="off")' > /etc/rsyslog.d/00-lab-container.conf
 STOPSIGNAL SIGRTMIN+3
 CMD ["/usr/lib/systemd/systemd"]

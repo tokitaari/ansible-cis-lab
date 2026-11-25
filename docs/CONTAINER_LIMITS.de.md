@@ -55,11 +55,12 @@ volle Arbeit.
 - rsyslog auf rocky und alma (Übung 4.09) gibt beim Start seine Capabilities mit libcap-ng ab,
   auch bei `rsyslogd -N1`, und bricht ab, wenn der Kernel das verweigert. Auf dem GitHub-Runner
   (Kernel 7.0) geschah das: `capng_apply=-4` (kein `CAP_SETPCAP` für das Bounding Set), Fehler
-  -2455; unter WSL2 (Kernel 6.6) und auf fedora nicht. Die Images von rocky und alma liefern
-  deshalb `/etc/rsyslog.d/00-lab-container.conf` mit `global(libcapng.default="off")`: rsyslog
-  protokolliert den Fehler und läuft weiter, und es gibt seine Capabilities weiterhin ab, wo es
-  kann. Kopiere die Datei nicht auf andere Familien - ein rsyslog ohne libcap-ng lehnt die Option
-  ab.
+  -2455; unter WSL2 (Kernel 6.6) und auf fedora nicht. `global(libcapng.default="off")` beendete
+  nur den Abbruch: Der Fehler wurde weiter protokolliert, und `rsyslogd -N1` endete weiter mit 1
+  (gemessen auf dem Runner). Die Images von rocky und alma liefern deshalb
+  `/etc/rsyslog.d/00-lab-container.conf` mit `global(libcapng.enable="off")`: rsyslog behält die
+  Capabilities seiner Unit und versucht nicht, welche abzugeben. Kopiere die Datei nicht auf
+  andere Familien - ein rsyslog ohne libcap-ng lehnt die Option ab.
 
 ## Das volle Bild?
 

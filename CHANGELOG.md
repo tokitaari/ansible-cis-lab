@@ -35,9 +35,10 @@ MINOR: new features or exercises, PATCH: fixes.
   README (16 lessons) and the glossary (`ForwardToSyslog`, journald, `listen`, mask (drop-in),
   rsyslog, syslogd (BusyBox)) follow. Rebuild: *none*
 - The rocky and alma images ship `/etc/rsyslog.d/00-lab-container.conf` with
-  `global(libcapng.default="off")`: on the GitHub runner (kernel 7.0) the el10 rsyslog aborted
-  even `rsyslogd -N1` because it could not drop its capabilities (`capng_apply=-4`); documented
-  in `docs/CONTAINER_LIMITS.md`. Rebuild: *targets*
+  `global(libcapng.enable="off")`: on the GitHub runner (kernel 7.0) the el10 rsyslog failed
+  even `rsyslogd -N1` because it could not drop its capabilities (`capng_apply=-4`);
+  `libcapng.default="off"` stopped the abort but not the exit code 1. Documented in
+  `docs/CONTAINER_LIMITS.md`. Rebuild: *targets*
 
 ## [1.6.0] - 2026-11-16
 
