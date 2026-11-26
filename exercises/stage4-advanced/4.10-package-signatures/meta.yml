@@ -1,0 +1,25 @@
+---
+id: '4.10'
+slug: package-signatures
+stage: 4
+stage_name: Stage 4 - Advanced
+stage_name_de: Stufe 4 - Fortgeschritten
+title:
+  en: 'Package signatures: every repository verified, no bypass'
+  de: 'Paketsignaturen: jedes Repository geprüft, keine Umgehung'
+difficulty: 4
+minutes: 60
+cis:
+  section: 1.2 Package management
+  level: L1
+hosts: targets
+requires:
+- '0.02'
+concepts:
+- choice by pkg_mgr + assert
+- global switch vs per-repository value
+- reading the values in effect
+- set difference of file lists
+- ini_file sections
+idempotency: true
+solve: ansible-playbook playbook.yml

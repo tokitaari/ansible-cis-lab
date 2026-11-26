@@ -39,8 +39,8 @@ controls:
     title: Package signatures are verified and repositories are trusted
     level: 1
     container: full
-    exercises: []
-    platforms: gpgcheck (dnf/zypper), signed-by (apt), SigLevel (pacman), apk keys
+    exercises: ["4.10"]
+    platforms: gpgcheck (dnf/zypper), signed-by (apt), SigLevel (pacman), apk keys; the repository value wins over the global one; fedora writes no gpgcheck line (on by default)
 
   - id: "1.3"
     section: 1 Initial setup / mandatory access control

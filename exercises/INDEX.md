@@ -56,6 +56,7 @@ The *Lesson* column names the lesson(s) that prepare the exercise: read them fir
 | 4.07 | [Host firewall with nftables - safe rollout](stage4-advanced/4.07-nftables-safe-rollout/README.md) | ★★★★★ | ~90 min | 4 Host based firewall | `targets:!suse_family` | [L13](../docs/lessons/L13-host-firewall-nftables.md) |
 | 4.08 | [File integrity with AIDE - long-running tasks](stage4-advanced/4.08-aide-async/README.md) | ★★★★☆ | ~60 min | 6.1 Filesystem integrity checking | `debian_family:redhat_family` | [L09](../docs/lessons/L09-auditing-and-integrity.md) |
 | 4.09 | [System logging: one logger per host, chosen by data](stage4-advanced/4.09-system-logging/README.md) | ★★★★☆ | ~60 min | 6.2 System logging | `targets` | [L15](../docs/lessons/L15-system-logging.md) |
+| 4.10 | [Package signatures: every repository verified, no bypass](stage4-advanced/4.10-package-signatures/README.md) | ★★★★☆ | ~60 min | 1.2 Package management | `targets` | [L16](../docs/lessons/L16-package-signatures.md) |
 
 ## Stage 5 - Capstone
 

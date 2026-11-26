@@ -136,4 +136,34 @@ case "$HOST" in
     usermod -p '' guest ;;
 esac
 
+# Package sources trusted without a key: the "quick fix" for an internal mirror (exercise
+# 4.10). The mirror is a local, empty repository - nothing is ever installed from it.
+LEGACY=/opt/lab/legacy-repo
+case "$FAMILY" in
+  debian)
+    mkdir -p "$LEGACY"
+    : > "$LEGACY/Packages"
+    { printf 'Origin: lab\nLabel: lab-legacy\nDate: %s\nSHA256:\n' "$(date -Ru)"
+      printf ' %s 0 Packages\n' "$(sha256sum "$LEGACY/Packages" | cut -d' ' -f1)"; } > "$LEGACY/Release"
+    printf '# Internal mirror (legacy)\ndeb [trusted=yes] file:%s ./\n' "$LEGACY" \
+      > /etc/apt/sources.list.d/lab-legacy.list ;;
+  redhat)
+    printf '[lab-legacy]\nname=Internal mirror (legacy)\nbaseurl=file://%s\nenabled=0\ngpgcheck=0\n' \
+      "$LEGACY" > /etc/yum.repos.d/lab-legacy.repo ;;
+  suse)
+    printf '[lab-legacy]\nname=Internal mirror (legacy)\nbaseurl=dir:%s\nenabled=0\nautorefresh=0\ngpgcheck=0\n' \
+      "$LEGACY" > /etc/zypp/repos.d/lab-legacy.repo ;;
+  arch)
+    mkdir -p "$LEGACY"
+    tar -czf "$LEGACY/lab-legacy.db.tar.gz" -T /dev/null
+    ln -sf lab-legacy.db.tar.gz "$LEGACY/lab-legacy.db"
+    printf '\n[lab-legacy]\n# Internal mirror (legacy)\nSigLevel = Optional TrustAll\nServer = file://%s\n' \
+      "$LEGACY" >> /etc/pacman.conf ;;
+  alpine)
+    mkdir -p "$LEGACY/$(apk --print-arch)"
+    apk index -o "$LEGACY/$(apk --print-arch)/APKINDEX.tar.gz"   # no packages: an empty, unsigned index
+    printf '%s\n' "$LEGACY" >> /etc/apk/repositories
+    printf 'allow-untrusted\n' > /etc/apk/config ;;
+esac
+
 log "done"

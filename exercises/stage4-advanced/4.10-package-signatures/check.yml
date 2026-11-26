@@ -1,0 +1,234 @@
+---
+- name: Check 4.10 - Package signatures
+  hosts: targets
+  become: true
+  gather_facts: true
+  gather_subset: [min]
+  vars:
+    mgr: "{{ ansible_facts.pkg_mgr }}"
+    refresh_by_mgr:
+      apt: [apt-get, update]
+      dnf: [dnf, -y, makecache]
+      dnf5: [dnf, -y, makecache]
+      zypper: [zypper, -n, refresh]
+      apk: [apk, update]
+    # one line per apt source entry: <file>:<line> signed=<0|1> trusted=<0|1>
+    apt_awk: |
+      function flush() { if (inst) print file ":" start, "signed=" s, "trusted=" t; inst = 0 }
+      FNR == 1 { flush(); file = FILENAME; deb822 = (FILENAME ~ /\.sources$/) }
+      deb822 {
+        if ($0 ~ /^[ \t]*$/) { flush(); next }
+        if ($0 ~ /^#/) next
+        if (!inst) { inst = 1; start = FNR; s = 0; t = 0 }
+        l = tolower($0)
+        if (l ~ /^signed-by:/) s = 1
+        if (l ~ /^(trusted|allow-insecure|allow-weak|allow-downgrade-to-insecure):[ \t]*yes/) t = 1
+        next
+      }
+      /^[ \t]*deb(-src)?[ \t]/ {
+        l = tolower($0)
+        print FILENAME ":" FNR, "signed=" (l ~ /signed-by=/), "trusted=" (l ~ /(trusted|allow-insecure|allow-weak|allow-downgrade-to-insecure)=yes/)
+      }
+      END { flush() }
+    # dnf4: the values in effect, as dnf itself computes them
+    dnf4_py: |
+      import dnf
+      b = dnf.Base()
+      b.conf.read()
+      b.conf.substitutions.update_from_etc('/')
+      b.read_all_repos()
+      print('main gpgcheck=%d' % b.conf.gpgcheck)
+      for r in sorted(b.repos.all(), key=lambda r: r.id):
+          print('repo %s gpgcheck=%d key=%d' % (r.id, r.gpgcheck, len(r.gpgkey) > 0))
+    # dnf5: the same lines from libdnf5 (`dnf5 --dump-repo-config` shows the same values)
+    dnf5_py: |
+      import libdnf5
+      b = libdnf5.base.Base()
+      b.load_config()
+      b.setup()
+      b.get_repo_sack().create_repos_from_system_configuration()
+      print('main gpgcheck=%d' % b.get_config().get_pkg_gpgcheck_option().get_value())
+      for r in sorted(libdnf5.repo.RepoQuery(b), key=lambda r: r.get_id()):
+          c = r.get_config()
+          print('repo %s gpgcheck=%d key=%d' % (r.get_id(), c.get_pkg_gpgcheck_option().get_value(),
+                                               len(c.get_gpgkey_option().get_value()) > 0))
+  tasks:
+    - name: The package manager is a known one
+      ansible.builtin.assert:
+        that: mgr in ['apt', 'dnf', 'dnf5', 'zypper', 'pacman', 'apk']
+        fail_msg: "unknown package manager {{ mgr }}"
+        quiet: true
+
+    - name: Apt
+      when: mgr == 'apt'
+      block:
+        - name: Global switches in effect
+          ansible.builtin.command: apt-config dump
+          register: aconf
+          changed_when: false
+          check_mode: false
+
+        - name: Every source entry
+          ansible.builtin.command:
+            argv: [find, /etc/apt, -maxdepth, "2", -type, f, "(", -path, /etc/apt/sources.list,
+                   -o, -path, "/etc/apt/sources.list.d/*.list", -o, -path, "/etc/apt/sources.list.d/*.sources",
+                   ")", -exec, awk, "{{ apt_awk }}", "{}", "+"]
+          register: asrc
+          changed_when: false
+          check_mode: false
+
+        - name: Apt verifies every source with a key of its own
+          vars:
+            bypass: >-
+              {{ aconf.stdout_lines
+                 | select('search', '(?i)^(Acquire::Allow(Insecure|Weak|DowngradeToInsecure)Repositories|APT::Get::AllowUnauthenticated) "(1|true|yes|on)"')
+                 | list }}
+            unsigned: "{{ asrc.stdout_lines | reject('search', ' signed=1 ') | list }}"
+            trusted: "{{ asrc.stdout_lines | select('search', ' trusted=1$') | list }}"
+          ansible.builtin.assert:
+            that:
+              - asrc.stdout_lines | length > 0
+              - bypass | length == 0
+              - unsigned | length == 0
+              - trusted | length == 0
+            fail_msg: >-
+              global bypass={{ bypass | join(', ') | default('-', true) }}
+              without Signed-By={{ unsigned | map('split', ' ') | map('first') | join(', ') | default('-', true) }}
+              trusted={{ trusted | map('split', ' ') | map('first') | join(', ') | default('-', true) }}
+            quiet: true
+
+    - name: Dnf and dnf5
+      when: mgr in ['dnf', 'dnf5']
+      block:
+        - name: Values in effect, as dnf itself computes them
+          ansible.builtin.command:
+            argv: [python3, -c, "{{ dnf4_py if mgr == 'dnf' else dnf5_py }}"]
+          register: dview
+          changed_when: false
+          check_mode: false
+
+        - name: Every repository checks package signatures with a key
+          vars:
+            bad: "{{ dview.stdout_lines | select('match', 'repo ') | reject('search', 'gpgcheck=1 key=1$') | list }}"
+          ansible.builtin.assert:
+            that:
+              - "'main gpgcheck=1' in dview.stdout_lines"
+              - dview.stdout_lines | select('match', 'repo ') | list | length > 0
+              - bad | length == 0
+            fail_msg: >-
+              {{ dview.stdout_lines | select('match', 'main') | first | default('main -') }};
+              repositories without check or key: {{ bad | map('regex_replace', '^repo (\S+) .*$', '\1') | join(', ') | default('-', true) }}
+            quiet: true
+
+    - name: Main switch written in the file (dnf, dnf5, zypper)
+      when: mgr in ['dnf', 'dnf5', 'zypper']
+      block:
+        - name: Gpgcheck line in the main section
+          ansible.builtin.command:
+            argv: [grep, -Ei, '^[[:space:]]*gpgcheck[[:space:]]*=[[:space:]]*(1|yes|true|on)[[:space:]]*$',
+                   "{{ '/etc/zypp/zypp.conf' if mgr == 'zypper' else '/etc/dnf/dnf.conf' }}"]
+          register: mainline
+          changed_when: false
+          failed_when: false
+          check_mode: false
+
+        - name: The main switch is written down
+          ansible.builtin.assert:
+            that: mainline.rc == 0
+            fail_msg: "no 'gpgcheck=1' line in the main configuration file"
+            quiet: true
+
+    - name: Zypper
+      when: mgr == 'zypper'
+      block:
+        - name: Repositories with the values in effect
+          ansible.builtin.command: zypper -n --xmlout lr
+          register: zview
+          changed_when: false
+          check_mode: false
+
+        - name: Every repository checks signatures with a key
+          vars:
+            repos: "{{ zview.stdout_lines | select('search', '<repo ') | list }}"
+            bad: >-
+              {{ repos | reject('search', ' gpgcheck="1"')
+                 | union(repos | reject('search', ' repo_gpgcheck="1"'))
+                 | union(repos | reject('search', ' gpgkey="[^"]+"')) }}
+          ansible.builtin.assert:
+            that:
+              - repos | length > 0
+              - bad | length == 0
+            fail_msg: >-
+              repositories without check or key:
+              {{ bad | map('regex_search', 'alias="[^"]*"') | join(', ') }}
+            quiet: true
+
+    - name: Pacman
+      when: mgr == 'pacman'
+      block:
+        - name: Package signature level per repository (its own, else the global one)
+          ansible.builtin.shell: |
+            set -o pipefail
+            g=$(pacman-conf SigLevel | tr '\n' ' ')
+            echo "global $g"
+            for r in $(pacman-conf --repo-list); do
+              o=$(pacman-conf -r "$r" SigLevel | tr '\n' ' ')
+              case "$o" in *Package*) echo "repo $r $o" ;; *) echo "repo $r $g" ;; esac
+            done
+          args:
+            executable: /bin/bash
+          register: plevel
+          changed_when: false
+          check_mode: false
+
+        - name: Every repository requires trusted package signatures
+          vars:
+            bad: >-
+              {{ plevel.stdout_lines | select('match', 'repo ')
+                 | reject('search', 'PackageRequired')
+                 | union(plevel.stdout_lines | select('match', 'repo ') | select('search', 'PackageTrustAll')) }}
+          ansible.builtin.assert:
+            that:
+              - plevel.stdout_lines | select('match', 'repo ') | list | length > 0
+              - bad | length == 0
+            fail_msg: "repositories with a lower level: {{ bad | join('; ') }}"
+            quiet: true
+
+    - name: Apk
+      when: mgr == 'apk'
+      block:
+        - name: Global options and repositories
+          ansible.builtin.shell: |
+            for f in /etc/apk/config /lib/apk/config; do
+              [ -f "$f" ] && sed -n 's/^[[:space:]]*\(allow-untrusted\).*/option \1/p' "$f"
+            done
+            cat /etc/apk/repositories /etc/apk/repositories.d/*.list /lib/apk/repositories.d/*.list 2>/dev/null \
+              | grep -Ev '^[[:space:]]*(#|$)' | sed 's/^/repo /'
+            true
+          register: aview
+          changed_when: false
+          check_mode: false
+
+        - name: No untrusted packages, https repositories only
+          vars:
+            plain: "{{ aview.stdout_lines | select('match', 'repo ') | reject('search', '^repo (@\\S+\\s+)?https://') | list }}"
+          ansible.builtin.assert:
+            that:
+              - "'option allow-untrusted' not in aview.stdout_lines"
+              - aview.stdout_lines | select('match', 'repo ') | list | length > 0
+              - plain | length == 0
+            fail_msg: >-
+              allow-untrusted={{ 'option allow-untrusted' in aview.stdout_lines }}
+              repositories without https={{ plain | map('regex_replace', '^repo ', '') | join(', ') | default('-', true) }}
+            quiet: true
+
+    - name: A verified metadata refresh succeeds
+      when: mgr in refresh_by_mgr
+      ansible.builtin.command:
+        argv: "{{ refresh_by_mgr[mgr] }}"
+      register: refresh
+      changed_when: false
+      failed_when: >-
+        refresh.rc != 0
+        or (refresh.stdout ~ refresh.stderr) is search('(?i)(is not signed|NO_PUBKEY|UNTRUSTED|BADSIG|EXPKEYSIG)')
+      check_mode: false
