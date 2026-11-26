@@ -1,0 +1,8 @@
+# Managed by Ansible (exercise 4.09)
+[Journal]
+{% for key, value in cis_journald | dictsort %}
+{{ key }}={{ value }}
+{% endfor %}
+{% if cis_logger == 'journald' %}
+ForwardToSyslog=no
+{% endif %}

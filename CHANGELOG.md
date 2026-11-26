@@ -12,7 +12,33 @@ MINOR: new features or exercises, PATCH: fixes.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+- Exercise 4.09 *System logging: one logger per host, chosen by data* (CIS 6.2, Level 1, all
+  eight targets, needs 0.02): the logger comes from a dict keyed by `os_family` - journald only
+  on Debian, Suse and Archlinux, rsyslog (reading the journal) on the RedHat family, BusyBox
+  `syslogd` on Alpine - and an `assert` guards it. The check reads the values in effect:
+  journald via `systemd-analyze cat-config` (persistent, compressed, size limit, no forwarding
+  on journald-only hosts, journal files in `/var/log/journal`), rsyslog via `rsyslogd -N1`,
+  service state, `$FileCreateMode`, no network input, a test message in `/var/log/messages` and
+  the file modes, syslogd via its runlevel and the options of the running daemon. README, hints,
+  explanation (EN and DE) with the measured pitfalls: the vendor drop-in `syslog.conf` of Debian
+  and Ubuntu wins over a `60-*.conf`, rocky and alma need `journalctl --flush` after the
+  restart, `validate: rsyslogd -N1 -f %s` rejects a valid drop-in, rsyslog starts with a broken
+  line. CI runs it in the `solo stage4` job (157 s with `tools/run-solutions.sh 4.09` on WSL2,
+  default timeout 900 s). Rebuild: *none*
+- Lesson L15 *System logging: journald, rsyslog and BusyBox syslogd* (`lab lesson 15`): the paths
+  of a message, journald drop-ins and masking, `Storage=` and the flush, rsyslog syntaxes and
+  `rsyslogd -N1`, handlers with `listen`, BusyBox `syslogd` and OpenRC runlevels. Rebuild: *none*
+
+### Changed
+- Catalogue 6.2 lists exercise 4.09; INDEX, LEARNING_PATH (lesson table, stage 4 time ~10.5 h),
+  README (16 lessons) and the glossary (`ForwardToSyslog`, journald, `listen`, mask (drop-in),
+  rsyslog, syslogd (BusyBox)) follow. Rebuild: *none*
+- The rocky and alma images ship `/etc/rsyslog.d/00-lab-container.conf` with
+  `global(libcapng.enable="off")`: on the GitHub runner (kernel 7.0) the el10 rsyslog failed
+  even `rsyslogd -N1` because it could not drop its capabilities (`capng_apply=-4`);
+  `libcapng.default="off"` stopped the abort but not the exit code 1. Documented in
+  `docs/CONTAINER_LIMITS.md`. Rebuild: *targets*
 
 ## [1.6.0] - 2026-11-16
 

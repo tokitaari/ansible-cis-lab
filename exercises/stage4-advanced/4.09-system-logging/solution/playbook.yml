@@ -1,0 +1,136 @@
+---
+- name: 4.09 - System logging, one logger per host
+  hosts: targets
+  become: true
+  vars:
+    # The choice is data: one logger per OS family (CIS: pick one, configure it fully)
+    cis_logger_by_family:
+      Debian: journald
+      RedHat: rsyslog
+      Suse: journald
+      Archlinux: journald
+      Alpine: syslogd
+    cis_logger: "{{ cis_logger_by_family[ansible_facts.os_family] }}"
+    cis_journald:
+      Storage: persistent
+      Compress: "yes"
+      SystemMaxUse: 200M
+    cis_syslogd_opts: "-t -s 1024 -b 4"
+
+  handlers:
+    - name: Restart journald
+      ansible.builtin.systemd_service:
+        name: systemd-journald
+        state: restarted
+      listen: journald config changed
+
+    - name: Move the journal to persistent storage
+      ansible.builtin.command: journalctl --flush
+      changed_when: true
+      listen: journald config changed
+
+    - name: Restart rsyslog
+      ansible.builtin.service:
+        name: rsyslog
+        state: restarted
+
+    - name: Restart syslog
+      ansible.builtin.service:
+        name: syslog
+        state: restarted
+
+  tasks:
+    - name: The logger of this host is a known one
+      ansible.builtin.assert:
+        that: cis_logger in ['journald', 'rsyslog', 'syslogd']
+        fail_msg: "unknown logger '{{ cis_logger }}' for {{ ansible_facts.os_family }}"
+        quiet: true
+
+    - name: Configure journald (every systemd host)
+      when: cis_logger in ['journald', 'rsyslog']
+      block:
+        - name: Drop-in directory
+          ansible.builtin.file:
+            path: /etc/systemd/journald.conf.d
+            state: directory
+            owner: root
+            group: root
+            mode: "0755"
+
+        - name: CIS drop-in
+          ansible.builtin.template:
+            src: 60-cis.conf.j2
+            dest: /etc/systemd/journald.conf.d/60-cis.conf
+            owner: root
+            group: root
+            mode: "0644"
+          notify: journald config changed
+
+        - name: Vendor drop-in directory
+          ansible.builtin.stat:
+            path: /usr/lib/systemd/journald.conf.d
+          register: cis_vendor_dir
+
+        - name: Vendor drop-ins that set ForwardToSyslog
+          ansible.builtin.find:
+            paths: /usr/lib/systemd/journald.conf.d
+            patterns: "*.conf"
+            contains: "^ForwardToSyslog="
+          register: cis_vendor_forward
+          when: cis_vendor_dir.stat.isdir | default(false)
+
+        - name: Mask them on journald-only hosts (they are read after 60-cis.conf)
+          ansible.builtin.file:
+            src: /dev/null
+            dest: "/etc/systemd/journald.conf.d/{{ item.path | basename }}"
+            state: link
+          loop: "{{ cis_vendor_forward.files | default([]) }}"
+          loop_control:
+            label: "{{ item.path }}"
+          when: cis_logger == 'journald'
+          notify: journald config changed
+
+    - name: Configure rsyslog
+      when: cis_logger == 'rsyslog'
+      block:
+        - name: Package
+          ansible.builtin.package:
+            name: rsyslog
+            state: present
+
+        - name: CIS drop-in
+          ansible.builtin.copy:
+            dest: /etc/rsyslog.d/60-cis.conf
+            content: |
+              # Managed by Ansible (exercise 4.09)
+              $FileCreateMode 0640
+            owner: root
+            group: root
+            mode: "0644"
+          notify: Restart rsyslog
+
+        - name: Whole configuration is valid (a failure stops before the restart)
+          ansible.builtin.command: rsyslogd -N1
+          changed_when: false
+
+        - name: Service
+          ansible.builtin.service:
+            name: rsyslog
+            enabled: true
+            state: started
+
+    - name: Configure busybox syslogd
+      when: cis_logger == 'syslogd'
+      block:
+        - name: Rotation options
+          ansible.builtin.lineinfile:
+            path: /etc/conf.d/syslog
+            regexp: "^#?SYSLOGD_OPTS="
+            line: 'SYSLOGD_OPTS="{{ cis_syslogd_opts }}"'
+          notify: Restart syslog
+
+        - name: Service in the default runlevel
+          ansible.builtin.service:
+            name: syslog
+            enabled: true
+            state: started

@@ -199,8 +199,8 @@ controls:
     title: journald/rsyslog configured, logs protected, optionally forwarded
     level: 1
     container: full
-    exercises: []
-    platforms: busybox syslogd on Alpine
+    exercises: ["4.09"]
+    platforms: busybox syslogd on Alpine; a vendor journald drop-in can win over yours (Debian); no rsyslog package on Arch
 
   - id: "6.3"
     section: 6 Logging and auditing / auditd
