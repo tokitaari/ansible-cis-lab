@@ -157,6 +157,9 @@ case "$FAMILY" in
     mkdir -p "$LEGACY"
     tar -czf "$LEGACY/lab-legacy.db.tar.gz" -T /dev/null
     ln -sf lab-legacy.db.tar.gz "$LEGACY/lab-legacy.db"
+    # its sync database too: without one every pacman command warns on stderr, and
+    # ansible.builtin.package_facts fails on any stderr of `pacman -Qi`
+    cp "$LEGACY/lab-legacy.db.tar.gz" /var/lib/pacman/sync/lab-legacy.db
     printf '\n[lab-legacy]\n# Internal mirror (legacy)\nSigLevel = Optional TrustAll\nServer = file://%s\n' \
       "$LEGACY" >> /etc/pacman.conf ;;
   alpine)

@@ -103,6 +103,7 @@ but the CIS audit reads every repository file, enabled or not.
 | `apk update` exits 0 with `UNTRUSTED signature` | apk drops the repository and goes on | grep the output, not only the exit code |
 | An enabled repository without metadata: `dnf makecache` rc 1 on rocky, rc 0 on fedora | `skip_if_unavailable` False (el10) / 1 (fedora) | do not rely on errors; read the configuration |
 | `pacman -Sy` with a scratch `--dbpath` from `mktemp -d`: "Permission denied" | pacman 7 downloads as the user `alpm`, the directory is 0700 | no refresh on pacman (its databases are not signed) |
+| `package_facts` fails on arch: "Could not detect a supported package manager" | a repository section without a sync database makes every pacman command warn on stderr, and the module gives up on any stderr of `pacman -Qi` (CI, first image of this exercise) | the image ships the database of `[lab-legacy]`; on a real host run `pacman -Sy` once or remove the section |
 | A `/etc/apk/config` emptied by `lineinfile` stays | the module removes lines, not the file; apk reads only the first config file that exists (apk(8)), so it hides `/lib/apk/config` | harmless in the lab; delete it if it is empty |
 
 `gpgcheck=0` written into a repository file of the zypper service survived `zypper refs`: the

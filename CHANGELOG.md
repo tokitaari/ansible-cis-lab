@@ -53,7 +53,9 @@ MINOR: new features or exercises, PATCH: fixes.
   ubuntu), a disabled dnf/zypper repository `lab-legacy` with `gpgcheck=0` and no key (rocky,
   alma, fedora, opensuse), a pacman section `SigLevel = Optional TrustAll` (arch) and an apk
   repository line plus `allow-untrusted` in `/etc/apk/config` (alpine). Nothing is ever
-  installed from it; `apt-get update`, `pacman -Sy` and `apk update` still succeed.
+  installed from it; `apt-get update`, `pacman -Sy` and `apk update` still succeed. The pacman
+  image also ships the sync database of `[lab-legacy]`: without it every pacman command warned
+  on stderr and `ansible.builtin.package_facts` failed on arch (first CI run).
   Rebuild: *targets*
 - Catalogue 1.2 lists exercise 4.10; INDEX, LEARNING_PATH (lesson table, stage 4 time ~11.5 h),
   README (17 lessons, ~8 h) and the glossary (`gpgcheck`, keyring, `pkg_gpgcheck`, `SigLevel`,

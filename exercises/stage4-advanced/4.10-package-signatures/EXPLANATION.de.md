@@ -106,6 +106,7 @@ Installieren nichts, aber das CIS-Audit liest jede Repository-Datei, aktiviert o
 | `apk update` endet mit 0 und `UNTRUSTED signature` | apk lässt das Repository weg und macht weiter | die Ausgabe durchsuchen, nicht nur den Exit-Code |
 | Ein aktiviertes Repository ohne Metadaten: `dnf makecache` rc 1 auf rocky, rc 0 auf fedora | `skip_if_unavailable` False (el10) / 1 (fedora) | nicht auf Fehler verlassen; die Konfiguration lesen |
 | `pacman -Sy` mit einem Scratch-`--dbpath` aus `mktemp -d`: "Permission denied" | pacman 7 lädt als Benutzer `alpm` herunter, das Verzeichnis ist 0700 | keine Aktualisierung bei pacman (seine Datenbanken sind nicht signiert) |
+| `package_facts` scheitert auf arch: "Could not detect a supported package manager" | ein Repository-Abschnitt ohne Sync-Datenbank lässt jeden pacman-Befehl auf stderr warnen, und das Modul gibt bei jeder stderr-Ausgabe von `pacman -Qi` auf (CI, erstes Image dieser Übung) | das Image liefert die Datenbank von `[lab-legacy]` mit; auf einem echten Host einmal `pacman -Sy` oder den Abschnitt entfernen |
 | Ein von `lineinfile` geleertes `/etc/apk/config` bleibt | das Modul entfernt Zeilen, nicht die Datei; apk liest nur die erste vorhandene Konfigurationsdatei (apk(8)), also verdeckt sie `/lib/apk/config` | im Lab harmlos; leer löschen |
 
 `gpgcheck=0`, in eine Repository-Datei des zypper-Service geschrieben, überstand `zypper refs`:
