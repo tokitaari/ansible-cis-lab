@@ -56,6 +56,7 @@ Die Spalte *Lektion* nennt die Lektion(en), die die Aufgabe vorbereiten: vorher 
 | 4.07 | [Host-Firewall mit nftables - sicherer Rollout](stage4-advanced/4.07-nftables-safe-rollout/README.de.md) | ★★★★★ | ~90 min | 4 Host based firewall | `targets:!suse_family` | [L13](../docs/lessons/L13-host-firewall-nftables.de.md) |
 | 4.08 | [Dateiintegrität mit AIDE - lang laufende Tasks](stage4-advanced/4.08-aide-async/README.de.md) | ★★★★☆ | ~60 min | 6.1 Filesystem integrity checking | `debian_family:redhat_family` | [L09](../docs/lessons/L09-auditing-and-integrity.de.md) |
 | 4.09 | [Systemprotokollierung: ein Logger je Host, gewählt über Daten](stage4-advanced/4.09-system-logging/README.de.md) | ★★★★☆ | ~60 min | 6.2 System logging | `targets` | [L15](../docs/lessons/L15-system-logging.de.md) |
+| 4.10 | [Paketsignaturen: jedes Repository geprüft, keine Umgehung](stage4-advanced/4.10-package-signatures/README.de.md) | ★★★★☆ | ~60 min | 1.2 Package management | `targets` | [L16](../docs/lessons/L16-package-signatures.de.md) |
 
 ## Stufe 5 - Abschlussprojekt
 

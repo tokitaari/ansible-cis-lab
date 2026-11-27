@@ -74,6 +74,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 
 - **Galaxy** - Ansible's hub for roles and collections. `ansible-galaxy install -r requirements.yml` installs them; pin a version or a commit. ([L14](lessons/L14-production-rollout.md#community-roles-galaxy-git-and-what-to-read-before-you-run))
 - **gate** - A check at the start of a rollout that refuses to go on without an explicit confirmation: a variable without default and an `assert`. ([L14](lessons/L14-production-rollout.md#preflight-and-gate-check-before-you-change))
+- **`gpgcheck`** - dnf, dnf5 and zypper option: check the signature of every package against the imported keys. It stands in `[main]` and in each repository section, and the repository value wins; dnf5 calls it `pkg_gpgcheck`. ([L16](lessons/L16-package-signatures.md#dnf-and-dnf5-gpgcheck-in-two-places))
 - **`group_vars` / `host_vars`** - Directories next to the inventory or the playbook; a file named like a group or host sets variables for it. ([L04](lessons/L04-platform-differences-as-data.md#where-variables-come-from))
 
 ## H
@@ -95,6 +96,10 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 
 - **Jinja2** - The template language of Ansible: `{{ expression }}`, filters such as `| default(...)`, and `{% ... %}` statements. ([L04](lessons/L04-platform-differences-as-data.md#jinja2-in-ansible-expressions-filters-undefined-values))
 - **journald** - `systemd-journald`, the logging service of systemd hosts: owns `/dev/log` and stores the messages in a binary journal (`journalctl`), volatile in `/run/log/journal` or persistent in `/var/log/journal`. ([L15](lessons/L15-system-logging.md#where-the-journal-is-stored-storage-flush-and-size))
+
+## K
+
+- **keyring** - A file or directory of public keys whose signatures a package manager accepts: the `Signed-By` file and `trusted.gpg.d` of apt, the rpm key database, `/etc/pacman.d/gnupg` of pacman, `/etc/apk/keys` of apk. ([L16](lessons/L16-package-signatures.md#what-a-signature-proves))
 
 ## L
 
@@ -123,6 +128,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 
 - **PAM** - Pluggable Authentication Modules: per service a stack of modules with a type (`auth`, `account`, `password`, `session`) and a control (`required`, `sufficient`, ...). ([L08](lessons/L08-accounts-and-pam.md#pam-types-controls-and-who-writes-the-stack))
 - **pattern** - An expression that selects hosts from the inventory: `targets:!alpine_family` (all but a group), `debian_family:redhat_family` (union). ([L00](lessons/L00-lab-and-ansible-basics.md#inventory-and-patterns))
+- **`pkg_gpgcheck`** - zypper option for the package signature check. Unset, it is on only while the repository metadata are not validly signed, so it reads `0` after a refresh; in dnf5 it is the name of `gpgcheck`. ([L16](lessons/L16-package-signatures.md#zypper-three-switches-and-a-service))
 - **platform data** - Values that differ per platform (package names, paths, groups), kept in data files instead of a `when` at every task. ([L04](lessons/L04-platform-differences-as-data.md#one-task-many-platforms-data-instead-of-conditions), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.md#platform-data-and-capability-flags))
 - **preflight** - The first play of a rollout: it only checks what the change needs and fails before anything has changed. ([L14](lessons/L14-production-rollout.md#preflight-and-gate-check-before-you-change))
 - **profile (CIS)** - A set of recommendations for one purpose: level (1 or 2) and kind of system (Server or Workstation). In a role a profile is simply a value. ([L01](lessons/L01-cis-benchmarks.md#profiles-and-levels), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.md#a-profile-is-a-value))
@@ -143,6 +149,8 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 - **salt** - A random value mixed into a password hash so that equal passwords give different hashes. A fixed salt makes `password_hash` idempotent. ([L12](lessons/L12-secrets-with-ansible-vault.md#hashing-a-password-salt-and-idempotency))
 - **`serial`** - Play keyword: runs the play in batches - a number, a percentage or a list such as `[1, "50%", "100%"]`. ([L14](lessons/L14-production-rollout.md#batches-batch-lists-and-the-check-after-each-batch))
 - **shadow** - `/etc/shadow` holds the password hashes and the aging fields of the accounts; ordinary users may not read it. The hash starts with `$id$`, which names the algorithm. ([L08](lessons/L08-accounts-and-pam.md#account-databases-passwd-shadow-and-what-the-password-field-says))
+- **`SigLevel`** - pacman setting in `[options]` or a repository section: how strictly (`Required`, `Optional`, `Never`) and against which keys (`TrustedOnly`, `TrustAll`) packages and databases are checked. `pacman-conf` prints the values in effect. ([L16](lessons/L16-package-signatures.md#pacman-siglevel-and-one-keyring))
+- **`Signed-By`** - apt source option (deb822 field, `signed-by=` in the one-line format): the keyring that alone may sign this source. Without it every key in `/etc/apt/trusted.gpg.d/` counts. ([L16](lessons/L16-package-signatures.md#apt-signed-release-files-and-signed-by))
 - **sshd effective value** - sshd reads its main file and drop-ins in order and, for almost every keyword, uses the first value. `sshd -T` prints what is in effect. ([L03](lessons/L03-base-hardening.md#sshd-several-files-one-effective-value))
 - **sudoers** - The sudo configuration (`/etc/sudoers` and `sudoers.d`). A broken file can cost you root, so a new one is tested before it is used (`validate`). ([L03](lessons/L03-base-hardening.md#sudo-drop-ins-order-and-the-management-channel))
 - **sysctl** - Kernel parameters under `/proc/sys`. The running value is what counts; files in the `sysctl.d` directories set it at boot, in the order of their names. ([L05](lessons/L05-kernel-modules-and-sysctl.md#sysctl-running-value-file-and-the-order-of-files))
@@ -155,6 +163,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 - **target** - A host Ansible manages (managed node). The lab has eight: debian, ubuntu, rocky, alma, fedora, opensuse, arch, alpine. ([L00](lessons/L00-lab-and-ansible-basics.md#the-lab-one-control-node-eight-targets))
 - **template** - `ansible.builtin.template` renders a Jinja2 file with the variables of the host and writes the result to the target. ([L04](lessons/L04-platform-differences-as-data.md#templates-files-rendered-from-variables))
 - **`TMOUT`** - Shell variable: an idle interactive shell exits after this many seconds. Set in a profile script, so a non-interactive Ansible task does not see it. ([L08](lessons/L08-accounts-and-pam.md#login-shells-where-umask-and-tmout-live))
+- **`trusted=yes`** - apt source option (`Trusted: yes` in deb822): accept the source without a valid signature - without a warning. ([L16](lessons/L16-package-signatures.md#apt-signed-release-files-and-signed-by))
 
 ## U
 

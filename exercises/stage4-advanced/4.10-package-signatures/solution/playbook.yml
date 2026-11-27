@@ -1,0 +1,162 @@
+---
+- name: 4.10 - Package signatures, every repository verified
+  hosts: targets
+  become: true
+  vars:
+    # The package manager decides where signatures are switched on and how a source looks
+    cis_sig_by_pkg_mgr:
+      apt:
+        refresh: [apt-get, update]
+      dnf:
+        main_conf: /etc/dnf/dnf.conf
+        repo_dir: /etc/yum.repos.d
+        refresh: [dnf, -y, makecache]
+      dnf5:
+        main_conf: /etc/dnf/dnf.conf
+        repo_dir: /etc/yum.repos.d
+        refresh: [dnf, -y, makecache]
+      zypper:
+        main_conf: /etc/zypp/zypp.conf
+        repo_dir: /etc/zypp/repos.d
+        refresh: [zypper, -n, refresh]
+      pacman:
+        refresh: []
+      apk:
+        refresh: [apk, update]
+    cis_pkg_mgr: "{{ ansible_facts.pkg_mgr }}"
+    cis_sig: "{{ cis_sig_by_pkg_mgr[cis_pkg_mgr] | default({}) }}"
+
+  handlers:
+    - name: Refresh the package metadata
+      ansible.builtin.command:
+        argv: "{{ cis_sig.refresh }}"
+      changed_when: true
+      when: cis_sig.refresh | length > 0
+      listen: package sources changed
+
+  tasks:
+    - name: The package manager of this host is a known one
+      ansible.builtin.assert:
+        that: cis_pkg_mgr in cis_sig_by_pkg_mgr
+        fail_msg: "unknown package manager '{{ cis_pkg_mgr }}' on {{ inventory_hostname }}"
+        quiet: true
+
+    - name: Apt
+      when: cis_pkg_mgr == 'apt'
+      block:
+        - name: Sources in sources.list.d
+          ansible.builtin.find:
+            paths: /etc/apt/sources.list.d
+            patterns: ["*.list", "*.sources"]
+          register: cis_apt_all
+
+        - name: Sources that name their own key
+          ansible.builtin.find:
+            paths: /etc/apt/sources.list.d
+            patterns: ["*.list", "*.sources"]
+            contains: '(?i)(.*signed-by=|signed-by:)'
+          register: cis_apt_keyed
+
+        - name: Sources that switch the check off
+          ansible.builtin.find:
+            paths: /etc/apt/sources.list.d
+            patterns: ["*.list", "*.sources"]
+            contains: '(?i)(.*(trusted|allow-insecure)=yes|(trusted|allow-insecure):\s*yes)'
+          register: cis_apt_trusted
+
+        - name: Remove sources without a key of their own, or trusted without one
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: >-
+            {{ ((cis_apt_all.files | map(attribute='path'))
+                | difference(cis_apt_keyed.files | map(attribute='path'))
+                | union(cis_apt_trusted.files | map(attribute='path'))) | sort }}
+          notify: package sources changed
+
+    - name: Dnf, dnf5 and zypper
+      when: cis_pkg_mgr in ['dnf', 'dnf5', 'zypper']
+      block:
+        - name: Main switch, written down (the CIS audit reads the file)
+          community.general.ini_file:
+            path: "{{ cis_sig.main_conf }}"
+            section: main
+            option: gpgcheck
+            value: "1"
+            no_extra_spaces: true
+            mode: "0644"
+
+        - name: Repository files
+          ansible.builtin.find:
+            paths: "{{ cis_sig.repo_dir }}"
+            patterns: "*.repo"
+          register: cis_repo_all
+
+        - name: Repository files that name a key
+          ansible.builtin.find:
+            paths: "{{ cis_sig.repo_dir }}"
+            patterns: "*.repo"
+            contains: '\s*gpgkey\s*=\s*\S'
+          register: cis_repo_keyed
+
+        - name: Remove repository files without any key (they cannot verify anything)
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop: >-
+            {{ (cis_repo_all.files | map(attribute='path'))
+               | difference(cis_repo_keyed.files | map(attribute='path')) | sort }}
+          notify: package sources changed
+
+        - name: No repository switches the check off (the repository value wins over main)
+          ansible.builtin.replace:
+            path: "{{ item }}"
+            regexp: '^(\s*(pkg_)?gpgcheck\s*=\s*)(0|no|false|off)\s*$'
+            replace: '\g<1>1'
+          loop: "{{ cis_repo_keyed.files | map(attribute='path') | sort }}"
+          notify: package sources changed
+
+    - name: Pacman
+      when: cis_pkg_mgr == 'pacman'
+      block:
+        - name: Repositories
+          ansible.builtin.command: pacman-conf --repo-list
+          register: cis_pacman_repos
+          changed_when: false
+          check_mode: false
+
+        - name: Signature level each repository sets itself
+          ansible.builtin.command:
+            argv: [pacman-conf, -r, "{{ item }}", SigLevel]
+          loop: "{{ cis_pacman_repos.stdout_lines }}"
+          register: cis_pacman_levels
+          changed_when: false
+          check_mode: false
+
+        - name: Remove repositories that lower the package check (the global SigLevel is Required)
+          community.general.ini_file:
+            path: /etc/pacman.conf
+            section: "{{ item.item }}"
+            state: absent
+            create: false
+          loop: "{{ cis_pacman_levels.results }}"
+          loop_control:
+            label: "{{ item.item }}"
+          when: item.stdout is search('Package(Optional|Never|TrustAll)')
+
+    - name: Apk
+      when: cis_pkg_mgr == 'apk'
+      block:
+        - name: No global allow-untrusted
+          ansible.builtin.lineinfile:
+            path: /etc/apk/config
+            regexp: '^\s*allow-untrusted'
+            state: absent
+          notify: package sources changed
+
+        - name: Only https repositories (a local or http path has no transport protection)
+          ansible.builtin.lineinfile:
+            path: /etc/apk/repositories
+            regexp: '^\s*(?!#)(?!(@\S+\s+)?https://)\S'
+            state: absent
+          notify: package sources changed

@@ -29,8 +29,37 @@ MINOR: new features or exercises, PATCH: fixes.
 - Lesson L15 *System logging: journald, rsyslog and BusyBox syslogd* (`lab lesson 15`): the paths
   of a message, journald drop-ins and masking, `Storage=` and the flush, rsyslog syntaxes and
   `rsyslogd -N1`, handlers with `listen`, BusyBox `syslogd` and OpenRC runlevels. Rebuild: *none*
+- Exercise 4.10 *Package signatures: every repository verified, no bypass* (CIS 1.2, Level 1, all
+  eight targets, needs 0.02): the per-manager data comes from a dict keyed by `pkg_mgr` (apt,
+  dnf, dnf5, zypper, pacman, apk) and an `assert` guards it; a repository without a key of its
+  own is removed. The check reads the values in effect: `apt-config dump` and every source entry
+  (`Signed-By`, no `trusted`), the dnf API and libdnf5 (`gpgcheck` and `gpgkey` of every
+  repository), `zypper --xmlout lr` (`gpgcheck`, `repo_gpgcheck`, `gpgkey`), `pacman-conf`
+  (package level per repository), `/etc/apk/config` and https-only repositories, the
+  `gpgcheck=1` line in `dnf.conf` / `zypp.conf`, and a metadata refresh without a signature
+  warning. README, hints, explanation (EN and DE) with the measured pitfalls: `trusted=yes`
+  disables apt's check without a warning, the repository value of dnf wins over `[main]`,
+  fedora's `dnf.conf` has no `gpgcheck` line, zypper's `pkg_gpgcheck` reads `0` after a refresh,
+  `pacman-conf -r` shows only a section's own `SigLevel`, `apk update` exits 0 with an
+  `UNTRUSTED` index. CI runs it in the `solo stage4` job (122 s with `tools/run-solutions.sh
+  4.10` on WSL2, default timeout 900 s). Rebuild: *none*
+- Lesson L16 *Package signatures: apt, dnf, zypper, pacman and apk* (`lab lesson 16`): what a
+  signature proves, global and per-repository switches, keys bound to one source, the views in
+  effect per manager, data by `pkg_mgr`, list filters and `ini_file` sections. Rebuild: *none*
 
 ### Changed
+- Every target ships a planted "internal mirror" trusted without a key, for exercise 4.10: an
+  empty local repository in `/opt/lab/legacy-repo` with an apt source `[trusted=yes]` (debian,
+  ubuntu), a disabled dnf/zypper repository `lab-legacy` with `gpgcheck=0` and no key (rocky,
+  alma, fedora, opensuse), a pacman section `SigLevel = Optional TrustAll` (arch) and an apk
+  repository line plus `allow-untrusted` in `/etc/apk/config` (alpine). Nothing is ever
+  installed from it; `apt-get update`, `pacman -Sy` and `apk update` still succeed. The pacman
+  image also ships the sync database of `[lab-legacy]`: without it every pacman command warned
+  on stderr and `ansible.builtin.package_facts` failed on arch (first CI run).
+  Rebuild: *targets*
+- Catalogue 1.2 lists exercise 4.10; INDEX, LEARNING_PATH (lesson table, stage 4 time ~11.5 h),
+  README (17 lessons, ~8 h) and the glossary (`gpgcheck`, keyring, `pkg_gpgcheck`, `SigLevel`,
+  `Signed-By`, `trusted=yes`) follow. Rebuild: *none*
 - Catalogue 6.2 lists exercise 4.09; INDEX, LEARNING_PATH (lesson table, stage 4 time ~10.5 h),
   README (16 lessons) and the glossary (`ForwardToSyslog`, journald, `listen`, mask (drop-in),
   rsyslog, syslogd (BusyBox)) follow. Rebuild: *none*

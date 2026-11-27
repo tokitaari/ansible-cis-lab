@@ -17,7 +17,7 @@ audit mode, exceptions and staged rollout.
 |---|---|
 | **Targets** | Debian 13, Ubuntu 26.04, Rocky 10, AlmaLinux 10, Fedora 44, openSUSE Leap 16, Arch (rolling), Alpine 3.24 |
 | **Exercises** | 31 in 6 stages, ~28 h, each with goal, background, requirements, 3 graded hints, bonus, reference solution, explanation, automatic check |
-| **Lessons** | 16 self-study lessons (L00-L15, ~7.5 h reading) - concepts before the exercises, platform differences, pitfalls, self-check: `lab lesson`; a [glossary](docs/GLOSSARY.md) of the terms (`lab docs glossary`) |
+| **Lessons** | 17 self-study lessons (L00-L16, ~8 h reading) - concepts before the exercises, platform differences, pitfalls, self-check: `lab lesson`; a [glossary](docs/GLOSSARY.md) of the terms (`lab docs glossary`) |
 | **Languages** | English (default) and German: `lab lang de` |
 | **CIS** | Level 1 Server profile (+ selected Level 2); own control catalogue in [`cis-catalogue/controls.yml`](cis-catalogue/controls.yml); PDFs: see [`cis-catalogue/README.md`](cis-catalogue/README.md) |
 
@@ -114,7 +114,7 @@ fresh runs of 4.03 and 5.01, each in a job of its own (workflow `runtime`).
 | 1 Beginner | package, file, copy + validate, handlers, service | 1.01-1.05 |
 | 2 Building blocks | variables, loops, templates, per-family data, collections | 2.01-2.06 |
 | 3 Intermediate | roles, PAM, password policy, auditd, account audit | 3.01-3.05 |
-| 4 Advanced | audit reports, profiles/exceptions, data-driven multi-platform, vault, custom facts, faillock, firewall with rollback, async, system logging | 4.01-4.09 |
+| 4 Advanced | audit reports, profiles/exceptions, data-driven multi-platform, vault, custom facts, faillock, firewall with rollback, async, system logging, package signatures | 4.01-4.10 |
 | 5 Capstone | role with audit/enforce mode, rollout strategy, review of a community role | 5.01-5.03 |
 
 Details: [`docs/LEARNING_PATH.md`](docs/LEARNING_PATH.md) · index: [`exercises/INDEX.md`](exercises/INDEX.md)
@@ -130,7 +130,7 @@ targets/              one Dockerfile per distribution + common bootstrap (plants
 ansible/              ansible.cfg, inventory (grouped by OS family), shared roles
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, check
 cis-catalogue/        control catalogue + place for your CIS PDFs
-docs/                 learning path, lessons/ (L00-L15), glossary, container limits, troubleshooting
+docs/                 learning path, lessons/ (L00-L16), glossary, container limits, troubleshooting
 tools/                maintainer checks: release hygiene, static quality gate, runtime test of the
                       reference solutions (all three run in CI)
 work/                 YOUR solutions (mounted to /lab/work)

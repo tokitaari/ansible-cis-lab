@@ -23,7 +23,7 @@ being bored or overwhelmed:
 | **1 Beginner** | remove packages, fix permissions, change sshd and sudo *safely* (validate, handlers), use conditionals | ~2 h |
 | **2 Building blocks** | express platform differences as data, loop, template, use collections, separate namespaced from global kernel settings | ~3.5 h |
 | **3 Intermediate** | structure everything as a role with tags, wrap CLIs idempotently, work with PAM tooling, design audit rules | ~4.5 h |
-| **4 Advanced** | write audit-only reports, implement profiles and exceptions, build data-driven multi-platform roles, handle secrets, roll out firewalls safely, run long jobs async, configure one logger per host | ~10.5 h |
+| **4 Advanced** | write audit-only reports, implement profiles and exceptions, build data-driven multi-platform roles, handle secrets, roll out firewalls safely, run long jobs async, configure one logger per host, verify package signatures | ~11.5 h |
 | **5 Capstone** | deliver a production-grade CIS role with audit/enforce mode and a safe rollout, and review third-party roles critically | ~7 h |
 
 ## Lessons
@@ -52,13 +52,14 @@ answers. L01 belongs to no single exercise: read it after L00. The [glossary](GL
 | [L13 - Host firewall with nftables: changing the rules you reach the host through](lessons/L13-host-firewall-nftables.md) | 4.07 | ~30 min |
 | [L14 - Production rollout: failure handling, preflight, batches and community roles](lessons/L14-production-rollout.md) | 5.02, 5.03 | ~35 min |
 | [L15 - System logging: journald, rsyslog and BusyBox syslogd](lessons/L15-system-logging.md) | 4.09 | ~25 min |
+| [L16 - Package signatures: apt, dnf, zypper, pacman and apk](lessons/L16-package-signatures.md) | 4.10 | ~25 min |
 
 ## Recommended order and dependencies
 
 - **0.02 first** (or `lab solve 0.02`): Alpine needs Python for every later module.
 - Stage 2 exercises are independent of each other.
 - **3.01** collects 0.04-2.06 into a role; **4.03** extends it with stage 3; **5.01** turns it into the capstone.
-- 4.01, 4.02, 4.04-4.09 are independent "toolbox" exercises - pick by interest.
+- 4.01, 4.02, 4.04-4.10 are independent "toolbox" exercises - pick by interest.
 - **Starter files** exist for the playbook exercises of stages 0-2, plus the empty role skeleton of 3.01. From stage 3 on you
   extend your own role and playbooks, so `lab start` mostly just creates the work directory.
 - `lab start` warns when an exercise builds on one you have not passed yet (`requires` in its `meta.yml`).

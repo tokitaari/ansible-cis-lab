@@ -75,6 +75,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 
 - **Galaxy** - Die zentrale Sammelstelle von Ansible für Rollen und Collections. `ansible-galaxy install -r requirements.yml` installiert sie; pinne eine Version oder einen Commit. ([L14](lessons/L14-production-rollout.de.md#community-rollen-galaxy-git-und-was-du-liest-bevor-du-ausführst))
 - **gate** - Eine Prüfung am Anfang eines Rollouts, die ohne ausdrückliche Bestätigung nicht weitermacht: eine Variable ohne Default und ein `assert`. ([L14](lessons/L14-production-rollout.de.md#vorabprüfung-und-gate-prüfen-bevor-du-änderst))
+- **`gpgcheck`** - Option von dnf, dnf5 und zypper: die Signatur jedes Pakets gegen die importierten Schlüssel prüfen. Sie steht in `[main]` und in jedem Repository-Abschnitt, und der Wert im Repository gewinnt; dnf5 nennt sie `pkg_gpgcheck`. ([L16](lessons/L16-package-signatures.de.md#dnf-und-dnf5-gpgcheck-an-zwei-stellen))
 - **`group_vars` / `host_vars`** - Verzeichnisse neben dem Inventar oder dem Playbook; eine Datei mit dem Namen einer Gruppe oder eines Hosts setzt Variablen für sie. ([L04](lessons/L04-platform-differences-as-data.de.md#woher-variablen-kommen))
 
 ## H
@@ -96,6 +97,10 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 
 - **Jinja2** - Die Template-Sprache von Ansible: `{{ ausdruck }}`, Filter wie `| default(...)` und `{% ... %}`-Anweisungen. ([L04](lessons/L04-platform-differences-as-data.de.md#jinja2-in-ansible-ausdrücke-filter-undefinierte-werte))
 - **journald** - `systemd-journald`, der Protokolldienst der systemd-Hosts: besitzt `/dev/log` und speichert die Nachrichten in einem binären Journal (`journalctl`), flüchtig in `/run/log/journal` oder persistent in `/var/log/journal`. ([L15](lessons/L15-system-logging.de.md#wo-das-journal-liegt-storage-flush-und-größe))
+
+## K
+
+- **keyring** (Schlüsselbund) - Eine Datei oder ein Verzeichnis öffentlicher Schlüssel, deren Signaturen ein Paketmanager akzeptiert: die `Signed-By`-Datei und `trusted.gpg.d` von apt, die rpm-Schlüsseldatenbank, `/etc/pacman.d/gnupg` von pacman, `/etc/apk/keys` von apk. ([L16](lessons/L16-package-signatures.de.md#was-eine-signatur-beweist))
 
 ## L
 
@@ -124,6 +129,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 
 - **PAM** - Pluggable Authentication Modules: pro Dienst ein Stack von Modulen mit Typ (`auth`, `account`, `password`, `session`) und Control (`required`, `sufficient`, ...). ([L08](lessons/L08-accounts-and-pam.de.md#pam-typen-controls-und-wer-den-stack-schreibt))
 - **pattern** - Ein Ausdruck, der Hosts aus dem Inventar auswählt: `targets:!alpine_family` (alle außer einer Gruppe), `debian_family:redhat_family` (Vereinigung). ([L00](lessons/L00-lab-and-ansible-basics.de.md#inventar-und-patterns))
+- **`pkg_gpgcheck`** - zypper-Option für die Prüfung der Paketsignatur. Nicht gesetzt, ist sie nur an, solange die Metadaten des Repositorys nicht gültig signiert sind, und steht deshalb nach einer Aktualisierung auf `0`; bei dnf5 ist es der Name von `gpgcheck`. ([L16](lessons/L16-package-signatures.de.md#zypper-drei-schalter-und-ein-service))
 - **platform data** (Plattformdaten) - Werte, die sich je Plattform unterscheiden (Paketnamen, Pfade, Gruppen), in Datendateien statt in einem `when` an jedem Task. ([L04](lessons/L04-platform-differences-as-data.de.md#ein-task-viele-plattformen-daten-statt-bedingungen), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.de.md#plattformdaten-und-fähigkeits-flags))
 - **preflight** (Vorabprüfung) - Das erste Play eines Rollouts: es prüft nur, was die Änderung braucht, und scheitert, bevor sich etwas geändert hat. ([L14](lessons/L14-production-rollout.de.md#vorabprüfung-und-gate-prüfen-bevor-du-änderst))
 - **profile (CIS)** (Profil) - Eine Auswahl von Empfehlungen für einen Zweck: Level (1 oder 2) und Art des Systems (Server oder Workstation). In einer Rolle ist ein Profil einfach ein Wert. ([L01](lessons/L01-cis-benchmarks.de.md#profile-und-levels), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.de.md#ein-profil-ist-ein-wert))
@@ -144,6 +150,8 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **salt** - Ein Zufallswert, der in einen Passwort-Hash eingeht, damit gleiche Passwörter verschiedene Hashes ergeben. Ein fester Salt macht `password_hash` idempotent. ([L12](lessons/L12-secrets-with-ansible-vault.de.md#ein-passwort-hashen-salt-und-idempotenz))
 - **`serial`** - Play-Schlüsselwort: führt das Play in Wellen aus - eine Zahl, ein Prozentsatz oder eine Liste wie `[1, "50%", "100%"]`. ([L14](lessons/L14-production-rollout.de.md#wellen-wellenlisten-und-die-prüfung-nach-jeder-welle))
 - **shadow** - `/etc/shadow` enthält die Passwort-Hashes und die Alterungsfelder der Konten; normale Benutzer dürfen sie nicht lesen. Der Hash beginnt mit `$id$`, das das Verfahren nennt. ([L08](lessons/L08-accounts-and-pam.de.md#konten-datenbanken-passwd-shadow-und-was-das-passwortfeld-sagt))
+- **`SigLevel`** - pacman-Einstellung in `[options]` oder einem Repository-Abschnitt: wie streng (`Required`, `Optional`, `Never`) und gegen welche Schlüssel (`TrustedOnly`, `TrustAll`) Pakete und Datenbanken geprüft werden. `pacman-conf` gibt die wirksamen Werte aus. ([L16](lessons/L16-package-signatures.de.md#pacman-siglevel-und-ein-schlüsselbund))
+- **`Signed-By`** - Option einer apt-Quelle (deb822-Feld, `signed-by=` im einzeiligen Format): der Schlüsselbund, der als einziger für diese Quelle signieren darf. Ohne sie zählt jeder Schlüssel in `/etc/apt/trusted.gpg.d/`. ([L16](lessons/L16-package-signatures.de.md#apt-signierte-release-dateien-und-signed-by))
 - **sshd effective value** (effektiver Wert) - sshd liest Hauptdatei und Drop-ins der Reihe nach und nimmt für fast jedes Schlüsselwort den ersten Wert. `sshd -T` zeigt, was gilt. ([L03](lessons/L03-base-hardening.de.md#sshd-mehrere-dateien-ein-effektiver-wert))
 - **sudoers** - Die sudo-Konfiguration (`/etc/sudoers` und `sudoers.d`). Eine kaputte Datei kann dich root kosten, darum wird eine neue geprüft, bevor sie gilt (`validate`). ([L03](lessons/L03-base-hardening.de.md#sudo-drop-ins-reihenfolge-und-der-verwaltungskanal))
 - **sysctl** - Kernel-Parameter unter `/proc/sys`. Es zählt der laufende Wert; Dateien in den `sysctl.d`-Verzeichnissen setzen ihn beim Start, in der Reihenfolge ihrer Namen. ([L05](lessons/L05-kernel-modules-and-sysctl.de.md#sysctl-laufender-wert-datei-und-die-reihenfolge-der-dateien))
@@ -156,6 +164,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **target** - Ein Host, den Ansible verwaltet (Managed Node). Das Lab hat acht: debian, ubuntu, rocky, alma, fedora, opensuse, arch, alpine. ([L00](lessons/L00-lab-and-ansible-basics.de.md#das-lab-ein-control-node-acht-targets))
 - **template** - `ansible.builtin.template` rendert eine Jinja2-Datei mit den Variablen des Hosts und schreibt das Ergebnis auf das Target. ([L04](lessons/L04-platform-differences-as-data.de.md#templates-dateien-aus-variablen))
 - **`TMOUT`** - Shell-Variable: eine untätige interaktive Shell endet nach so vielen Sekunden. Gesetzt in einem Profil-Skript, darum sieht ein nicht interaktiver Ansible-Task sie nicht. ([L08](lessons/L08-accounts-and-pam.de.md#login-shells-wo-umask-und-tmout-wohnen))
+- **`trusted=yes`** - Option einer apt-Quelle (`Trusted: yes` in deb822): die Quelle ohne gültige Signatur annehmen - ohne Warnung. ([L16](lessons/L16-package-signatures.de.md#apt-signierte-release-dateien-und-signed-by))
 
 ## U
 
