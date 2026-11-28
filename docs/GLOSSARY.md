@@ -51,6 +51,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 ## D
 
 - **dead-man switch** - A timed job that undoes a risky change unless you confirm it in time. If the change cuts your connection, the host repairs itself. ([L13](lessons/L13-host-firewall-nftables.md#a-change-you-may-not-survive-the-dead-man-switch))
+- **default driver (Molecule)** - Molecule's only built-in driver. With `managed: false` it creates and destroys nothing: the scenario runs against the hosts of an inventory you pass. ([L18](lessons/L18-testing-roles.md#molecule-scenarios-and-sequences))
 - **`defaults/` and `vars/`** - Two variable directories of a role: `defaults/` has the lowest precedence and is the interface for users, `vars/` has a high precedence and holds internal data. ([L07](lessons/L07-roles-tags-project-structure.md#defaults-and-vars-an-interface-and-internal-data))
 - **`delegate_to` / `run_once`** - `delegate_to` runs a task on another host (often `localhost`, the control node), `run_once` runs it for the first host of the batch only. ([L10](lessons/L10-compliance-reporting.md#from-per-host-results-to-one-report), [L14](lessons/L14-production-rollout.md#preflight-and-gate-check-before-you-change))
 - **diff mode** - `--diff`: shows changes to files line by line. With `--check` it is a preview of the change. ([L00](lessons/L00-lab-and-ansible-basics.md#idempotency-describe-the-state-not-the-steps), [L02](lessons/L02-safe-changes.md#check-mode-what-it-can-and-cannot-predict))
@@ -67,6 +68,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 - **faillock** - PAM module (`pam_faillock`) that locks an account after a number of failed logins; settings in `faillock.conf`, the `faillock` command shows and resets the counter. ([L08](lessons/L08-accounts-and-pam.md#two-modules-on-the-stack-pwquality-and-faillock))
 - **finding** - The result of one control on one host, kept as data with a status - not a failed task that stops the run. ([L10](lessons/L10-compliance-reporting.md#findings-are-data-not-failures))
 - **`first_found`** - Lookup that returns the first existing file from a list - written from the most specific name (distribution) to a generic one. ([L07](lessons/L07-roles-tags-project-structure.md#defaults-and-vars-an-interface-and-internal-data), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.md#platform-data-and-capability-flags))
+- **fixture (pytest)** - A value pytest hands to a test function by the name of its argument. testinfra's `host` fixture runs the function once per host. ([L18](lessons/L18-testing-roles.md#testinfra-tests-in-python-against-real-hosts))
 - **`ForwardToSyslog`** - journald setting: hand a copy of every message to a traditional syslog daemon over a socket. An rsyslog that receives with `imuxsock` needs it, one that reads the journal (`imjournal`) does not. ([L15](lessons/L15-system-logging.md#one-message-several-paths))
 - **FQCN** - Fully qualified collection name of a module, such as `ansible.builtin.copy`. The `production` profile of ansible-lint demands it. ([L05](lessons/L05-kernel-modules-and-sysctl.md#collections-where-ansibleposixsysctl-comes-from))
 
@@ -85,6 +87,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 
 ## I
 
+- **idempotence step (Molecule)** - Molecule runs the converge playbook a second time and fails if a task reports `changed`. It finds tasks that change on every run, not a wrong state. ([L18](lessons/L18-testing-roles.md#a-ladder-of-tests))
 - **idempotency** - Running the same playbook again changes nothing once the state is reached. You describe the state, not the steps. ([L00](lessons/L00-lab-and-ansible-basics.md#idempotency-describe-the-state-not-the-steps))
 - **immutable audit configuration** - `-e 2` as the last audit rule locks the rules until the next reboot; nothing can change them, not even root. ([L09](lessons/L09-auditing-and-integrity.md#rule-files-load-order-and-the-lock))
 - **`import_tasks` / `include_tasks`** - Static and dynamic inclusion: `import_tasks` is resolved when the playbook is read, `include_tasks` at run time (file name from a variable, in a loop). ([L07](lessons/L07-roles-tags-project-structure.md#import_tasks-and-include_tasks-static-and-dynamic))
@@ -117,6 +120,8 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 - **mode (file)** - The permission bits of a file. Write it as a quoted string (`"0644"`): YAML reads `644` as a decimal number. A CIS mode is a maximum - stricter passes. ([L03](lessons/L03-base-hardening.md#modes-bits-notation-and-why-compliance-is-a-bound))
 - **`modprobe.d`** - Configuration directories of `modprobe`. `install <module> /bin/false` stops a load by name; kmod reads the files in name order and uses the first `install` line it finds. ([L05](lessons/L05-kernel-modules-and-sysctl.md#kernel-modules-who-loads-them-and-what-modprobed-can-stop))
 - **module** - The unit of work: Ansible copies it to the target and runs it with Python (except `raw`), and it reports `ok`, `changed` or `failed`. ([L00](lessons/L00-lab-and-ansible-basics.md#how-a-module-runs))
+- **Molecule** - Test framework for roles: runs the test sequence of a scenario (converge, idempotence, verify ...) against test instances or hosts that exist. ([L18](lessons/L18-testing-roles.md#molecule-scenarios-and-sequences))
+- **mutation testing** - Breaking what a test checks on purpose, to see the test fail. A test that stays green when its subject is broken tests nothing. ([L18](lessons/L18-testing-roles.md#expected-values-and-tests-that-can-fail))
 
 ## N
 
@@ -147,6 +152,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 ## S
 
 - **salt** - A random value mixed into a password hash so that equal passwords give different hashes. A fixed salt makes `password_hash` idempotent. ([L12](lessons/L12-secrets-with-ansible-vault.md#hashing-a-password-salt-and-idempotency))
+- **scenario (Molecule)** - A directory `molecule/<name>/` with `molecule.yml`, `converge.yml` and the tests; `molecule test -s <name>` runs it. ([L18](lessons/L18-testing-roles.md#molecule-scenarios-and-sequences))
 - **`serial`** - Play keyword: runs the play in batches - a number, a percentage or a list such as `[1, "50%", "100%"]`. ([L14](lessons/L14-production-rollout.md#batches-batch-lists-and-the-check-after-each-batch))
 - **shadow** - `/etc/shadow` holds the password hashes and the aging fields of the accounts; ordinary users may not read it. The hash starts with `$id$`, which names the algorithm. ([L08](lessons/L08-accounts-and-pam.md#account-databases-passwd-shadow-and-what-the-password-field-says))
 - **`SigLevel`** - pacman setting in `[options]` or a repository section: how strictly (`Required`, `Optional`, `Never`) and against which keys (`TrustedOnly`, `TrustAll`) packages and databases are checked. `pacman-conf` prints the values in effect. ([L16](lessons/L16-package-signatures.md#pacman-siglevel-and-one-keyring))
@@ -162,6 +168,9 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 - **tag** - A label on tasks, blocks or roles; `--tags` and `--skip-tags` choose what runs. `always` and `never` are special. ([L07](lessons/L07-roles-tags-project-structure.md#tags-choosing-what-runs))
 - **target** - A host Ansible manages (managed node). The lab has eight: debian, ubuntu, rocky, alma, fedora, opensuse, arch, alpine. ([L00](lessons/L00-lab-and-ansible-basics.md#the-lab-one-control-node-eight-targets))
 - **template** - `ansible.builtin.template` renders a Jinja2 file with the variables of the host and writes the result to the target. ([L04](lessons/L04-platform-differences-as-data.md#templates-files-rendered-from-variables))
+- **test oracle** - Where the expected value of a test comes from. It must not be the code under test: a test that reads a role's own variables passes on every wrong value in them. ([L18](lessons/L18-testing-roles.md#expected-values-and-tests-that-can-fail))
+- **test sequence (Molecule)** - The steps that `molecule test` runs, in order; `scenario.test_sequence` sets them. ([L18](lessons/L18-testing-roles.md#molecule-scenarios-and-sequences))
+- **testinfra** - pytest plugin that tests the state of hosts in Python (`host.file()`, `host.service()` ...). Its `ansible://` backend reads an Ansible inventory and connects with its own `ssh`. ([L18](lessons/L18-testing-roles.md#testinfra-tests-in-python-against-real-hosts))
 - **`TMOUT`** - Shell variable: an idle interactive shell exits after this many seconds. Set in a profile script, so a non-interactive Ansible task does not see it. ([L08](lessons/L08-accounts-and-pam.md#login-shells-where-umask-and-tmout-live))
 - **`trusted=yes`** - apt source option (`Trusted: yes` in deb822): accept the source without a valid signature - without a warning. ([L16](lessons/L16-package-signatures.md#apt-signed-release-files-and-signed-by))
 
@@ -174,6 +183,7 @@ lesson section that explains it in depth. In the lab, `lab lesson <n>` opens a l
 - **`validate`** - Parameter of `copy`, `template` and others: a command that tests the new file (`%s`) before it replaces the old one. ([L02](lessons/L02-safe-changes.md#validate-test-the-file-before-it-exists))
 - **variable precedence** - The rules for which of several definitions of a variable wins: `-e` beats everything, role defaults lose to every other variable. ([L04](lessons/L04-platform-differences-as-data.md#where-variables-come-from))
 - **Vault** - Ansible Vault encrypts files or single values with a password; vault ids tell several passwords apart. ([L12](lessons/L12-secrets-with-ansible-vault.md#vault-files-passwords-ids))
+- **verifier (Molecule)** - The tool that runs the tests in Molecule's `verify` step: `ansible` (a `verify.yml`) or `testinfra`. ([L18](lessons/L18-testing-roles.md#testinfra-tests-in-python-against-real-hosts))
 
 ## W
 

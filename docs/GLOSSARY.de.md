@@ -52,6 +52,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 ## D
 
 - **dead-man switch** (Totmannschalter) - Ein zeitgesteuerter Job, der eine riskante Änderung zurücknimmt, wenn du sie nicht rechtzeitig bestätigst. Kappt die Änderung deine Verbindung, repariert sich der Host selbst. ([L13](lessons/L13-host-firewall-nftables.de.md#eine-änderung-die-du-vielleicht-nicht-überlebst-der-totmannschalter))
+- **default driver (Molecule)** (Default-Driver) - Der einzige eingebaute Driver von Molecule. Mit `managed: false` legt er nichts an und löscht nichts: Das Szenario läuft gegen die Hosts eines Inventars, das du übergibst. ([L18](lessons/L18-testing-roles.de.md#molecule-szenarien-und-sequenzen))
 - **`defaults/` and `vars/`** - Zwei Variablen-Verzeichnisse einer Rolle: `defaults/` hat den niedrigsten Rang und ist die Schnittstelle für Nutzer, `vars/` hat einen hohen Rang und hält interne Daten. ([L07](lessons/L07-roles-tags-project-structure.de.md#defaults-und-vars-eine-schnittstelle-und-interne-daten))
 - **`delegate_to` / `run_once`** - `delegate_to` führt einen Task auf einem anderen Host aus (oft `localhost`, dem Control-Node), `run_once` nur für den ersten Host der Welle. ([L10](lessons/L10-compliance-reporting.de.md#von-den-ergebnissen-pro-host-zu-einem-bericht), [L14](lessons/L14-production-rollout.de.md#vorabprüfung-und-gate-prüfen-bevor-du-änderst))
 - **diff mode** (Diff-Modus) - `--diff`: zeigt Änderungen an Dateien Zeile für Zeile. Mit `--check` ist es eine Vorschau der Änderung. ([L00](lessons/L00-lab-and-ansible-basics.de.md#idempotenz-den-zustand-beschreiben-nicht-die-schritte), [L02](lessons/L02-safe-changes.de.md#check-modus-was-er-vorhersagen-kann-und-was-nicht))
@@ -68,6 +69,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **faillock** - PAM-Modul (`pam_faillock`), das ein Konto nach einer Anzahl fehlgeschlagener Anmeldungen sperrt; Einstellungen in `faillock.conf`, das Kommando `faillock` zeigt und löscht den Zähler. ([L08](lessons/L08-accounts-and-pam.de.md#zwei-module-im-stack-pwquality-und-faillock))
 - **finding** (Befund) - Das Ergebnis einer Kontrolle auf einem Host, als Datensatz mit einem Status festgehalten - kein gescheiterter Task, der den Lauf anhält. ([L10](lessons/L10-compliance-reporting.de.md#befunde-sind-daten-keine-fehler))
 - **`first_found`** - Lookup, das die erste vorhandene Datei aus einer Liste liefert - geschrieben vom spezifischsten Namen (Distribution) bis zu einem allgemeinen. ([L07](lessons/L07-roles-tags-project-structure.de.md#defaults-und-vars-eine-schnittstelle-und-interne-daten), [L11](lessons/L11-profiles-exceptions-and-data-driven-roles.de.md#plattformdaten-und-fähigkeits-flags))
+- **fixture (pytest)** (Fixture) - Ein Wert, den pytest einer Testfunktion über den Namen ihres Arguments übergibt. Die Fixture `host` von testinfra führt die Funktion einmal je Host aus. ([L18](lessons/L18-testing-roles.de.md#testinfra-tests-in-python-gegen-echte-hosts))
 - **`ForwardToSyslog`** - journald-Einstellung: eine Kopie jeder Nachricht über einen Socket an einen klassischen Syslog-Daemon geben. Ein rsyslog, das mit `imuxsock` empfängt, braucht sie, eines, das das Journal liest (`imjournal`), nicht. ([L15](lessons/L15-system-logging.de.md#eine-nachricht-mehrere-wege))
 - **FQCN** - Vollqualifizierter Collection-Name eines Moduls, etwa `ansible.builtin.copy`. Das Profil `production` von ansible-lint verlangt ihn. ([L05](lessons/L05-kernel-modules-and-sysctl.de.md#collections-woher-ansibleposixsysctl-kommt))
 
@@ -86,6 +88,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 
 ## I
 
+- **idempotence step (Molecule)** (Idempotenz-Schritt) - Molecule führt das converge-Playbook ein zweites Mal aus und scheitert, wenn ein Task `changed` meldet. Er findet Tasks, die bei jedem Lauf ändern, keinen falschen Zustand. ([L18](lessons/L18-testing-roles.de.md#eine-leiter-von-tests))
 - **idempotency** (Idempotenz) - Derselbe Playbook-Lauf ändert nichts mehr, sobald der Zustand erreicht ist. Du beschreibst den Zustand, nicht die Schritte. ([L00](lessons/L00-lab-and-ansible-basics.de.md#idempotenz-den-zustand-beschreiben-nicht-die-schritte))
 - **immutable audit configuration** (Sperre) - `-e 2` als letzte Audit-Regel sperrt die Regeln bis zum nächsten Neustart; niemand kann sie ändern, auch root nicht. ([L09](lessons/L09-auditing-and-integrity.de.md#regeldateien-lade-reihenfolge-und-die-sperre))
 - **`import_tasks` / `include_tasks`** - Statisches und dynamisches Einbinden: `import_tasks` wird beim Lesen des Playbooks aufgelöst, `include_tasks` zur Laufzeit (Dateiname aus einer Variablen, in einer Schleife). ([L07](lessons/L07-roles-tags-project-structure.de.md#import_tasks-und-include_tasks-statisch-und-dynamisch))
@@ -118,6 +121,8 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **mode (file)** (Modus) - Die Rechte-Bits einer Datei. Schreib ihn als Zeichenkette in Anführungszeichen (`"0644"`): YAML liest `644` als Dezimalzahl. Ein CIS-Modus ist ein Maximum - strenger besteht. ([L03](lessons/L03-base-hardening.de.md#modi-bits-schreibweise-und-warum-compliance-eine-schranke-ist))
 - **`modprobe.d`** - Konfigurationsverzeichnisse von `modprobe`. `install <modul> /bin/false` stoppt das Laden über den Namen; kmod liest die Dateien in Namensreihenfolge und nimmt die erste `install`-Zeile, die es findet. ([L05](lessons/L05-kernel-modules-and-sysctl.de.md#kernelmodule-wer-sie-lädt-und-was-modprobed-stoppen-kann))
 - **module** (Modul) - Die Arbeitseinheit: Ansible kopiert es auf das Target und führt es mit Python aus (außer `raw`), es meldet `ok`, `changed` oder `failed`. ([L00](lessons/L00-lab-and-ansible-basics.de.md#wie-ein-modul-läuft))
+- **Molecule** - Test-Framework für Rollen: führt die Testsequenz eines Szenarios aus (converge, idempotence, verify ...), gegen Testinstanzen oder Hosts, die es schon gibt. ([L18](lessons/L18-testing-roles.de.md#molecule-szenarien-und-sequenzen))
+- **mutation testing** (Mutationstesten) - Absichtlich verletzen, was ein Test prüft, um ihn scheitern zu sehen. Ein Test, der grün bleibt, wenn sein Gegenstand kaputt ist, prüft nichts. ([L18](lessons/L18-testing-roles.de.md#sollwerte-und-tests-die-scheitern-können))
 
 ## N
 
@@ -148,6 +153,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 ## S
 
 - **salt** - Ein Zufallswert, der in einen Passwort-Hash eingeht, damit gleiche Passwörter verschiedene Hashes ergeben. Ein fester Salt macht `password_hash` idempotent. ([L12](lessons/L12-secrets-with-ansible-vault.de.md#ein-passwort-hashen-salt-und-idempotenz))
+- **scenario (Molecule)** (Szenario) - Ein Verzeichnis `molecule/<name>/` mit `molecule.yml`, `converge.yml` und den Tests; `molecule test -s <name>` führt es aus. ([L18](lessons/L18-testing-roles.de.md#molecule-szenarien-und-sequenzen))
 - **`serial`** - Play-Schlüsselwort: führt das Play in Wellen aus - eine Zahl, ein Prozentsatz oder eine Liste wie `[1, "50%", "100%"]`. ([L14](lessons/L14-production-rollout.de.md#wellen-wellenlisten-und-die-prüfung-nach-jeder-welle))
 - **shadow** - `/etc/shadow` enthält die Passwort-Hashes und die Alterungsfelder der Konten; normale Benutzer dürfen sie nicht lesen. Der Hash beginnt mit `$id$`, das das Verfahren nennt. ([L08](lessons/L08-accounts-and-pam.de.md#konten-datenbanken-passwd-shadow-und-was-das-passwortfeld-sagt))
 - **`SigLevel`** - pacman-Einstellung in `[options]` oder einem Repository-Abschnitt: wie streng (`Required`, `Optional`, `Never`) und gegen welche Schlüssel (`TrustedOnly`, `TrustAll`) Pakete und Datenbanken geprüft werden. `pacman-conf` gibt die wirksamen Werte aus. ([L16](lessons/L16-package-signatures.de.md#pacman-siglevel-und-ein-schlüsselbund))
@@ -163,6 +169,9 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **tag** - Eine Markierung an Tasks, Blöcken oder Rollen; `--tags` und `--skip-tags` wählen, was läuft. `always` und `never` sind besonders. ([L07](lessons/L07-roles-tags-project-structure.de.md#tags-auswählen-was-läuft))
 - **target** - Ein Host, den Ansible verwaltet (Managed Node). Das Lab hat acht: debian, ubuntu, rocky, alma, fedora, opensuse, arch, alpine. ([L00](lessons/L00-lab-and-ansible-basics.de.md#das-lab-ein-control-node-acht-targets))
 - **template** - `ansible.builtin.template` rendert eine Jinja2-Datei mit den Variablen des Hosts und schreibt das Ergebnis auf das Target. ([L04](lessons/L04-platform-differences-as-data.de.md#templates-dateien-aus-variablen))
+- **test oracle** (Testorakel) - Woher der Sollwert eines Tests kommt. Er darf nicht der getestete Code sein: Ein Test, der die Variablen einer Rolle liest, besteht bei jedem falschen Wert darin. ([L18](lessons/L18-testing-roles.de.md#sollwerte-und-tests-die-scheitern-können))
+- **test sequence (Molecule)** (Testsequenz) - Die Schritte, die `molecule test` der Reihe nach ausführt; `scenario.test_sequence` legt sie fest. ([L18](lessons/L18-testing-roles.de.md#molecule-szenarien-und-sequenzen))
+- **testinfra** - pytest-Plugin, das den Zustand von Hosts in Python prüft (`host.file()`, `host.service()` ...). Sein Backend `ansible://` liest ein Ansible-Inventar und verbindet sich mit eigenem `ssh`. ([L18](lessons/L18-testing-roles.de.md#testinfra-tests-in-python-gegen-echte-hosts))
 - **`TMOUT`** - Shell-Variable: eine untätige interaktive Shell endet nach so vielen Sekunden. Gesetzt in einem Profil-Skript, darum sieht ein nicht interaktiver Ansible-Task sie nicht. ([L08](lessons/L08-accounts-and-pam.de.md#login-shells-wo-umask-und-tmout-wohnen))
 - **`trusted=yes`** - Option einer apt-Quelle (`Trusted: yes` in deb822): die Quelle ohne gültige Signatur annehmen - ohne Warnung. ([L16](lessons/L16-package-signatures.de.md#apt-signierte-release-dateien-und-signed-by))
 
@@ -175,6 +184,7 @@ verweist auf den Abschnitt der Lektion, der ihn ausführlich erklärt. Im Lab ö
 - **`validate`** - Parameter von `copy`, `template` und anderen: ein Kommando, das die neue Datei (`%s`) prüft, bevor sie die alte ersetzt. ([L02](lessons/L02-safe-changes.de.md#validate-die-datei-testen-bevor-sie-existiert))
 - **variable precedence** (Variablen-Rangfolge) - Die Regeln, welche von mehreren Definitionen einer Variablen gewinnt: `-e` schlägt alles, Rollen-Defaults verlieren gegen jede andere Variable. ([L04](lessons/L04-platform-differences-as-data.de.md#woher-variablen-kommen))
 - **Vault** - Ansible Vault verschlüsselt Dateien oder einzelne Werte mit einem Passwort; Vault-IDs unterscheiden mehrere Passwörter. ([L12](lessons/L12-secrets-with-ansible-vault.de.md#vault-dateien-passwörter-ids))
+- **verifier (Molecule)** (Verifier) - Das Werkzeug, das im Schritt `verify` von Molecule die Tests ausführt: `ansible` (eine `verify.yml`) oder `testinfra`. ([L18](lessons/L18-testing-roles.de.md#testinfra-tests-in-python-gegen-echte-hosts))
 
 ## W
 

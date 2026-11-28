@@ -1,0 +1,36 @@
+---
+# cis_mini - fixture role of exercise 6.01: account files, shadow files and login banners.
+# The requirements it must meet are in the README of 6.01.
+- name: Account files are root-owned and world-readable only
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: [/etc/passwd, /etc/group]
+
+- name: Find the shadow files
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop: [/etc/shadow, /etc/gshadow]
+  register: cis_mini_shadow_files
+
+- name: Shadow files per OS family
+  ansible.builtin.file:
+    path: "{{ item.item }}"
+    owner: root
+    group: "{{ cis_mini_shadow[ansible_facts.os_family].group }}"
+    mode: "{{ cis_mini_shadow[ansible_facts.os_family].mode }}"
+  loop: "{{ cis_mini_shadow_files.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists
+
+- name: Login banners without system information
+  ansible.builtin.copy:
+    content: "{{ cis_mini_banner }}\n"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: [/etc/issue, /etc/issue.net]

@@ -65,3 +65,9 @@ The *Lesson* column names the lesson(s) that prepare the exercise: read them fir
 | 5.01 | [Capstone: CIS role with audit and enforce mode](stage5-capstone/5.01-capstone-cis-role/README.md) | ★★★★★ | ~240 min | Sections 1-7 | `targets` | [L10](../docs/lessons/L10-compliance-reporting.md) |
 | 5.02 | [Rollout strategy: preflight, canary, batches](stage5-capstone/5.02-rollout-strategy/README.md) | ★★★★★ | ~90 min | (operations) | `targets` | [L14](../docs/lessons/L14-production-rollout.md) |
 | 5.03 | [Review: your role vs. a community CIS role](stage5-capstone/5.03-compare-with-community-role/README.md) | ★★★★☆ | ~90 min | all | `(reading)` | [L14](../docs/lessons/L14-production-rollout.md) |
+
+## Stage 6 - Beyond the benchmark
+
+| ID | Title | Difficulty | Time | CIS | Hosts | Lesson |
+|---|---|---|---|---|---|---|
+| 6.01 | [Testing a role: Molecule scenario with testinfra](stage6-beyond-the-benchmark/6.01-testing-the-role/README.md) | ★★★★☆ | ~90 min | - | `targets` | [L18](../docs/lessons/L18-testing-roles.md) |

@@ -50,7 +50,8 @@ jobs:
         # longest first: the chain sets the wall time. Measured in CI (2026-11-11, whole job):
         # chain 36 min, fresh 5.01 27, fresh 4.03 20, stages 4-12. minutes = the worst case of
         # one hung run (its timeout in tools/run-solutions.sh) + the other runs + build and start,
-        # so the runner's own timeout fires first and the summary and logs are still written
+        # so the runner's own timeout fires first and the summary and logs are still written.
+        # Stage 6 (6.01 only, default timeout 900 s): 15 min + 0.02 + build = 30 min.
         include:
           - name: chain
             key: chain
@@ -84,6 +85,10 @@ jobs:
             key: stage4
             specs: stage4
             minutes: 60
+          - name: solo stage6
+            key: stage6
+            specs: stage6
+            minutes: 30
     steps:
       - uses: actions/checkout@v7
       - name: Runner facts

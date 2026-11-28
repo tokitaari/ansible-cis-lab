@@ -1,0 +1,33 @@
+---
+# Scenario "default" of exercise 6.01: the role cis_mini on the eight lab targets that already
+# exist - the default driver creates and destroys nothing (managed: false).
+driver:
+  name: default
+  options:
+    managed: false
+ansible:
+  # Molecule runs ansible-playbook with an ansible.cfg of its own, so the settings of
+  # /lab/ansible/ansible.cfg are gone: the SSH options and the role path come back here.
+  cfg:
+    ssh_connection:
+      pipelining: true
+      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=ERROR
+  env:
+    # work layout: <work>/6.01 next to <work>/roles; 'lab solve': roles/ inside the project
+    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/../roles:${MOLECULE_PROJECT_DIRECTORY}/roles
+  executor:
+    args:
+      ansible_playbook:
+        - --inventory=/lab/ansible/inventory/hosts.yml
+verifier:
+  name: testinfra
+  options:
+    # testinfra reads the hosts from this inventory, not from the one Molecule writes
+    ansible-inventory: /lab/ansible/inventory/hosts.yml
+    hosts: targets
+scenario:
+  test_sequence:
+    - syntax
+    - converge
+    - idempotence
+    - verify

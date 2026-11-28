@@ -20,7 +20,7 @@
 # spec:
 #   stage<N>    the solo runs of stage N in id order, plus the extra level runs below; the
 #               cumulative and the skipped exercises are listed as SKIPPED
-#   solo        stage0 ... stage5
+#   solo        stage0 ... stage6
 #   chain       the chain steps below, rows 'chain/<id>'
 #   all         solo, chain and the fresh runs below
 #   <id>        one exercise, e.g. 2.03; a cumulative one (4.03, 5.01, 5.02) runs fresh, row
@@ -122,7 +122,7 @@ in_control() {
   local id="$1" lvl="$2" rerun="$3" mode="$4" d solve idem extra cargs r rd rs rc f
   export LAB_WORK_DIR="$WD" ANSIBLE_ROLES_PATH="$WD/roles:$ROOT/ansible/roles"
   export LAB_STATE_DIR="$STATE" ANSIBLE_NOCOLOR=1 ANSIBLE_FORCE_COLOR=0
-  rm -rf /tmp/lab-check-*.log /tmp/lab-402-* /tmp/lab-502-* /tmp/lab-run-*.log
+  rm -rf /tmp/lab-check-*.log /tmp/lab-402-* /tmp/lab-502-* /tmp/lab-601-* /tmp/lab-run-*.log
   [[ "$mode" == next ]] || rm -rf "${WD:?}" "${LAB_STATE_DIR:?}" "${DONE:?}"
   mkdir -p "$WD" "$LAB_STATE_DIR" "$DONE"
   d="$(exdir "$id")" || { echo "unknown exercise $id"; return 11; }
@@ -167,7 +167,7 @@ in_control() {
   lab check "$id" $cargs </dev/null 2>&1 | tee /tmp/lab-run-check.log
   rc=${PIPESTATUS[0]}
   if [[ $rc -ne 0 ]]; then
-    for f in /tmp/lab-check-*.log; do [[ -f "$f" ]] && { echo "--- $f"; cat "$f"; }; done
+    for f in /tmp/lab-check-*.log /tmp/lab-601-*/*.log; do [[ -f "$f" ]] && { echo "--- $f"; cat "$f"; }; done
     mark_hosts failed /tmp/lab-run-check.log /tmp/lab-check-*.log
     return 13
   fi
@@ -223,7 +223,7 @@ ids_of_stage() { local d; for d in "$ROOT"/exercises/stage"$1"-*/[0-9].[0-9][0-9
 plan_spec() {
   local s="$1" n id e ids
   case "$s" in
-    solo) for n in 0 1 2 3 4 5; do plan_spec "stage$n"; done ;;
+    solo) for n in 0 1 2 3 4 5 6; do plan_spec "stage$n"; done ;;
     chain)
       for e in "${CHAIN[@]}"; do
         id="${e%@2}"
@@ -247,7 +247,7 @@ plan_spec() {
       if [[ -n "${SKIP[$id]:-}" ]]; then add skip "$s" "${SKIP[$id]}"
       elif in_list "$id" "${CUMULATIVE[@]}"; then add run "fresh/$s"
       else add run "$s"; fi ;;
-    *) die "unknown spec '$s' (stage0 ... stage5, solo, chain, all, <id>, <id>@2)" ;;
+    *) die "unknown spec '$s' (stage0 ... stage6, solo, chain, all, <id>, <id>@2)" ;;
   esac
 }
 for s in "${specs[@]}"; do plan_spec "$s"; done

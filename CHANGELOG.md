@@ -46,8 +46,36 @@ MINOR: new features or exercises, PATCH: fixes.
 - Lesson L16 *Package signatures: apt, dnf, zypper, pacman and apk* (`lab lesson 16`): what a
   signature proves, global and per-repository switches, keys bound to one source, the views in
   effect per manager, data by `pkg_mgr`, list filters and `ini_file` sections. Rebuild: *none*
+- Stage 6 *Beyond the benchmark* with exercise 6.01 *Testing a role: Molecule scenario with
+  testinfra* (no CIS section, all eight targets, needs 0.02): `lab start 6.01` copies the small
+  role `cis_mini` (account files, shadow files per family, login banners) with two faults; the
+  learner writes a Molecule scenario with the default driver against the lab inventory and
+  testinfra tests from the requirements table, and fixes the role until `molecule test` passes.
+  The check runs `molecule test` (junit: tests on all eight targets), checks the requirements
+  itself, then breaks one requirement on each of six targets and expects `molecule verify` to
+  fail exactly there, and converges them back. README, hints, explanation (EN and DE) with the
+  measured pitfalls: Molecule's own `ansible.cfg` drops the inventory, `roles_path` and the SSH
+  options; testinfra gets Molecule's empty inventory ("No inventory was parsed"); without the
+  lab's `ssh_args` `molecule verify` alone stops at "Host key verification failed"; a failed
+  idempotence step exits 1 while Molecule's summary says "Successful". Measured with the
+  reference on WSL2: `molecule test` 65-69 s, the check 143 s; CI runs it in the new job
+  `solo stage6` (default timeout 900 s). Rebuild: *control*
+- Lesson L18 *Testing roles: Molecule, testinfra and tests that can fail* (`lab lesson 18`): the
+  ladder lint, syntax, converge, idempotence, verify; scenarios, sequences and the default
+  driver; what Molecule's `ansible.cfg` takes away; testinfra with `host` and `parametrize`;
+  expected values from the requirements and tests that can fail. Rebuild: *none*
 
 ### Changed
+- `control/requirements.txt` pins `molecule==26.11.1` and `pytest-testinfra==10.2.2` for 6.01
+  (they resolve with `ansible==14.6.0` and `ansible-lint==26.11.0` without changing a pin and
+  add `pytest`, `pluggy`, `iniconfig` and `enrich`). Rebuild: *control*
+- Stage 6 in the lab tooling: `tools/run-solutions.sh solo` runs stage0 ... stage6, the workflow
+  `runtime` has a job `solo stage6` (30 min), `tools/static-check.sh` lints the 6.01 solution
+  with its role. INDEX (stage 6), LEARNING_PATH (stage 6 ~1.5 h, lesson table, order notes),
+  README (34 exercises in 7 stages, ~32 h - the line still said 31 in 6 stages, ~28 h; 18
+  lessons, ~8.5 h; CI runs stage 6) and the glossary (default driver, fixture, idempotence step,
+  Molecule, mutation testing, scenario, test oracle, test sequence, testinfra, verifier)
+  follow. Rebuild: *none*
 - Every target ships a planted "internal mirror" trusted without a key, for exercise 4.10: an
   empty local repository in `/opt/lab/legacy-repo` with an apt source `[trusted=yes]` (debian,
   ubuntu), a disabled dnf/zypper repository `lab-legacy` with `gpgcheck=0` and no key (rocky,

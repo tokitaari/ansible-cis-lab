@@ -65,3 +65,9 @@ Die Spalte *Lektion* nennt die Lektion(en), die die Aufgabe vorbereiten: vorher 
 | 5.01 | [Abschlussprojekt: CIS-Rolle mit Audit- und Enforce-Modus](stage5-capstone/5.01-capstone-cis-role/README.de.md) | ★★★★★ | ~240 min | Sections 1-7 | `targets` | [L10](../docs/lessons/L10-compliance-reporting.de.md) |
 | 5.02 | [Rollout-Strategie: Vorabprüfung, Canary, Wellen](stage5-capstone/5.02-rollout-strategy/README.de.md) | ★★★★★ | ~90 min | (operations) | `targets` | [L14](../docs/lessons/L14-production-rollout.de.md) |
 | 5.03 | [Review: deine Rolle vs. eine Community-CIS-Rolle](stage5-capstone/5.03-compare-with-community-role/README.de.md) | ★★★★☆ | ~90 min | all | `(reading)` | [L14](../docs/lessons/L14-production-rollout.de.md) |
+
+## Stufe 6 - Über den Benchmark hinaus
+
+| ID | Titel | Schwierigkeit | Zeit | CIS | Hosts | Lektion |
+|---|---|---|---|---|---|---|
+| 6.01 | [Eine Rolle testen: Molecule-Szenario mit testinfra](stage6-beyond-the-benchmark/6.01-testing-the-role/README.de.md) | ★★★★☆ | ~90 min | - | `targets` | [L18](../docs/lessons/L18-testing-roles.de.md) |
