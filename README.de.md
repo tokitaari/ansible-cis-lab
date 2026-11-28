@@ -16,8 +16,8 @@ Multi-Distro-Rolle mit Audit-Modus, Ausnahmen und gestaffeltem Rollout.
 | | |
 |---|---|
 | **Targets** | Debian 13, Ubuntu 26.04, Rocky 10, AlmaLinux 10, Fedora 44, openSUSE Leap 16, Arch (rolling), Alpine 3.24 |
-| **Aufgaben** | 31 in 6 Stufen, ~28 h, jeweils mit Ziel, Hintergrund, Anforderungen, 3 gestaffelten Hinweisen, Bonus, Musterlösung, Erklärung, automatischem Check |
-| **Lektionen** | 17 Lektionen zum Selbststudium (L00-L16, ~8 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
+| **Aufgaben** | 34 in 7 Stufen, ~32 h, jeweils mit Ziel, Hintergrund, Anforderungen, 3 gestaffelten Hinweisen, Bonus, Musterlösung, Erklärung, automatischem Check |
+| **Lektionen** | 18 Lektionen zum Selbststudium (L00-L16, L18, ~8,5 h Lesezeit) - Konzepte vor den Aufgaben, Plattformunterschiede, Stolperfallen, Selbstkontrolle: `lab lesson`; ein [Glossar](docs/GLOSSARY.de.md) der Begriffe (`lab docs glossary`) |
 | **Sprachen** | Englisch (Standard) und Deutsch: `lab lang de` |
 | **CIS** | Profil Level 1 Server (+ ausgewählte Level 2); eigener Kontrollkatalog in [`cis-catalogue/controls.yml`](cis-catalogue/controls.yml); PDFs: siehe [`cis-catalogue/README.de.md`](cis-catalogue/README.de.md) |
 
@@ -106,7 +106,7 @@ aus und einen zweiten Lauf, der nichts ändern darf (`--list` zeigt den Plan, `-
 `tools/run-solutions.sh chain` führt die aufbauenden Aufgaben 3.01-5.02 so aus, wie Lernende sie
 bearbeiten: ein Reset, dann jeder Schritt auf dem Zustand, den die Schritte davor hinterlassen.
 `tools/run-solutions.sh 5.01` prüft eine aufbauende Rolle frisch (nur 0.02 davor), `all` führt
-alles aus (über zwei Stunden). CI führt die Stufen 0-4, die Kette und die frischen Läufe von 4.03
+alles aus (über zwei Stunden). CI führt die Stufen 0-4 und 6, die Kette und die frischen Läufe von 4.03
 und 5.01 aus, jeweils in einem eigenen Job (Workflow `runtime`).
 
 ## Lernpfad
@@ -119,6 +119,7 @@ und 5.01 aus, jeweils in einem eigenen Job (Workflow `runtime`).
 | 3 Mittelstufe | Rollen, PAM, Passwortrichtlinie, auditd, Konten-Audit | 3.01-3.05 |
 | 4 Fortgeschritten | Audit-Berichte, Profile/Ausnahmen, datengetriebene Multi-Plattform, Vault, Custom Facts, faillock, Firewall mit Rollback, async, Systemprotokollierung, Paketsignaturen | 4.01-4.10 |
 | 5 Abschluss | Rolle mit Audit-/Enforce-Modus, Rollout-Strategie, Review einer Community-Rolle | 5.01-5.03 |
+| 6 Über den Benchmark hinaus | eine Rolle testen: Molecule, testinfra | 6.01 |
 
 Details: [`docs/LEARNING_PATH.de.md`](docs/LEARNING_PATH.de.md) · Übersicht: [`exercises/INDEX.de.md`](exercises/INDEX.de.md)
 
@@ -133,7 +134,7 @@ targets/              ein Dockerfile pro Distribution + gemeinsamer Bootstrap (p
 ansible/              ansible.cfg, Inventar (nach OS-Familie gruppiert), gemeinsame Rollen
 exercises/            stage*/<id>-<slug>/ README, HINTS, EXPLANATION (EN+DE), solution/, Check
 cis-catalogue/        Kontrollkatalog + Ablage für deine CIS-PDFs
-docs/                 Lernpfad, lessons/ (L00-L16), Glossar, Container-Grenzen, Fehlerbehebung
+docs/                 Lernpfad, lessons/ (L00-L16, L18), Glossar, Container-Grenzen, Fehlerbehebung
 tools/                Prüfskripte für Maintainer: Release-Hygiene, statisches Qualitäts-Gate,
                       Laufzeittest der Musterlösungen (alle drei in CI)
 work/                 DEINE Lösungen (eingehängt nach /lab/work)

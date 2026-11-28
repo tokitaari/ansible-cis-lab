@@ -25,6 +25,7 @@ ohne sich zu langweilen oder überfordert zu sein:
 | **3 Mittelstufe** | alles als Rolle mit Tags strukturieren, CLIs idempotent kapseln, mit PAM-Werkzeugen arbeiten, Audit-Regeln entwerfen | ~4,5 h |
 | **4 Fortgeschritten** | reine Audit-Berichte schreiben, Profile und Ausnahmen umsetzen, datengetriebene Multi-Plattform-Rollen bauen, Geheimnisse verwalten, Firewalls sicher ausrollen, lange Jobs asynchron ausführen, einen Logger je Host konfigurieren, Paketsignaturen prüfen | ~11,5 h |
 | **5 Abschluss** | eine produktionsreife CIS-Rolle mit Audit-/Enforce-Modus und sicherem Rollout liefern und fremde Rollen kritisch prüfen | ~7 h |
+| **6 Über den Benchmark hinaus** | eine Rolle mit Molecule und testinfra gegen die Lab-Targets testen, mit eigenen Sollwerten | ~1,5 h |
 
 ## Lektionen
 
@@ -54,6 +55,7 @@ auf die Abschnitte der Lektionen.
 | [L14 - Rollout in Produktion: Fehlerbehandlung, Vorabprüfung, Wellen und Community-Rollen](lessons/L14-production-rollout.de.md) | 5.02, 5.03 | ~35 Min. |
 | [L15 - Systemprotokollierung: journald, rsyslog und BusyBox-syslogd](lessons/L15-system-logging.de.md) | 4.09 | ~25 Min. |
 | [L16 - Paketsignaturen: apt, dnf, zypper, pacman und apk](lessons/L16-package-signatures.de.md) | 4.10 | ~25 Min. |
+| [L18 - Rollen testen: Molecule, testinfra und Tests, die scheitern können](lessons/L18-testing-roles.de.md) | 6.01 | ~20 Min. |
 
 ## Empfohlene Reihenfolge und Abhängigkeiten
 
@@ -61,7 +63,8 @@ auf die Abschnitte der Lektionen.
 - Die Aufgaben in Stufe 2 sind voneinander unabhängig.
 - **3.01** fasst 0.04-2.06 zu einer Rolle zusammen; **4.03** erweitert sie um Stufe 3; **5.01** macht daraus das Abschlussprojekt.
 - 4.01, 4.02, 4.04-4.10 sind unabhängige "Werkzeugkasten"-Aufgaben - nach Interesse wählen.
-- **Starter-Dateien** gibt es für die Playbook-Übungen der Stufen 0-2, dazu das leere Rollengerüst von 3.01. Ab Stufe 3 erweiterst du
+- Stufe 6 geht über den Benchmark hinaus. **6.01** bringt eine eigene kleine Rolle mit (`cis_mini`) und braucht nur 0.02, nicht 5.01.
+- **Starter-Dateien** gibt es für die Playbook-Übungen der Stufen 0-2, dazu das leere Rollengerüst von 3.01 und die Rolle `cis_mini` von 6.01. Ab Stufe 3 erweiterst du
   deine eigene Rolle und Playbooks, `lab start` legt dann meist nur das Arbeitsverzeichnis an.
 - `lab start` warnt, wenn eine Übung auf einer aufbaut, die du noch nicht bestanden hast (`requires` in ihrer `meta.yml`).
 - Vor 3.01, 4.03 und 5.01: `./lab.sh reset all`, damit die Regressionschecks beweisen, dass deine Rolle auf frischen Hosts funktioniert.

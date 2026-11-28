@@ -1,0 +1,8 @@
+---
+# Group and mode of /etc/shadow and /etc/gshadow per OS family (owner: root everywhere)
+cis_mini_shadow:
+  Debian: {group: shadow, mode: "0640"}
+  Suse: {group: shadow, mode: "0640"}
+  Alpine: {group: shadow, mode: "0640"}
+  RedHat: {group: root, mode: "0640"}
+  Archlinux: {group: root, mode: "0600"}

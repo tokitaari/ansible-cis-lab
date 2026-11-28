@@ -25,6 +25,7 @@ being bored or overwhelmed:
 | **3 Intermediate** | structure everything as a role with tags, wrap CLIs idempotently, work with PAM tooling, design audit rules | ~4.5 h |
 | **4 Advanced** | write audit-only reports, implement profiles and exceptions, build data-driven multi-platform roles, handle secrets, roll out firewalls safely, run long jobs async, configure one logger per host, verify package signatures | ~11.5 h |
 | **5 Capstone** | deliver a production-grade CIS role with audit/enforce mode and a safe rollout, and review third-party roles critically | ~7 h |
+| **6 Beyond the benchmark** | test a role with Molecule and testinfra against the lab targets, with expected values of your own | ~1.5 h |
 
 ## Lessons
 
@@ -53,6 +54,7 @@ answers. L01 belongs to no single exercise: read it after L00. The [glossary](GL
 | [L14 - Production rollout: failure handling, preflight, batches and community roles](lessons/L14-production-rollout.md) | 5.02, 5.03 | ~35 min |
 | [L15 - System logging: journald, rsyslog and BusyBox syslogd](lessons/L15-system-logging.md) | 4.09 | ~25 min |
 | [L16 - Package signatures: apt, dnf, zypper, pacman and apk](lessons/L16-package-signatures.md) | 4.10 | ~25 min |
+| [L18 - Testing roles: Molecule, testinfra and tests that can fail](lessons/L18-testing-roles.md) | 6.01 | ~20 min |
 
 ## Recommended order and dependencies
 
@@ -60,7 +62,8 @@ answers. L01 belongs to no single exercise: read it after L00. The [glossary](GL
 - Stage 2 exercises are independent of each other.
 - **3.01** collects 0.04-2.06 into a role; **4.03** extends it with stage 3; **5.01** turns it into the capstone.
 - 4.01, 4.02, 4.04-4.10 are independent "toolbox" exercises - pick by interest.
-- **Starter files** exist for the playbook exercises of stages 0-2, plus the empty role skeleton of 3.01. From stage 3 on you
+- Stage 6 goes beyond the benchmark. **6.01** brings its own small role (`cis_mini`) and needs only 0.02, not 5.01.
+- **Starter files** exist for the playbook exercises of stages 0-2, plus the empty role skeleton of 3.01 and the role `cis_mini` of 6.01. From stage 3 on you
   extend your own role and playbooks, so `lab start` mostly just creates the work directory.
 - `lab start` warns when an exercise builds on one you have not passed yet (`requires` in its `meta.yml`).
 - Before 3.01, 4.03 and 5.01: `./lab.sh reset all` so that the regression checks prove your role works on fresh hosts.

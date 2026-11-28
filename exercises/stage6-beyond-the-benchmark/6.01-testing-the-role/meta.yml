@@ -1,0 +1,25 @@
+---
+id: '6.01'
+slug: testing-the-role
+stage: 6
+stage_name: Stage 6 - Beyond the benchmark
+stage_name_de: Stufe 6 - Über den Benchmark hinaus
+title:
+  en: 'Testing a role: Molecule scenario with testinfra'
+  de: 'Eine Rolle testen: Molecule-Szenario mit testinfra'
+difficulty: 4
+minutes: 90
+cis:
+  section: '-'
+  level: '-'
+hosts: targets
+requires:
+- '0.02'
+concepts:
+- Molecule scenario
+- default driver
+- test sequence
+- testinfra
+- expected values from the requirements
+idempotency: false
+solve: molecule test

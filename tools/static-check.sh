@@ -53,7 +53,7 @@ if wanted lint; then
   lint_solutions() {
     { env -u ANSIBLE_CONFIG \
         ANSIBLE_VAULT_PASSWORD_FILE="$ROOT/exercises/stage4-advanced/4.04-vault-break-glass-account/solution/.vault-pass" \
-        ANSIBLE_ROLES_PATH="$ROOT/exercises/stage5-capstone/5.01-capstone-cis-role/solution/roles" \
+        ANSIBLE_ROLES_PATH="$ROOT/exercises/stage5-capstone/5.01-capstone-cis-role/solution/roles:$ROOT/exercises/stage6-beyond-the-benchmark/6.01-testing-the-role/solution/roles" \
         ansible-lint --profile production --nocolor exercises/*/*/solution 2>&1 1>&3 |
         awk '/^WARNING +Directory expansion discovered [0-9]+ file\(s\)\./ { skip = 5 }
              skip > 0 { skip--; if ($0 ~ /configuring\/ *$/) skip = 0; next }
